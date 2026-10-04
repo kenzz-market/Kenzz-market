@@ -78,11 +78,20 @@ button{font:inherit}
 .clock small{display:block;color:#aaa5b1;font-size:11px;letter-spacing:2px}
 .clock strong{display:block;margin-top:4px;color:var(--cyan);font:800 20px/1 monospace}
 .hero{
-  margin:18px 12px 0;min-height:330px;border:1px solid var(--line);border-radius:28px;overflow:hidden;
-  position:relative;background:
-    radial-gradient(circle at 75% 30%,rgba(255,38,110,.35),transparent 30%),
-    radial-gradient(circle at 20% 80%,rgba(78,45,170,.55),transparent 38%),
-    linear-gradient(135deg,#17131e,#26131f 50%,#071d21);
+ margin:18px 12px 0;
+ min-height:330px;
+ border:1px solid var(--line);
+ position:relative;
+
+ background:
+ linear-gradient(
+ rgba(0,0,0,.55),
+ rgba(0,0,0,.65)
+ ),
+ url("https://c.termai.cc/i131/fcdfrAs.jpg");
+
+ background-size:cover;
+ background-position:center;
 }
 .hero:before{
   content:"";position:absolute;inset:0;opacity:.5;
