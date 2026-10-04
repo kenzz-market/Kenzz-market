@@ -196,33 +196,37 @@ button{font:inherit}
 }
 </style>
 </head>
-  <button onclick="closeMenu()">✕</button>
+  
+<body>
+  <div id="menu" class="menu">
 
-  <h2>☰ Kenzz Menu</h2>
+<button onclick="closeMenu()">✕</button>
 
-  <a href="index.html">🏠 Home</a>
-  <a href="#store">🛒 Store</a>
-  <a href="#updates">🔔 Update</a>
-  <a href="admin.html">👑 Admin</a>
+<h2>👑 Kenzz Menu</h2>
+
+<a href="index.html">🏠 Home</a>
+<a href="#store">🛒 Store</a>
+<a href="#updates">🔔 Update</a>
+<a href="admin.html">👑 Admin</a>
+
 </div>
 
 <div id="overlay" onclick="closeMenu()"></div>
 
 <script>
 function openMenu(){
-  document.getElementById("menu").classList.add("show");
-  document.getElementById("overlay").classList.add("show");
+ document.getElementById("menu").classList.add("show");
+ document.getElementById("overlay").classList.add("show");
 }
 
 function closeMenu(){
-  document.getElementById("menu").classList.remove("show");
-  document.getElementById("overlay").classList.remove("show");
+ document.getElementById("menu").classList.remove("show");
+ document.getElementById("overlay").classList.remove("show");
 }
 </script>
-    <div id="menu" class="menu">
-<button onclick="closeMenu()">✕</button>
-<h2>👑 Kenzz Menu</h2>
-<body>
+
+</body>
+</html>
 <div class="app">
 
 <header class="top">
