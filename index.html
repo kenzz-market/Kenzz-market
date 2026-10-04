@@ -376,14 +376,9 @@ display:none;
 
   <div id="intro">
 
-<video autoplay muted playsinline id="intro-video" onended="closeIntro()">
-<source src="https://c.termai.cc/v131/194dA.mp4" type="video/mp4">
+<video id="intro-video" autoplay muted playsinline onended="closeIntro()">
+    <source src="https://c.termai.cc/v131/194dA.mp4" type="video/mp4">
 </video>
-
-<div class="intro-text">
-<h1>👑 KENZZ STORE</h1>
-<p>Selamat datang di Kenzz Store</p>
-</div>
 
   </div>
 
@@ -451,15 +446,11 @@ Rp ${Number(p.price).toLocaleString("id-ID")}
 
 tampilProduk();
 <script>
-function closeIntro(){
-    let intro = document.getElementById("intro");
+const video = document.getElementById("intro-video");
 
-    intro.style.opacity = "0";
-
-    setTimeout(()=>{
-        intro.style.display="none";
-    },500);
-}
+video.addEventListener("ended", function(){
+    document.getElementById("intro").style.display="none";
+});
 </script>
 
 </body>
