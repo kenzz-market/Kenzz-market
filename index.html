@@ -270,6 +270,42 @@ overlay.classList.toggle("show");
 #overlay.show{
  display:block;
 }
+  <style>
+  #product-list{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:12px;
+ margin:15px;
+}
+
+.product-card{
+ background:#17151f;
+ border:1px solid #333;
+ border-radius:18px;
+ padding:12px;
+}
+
+.product-card img{
+ width:100%;
+ height:150px;
+ object-fit:cover;
+ border-radius:12px;
+}
+
+.product-card h3{
+ margin:8px 0;
+}
+
+.price{
+ color:#00ffd5;
+ font-weight:bold;
+}
+
+@media(max-width:600px){
+ #product-list{
+  grid-template-columns:1fr;
+ }
+}
 </style>
 </head>
   
@@ -313,23 +349,25 @@ function closeMenu(){
  document.getElementById("overlay").classList.remove("show");
 }
 <script>
-async function loadProducts(){
+async function tampilProduk(){
 
-let data = await getProducts();
+let produk = await getProducts();
 
-let box=document.getElementById("product-list");
+let tempat = document.getElementById("product-list");
 
-box.innerHTML=data.map(p=>`
+tempat.innerHTML = produk.map(p=>`
 
-<div class="product">
+<div class="product-card">
 
 <img src="${p.image || 'https://via.placeholder.com/300'}">
 
 <h3>${p.name}</h3>
 
-<p>Rp ${p.price}</p>
+<p class="price">
+Rp ${Number(p.price).toLocaleString("id-ID")}
+</p>
 
-<p>Kategori: ${p.category}</p>
+<p>${p.category}</p>
 
 <p>Stok: ${p.stock}</p>
 
@@ -339,7 +377,7 @@ box.innerHTML=data.map(p=>`
 
 }
 
-loadProducts();
+tampilProduk();
 
 </script>
 
