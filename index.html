@@ -130,17 +130,31 @@ button{font:inherit}
  top:0;
  left:-300px;
  width:280px;
- height:100%;
+ height:100vh;
  background:#111;
- color:white;
- padding:25px;
- z-index:1000;
- transition:.3s;
- overflow-y:auto;
+ padding:30px 20px;
+ z-index:9999;
+ transition:0.3s ease;
+ overflow:auto;
 }
 
 .menu.show{
  left:0;
+}
+
+#overlay{
+ position:fixed;
+ top:0;
+ left:0;
+ width:100%;
+ height:100%;
+ background:rgba(0,0,0,.6);
+ z-index:9998;
+ display:none;
+}
+
+#overlay.show{
+ display:block;
 }
   .menu h2{
  margin-top:40px;
@@ -183,7 +197,6 @@ button{font:inherit}
 }
 </style>
 </head>
-  <div id="menu" class="menu">
   <button onclick="closeMenu()">✕</button>
 
   <h2>☰ Kenzz Menu</h2>
@@ -207,6 +220,7 @@ function closeMenu(){
   document.getElementById("overlay").classList.remove("show");
 }
 </script>
+    <div id="menu" class="menu">
 <body>
 <div class="app">
 
