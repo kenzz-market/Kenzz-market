@@ -36,14 +36,14 @@ body:before{
  content:"";
  position:fixed;
  inset:0;
- z-index:-3;
-
+ background:rgba(0,0,0,.5);
+ z-index:-5;
+}
  background:
  linear-gradient(
  rgba(0,0,0,.65),
  rgba(0,0,0,.75)
  ),
- url("https://c.termai.cc/i190/3KLl.jpg");
 
  background-size:cover;
  background-position:center;
@@ -254,7 +254,8 @@ button{font:inherit}
   <video autoplay muted loop playsinline id="bg-video">
   <source src="https://c.termai.cc/v106/DUN4.mp4" type="video/mp4">
 </video>
-  
+
+  <div class="app">
   <div id="menu" class="menu">
 
 <button onclick="closeMenu()">✕</button>
@@ -284,7 +285,6 @@ function closeMenu(){
 
 </body>
 </html>
-<div class="app">
 
 <header class="top">
   <nav class="nav">
