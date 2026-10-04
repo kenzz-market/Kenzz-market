@@ -328,6 +328,42 @@ overlay.classList.toggle("show");
   grid-template-columns:1fr;
  }
 }
+  #intro{
+position:fixed;
+inset:0;
+z-index:9999;
+background:#000;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+#intro-video{
+position:absolute;
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.intro-text{
+position:relative;
+z-index:2;
+text-align:center;
+color:white;
+}
+
+.intro-text button{
+padding:12px 25px;
+border-radius:30px;
+border:0;
+background:#ff2f68;
+color:white;
+font-size:16px;
+}
+
+#intro.hide{
+display:none;
+}
 </style>
 </head>
   
@@ -337,6 +373,19 @@ overlay.classList.toggle("show");
   <source src="https://c.termai.cc/v154/apv.mp4" type="video/mp4">
 </video>
 
+  <div id="intro">
+
+<video autoplay muted playsinline id="intro-video">
+<source src="LINK_VIDEO_KAMU.mp4" type="video/mp4">
+</video>
+
+<div class="intro-text">
+<h1>👑 KENZZ STORE</h1>
+<p>Selamat datang di toko digital kami</p>
+<button onclick="closeIntro()">Mulai Belanja</button>
+</div>
+
+</div>
   <div class="app">
   <div id="menu" class="menu">
 
@@ -400,7 +449,11 @@ Rp ${Number(p.price).toLocaleString("id-ID")}
 }
 
 tampilProduk();
+<script>
 
+function closeIntro(){
+document.getElementById("intro").classList.add("hide");
+}
 </script>
 
 </body>
