@@ -124,8 +124,74 @@ button{font:inherit}
  .hero h1{font-size:42px}.features{grid-template-columns:1fr 1fr}.feature{padding:14px}
  .feature p{font-size:11px}.section{margin:10px}
 }
-</style>
+</style>.menu{
+ position:fixed;
+ top:0;
+ left:-300px;
+ width:280px;
+ height:100%;
+ background:#111;
+ color:white;
+ padding:25px;
+ z-index:1000;
+ transition:.3s;
+}
+
+.menu.show{
+ left:0;
+}
+
+.menu a{
+ display:block;
+ color:white;
+ text-decoration:none;
+ padding:15px 0;
+ border-bottom:1px solid #333;
+}
+
+.menu button{
+ background:none;
+ color:white;
+ border:0;
+ font-size:22px;
+}
+
+#overlay{
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.6);
+ display:none;
+ z-index:999;
+}
+
+#overlay.show{
+ display:block;
+}
 </head>
+  <div id="menu" class="menu">
+  <button onclick="closeMenu()">✕</button>
+
+  <h2>Kenzz Menu</h2>
+
+  <a href="index.html">🏠 Home</a>
+  <a href="#store">🛒 Store</a>
+  <a href="#updates">🔔 Update</a>
+  <a href="admin.html">👑 Admin</a>
+</div>
+
+<div id="overlay" onclick="closeMenu()"></div>
+
+<script>
+function openMenu(){
+  document.getElementById("menu").classList.add("show");
+  document.getElementById("overlay").classList.add("show");
+}
+
+function closeMenu(){
+  document.getElementById("menu").classList.remove("show");
+  document.getElementById("overlay").classList.remove("show");
+}
+</script>
 <body>
 <div class="app">
 
@@ -133,7 +199,7 @@ button{font:inherit}
   <nav class="nav">
     <div class="brand"><span class="crown">👑</span> KENZZ</div>
     <button class="icon-btn" onclick="toast('Mode malam aktif 🌙')">☾</button>
-    <button class="icon-btn" onclick="toast('Menu dibuka ☰')">☰</button>
+    <button class="icon-btn" onclick="openMenu()">☰</button>
   </nav>
   <div class="search">🔎 <input id="search" placeholder="Cari produk, kategori, atau informasi..."></div>
   <div class="clock-row">
