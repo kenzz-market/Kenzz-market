@@ -165,6 +165,15 @@ button{font:inherit}
  .feature p{font-size:11px}.section{margin:10px}
 }
   <style>
+  function toggleMenu(){
+
+let menu = document.getElementById("menu");
+let overlay = document.getElementById("overlay");
+
+menu.classList.toggle("show");
+overlay.classList.toggle("show");
+
+}
   .menu{
     position:fixed;
     top:0;
@@ -273,7 +282,6 @@ button{font:inherit}
   <div class="app">
   <div id="menu" class="menu">
 
-<button onclick="closeMenu()">✕</button>
 
 <h2>👑 Kenzz Menu</h2>
 
@@ -283,8 +291,6 @@ button{font:inherit}
 <a href="admin.html">👑 Admin</a>
 
 </div>
-
-<div id="overlay" onclick="closeMenu()"></div>
 
 <script>
 function openMenu(){
