@@ -1,18 +1,24 @@
-<!DOCTYPE html>
-<html><body>
-<h1>🛒 Kenzz Market</h1>
-<div id="products"></div>
 <script src="supabase.js"></script>
+
 <script>
 async function load(){
- let data=await getProducts();
- products.innerHTML=data.map(p=>`
- <div>
- <h3>${p.name}</h3>
- Rp${p.price}<br>
- Stok: ${p.stock}
- </div>`).join("");
+    let data = await getProducts();
+
+    const box = document.getElementById("products");
+
+    if(!data || data.length === 0){
+        box.innerHTML = "<p>Belum ada produk</p>";
+        return;
+    }
+
+    box.innerHTML = data.map(p => `
+        <div>
+            <h3>${p.name}</h3>
+            <p>Rp ${p.price}</p>
+            <p>Stok: ${p.stock}</p>
+        </div>
+    `).join("");
 }
+
 load();
 </script>
-</body></html>
