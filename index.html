@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kenzz Market | Belanja Online</title>
+<style>
+:root{--green:#16a34a;--dark:#0f172a;--muted:#64748b;--bg:#f8fafc;--white:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--dark)}
+header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #e2e8f0}
+.nav{max-width:1150px;margin:auto;padding:16px 20px;display:flex;align-items:center;gap:20px}
+.logo{font-size:25px;font-weight:900;color:var(--green);white-space:nowrap}
+.search{flex:1;display:flex;background:#f1f5f9;border-radius:12px;overflow:hidden}
+.search input{width:100%;border:0;background:transparent;padding:13px 15px;outline:0;font-size:15px}
+.cart-btn{border:0;background:var(--dark);color:#fff;padding:12px 16px;border-radius:12px;cursor:pointer;font-weight:bold}
+.cart-count{background:#22c55e;border-radius:50%;padding:2px 7px;margin-left:5px}
+.hero{background:linear-gradient(120deg,#052e16,#16a34a);color:#fff}
+.hero-inner{max-width:1150px;margin:auto;padding:65px 20px;display:flex;align-items:center;justify-content:space-between;gap:30px}
+.hero h1{font-size:46px;line-height:1.05;margin-bottom:15px}
+.hero p{font-size:18px;color:#dcfce7;max-width:560px}
+.hero-btn{display:inline-block;margin-top:25px;background:#fff;color:var(--green);padding:13px 22px;border-radius:12px;text-decoration:none;font-weight:bold}
+.hero-box{font-size:80px;background:rgba(255,255,255,.1);padding:25px 35px;border-radius:30px}
+main{max-width:1150px;margin:auto;padding:35px 20px 70px}
+.section-title{font-size:26px;margin-bottom:18px}
+.categories{display:flex;gap:10px;overflow:auto;padding-bottom:18px}
+.cat{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:9px 16px;cursor:pointer;white-space:nowrap}
+.cat.active,.cat:hover{background:var(--green);color:#fff;border-color:var(--green)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.product{background:#fff;border-radius:18px;overflow:hidden;border:1px solid #e2e8f0;box-shadow:0 5px 20px rgba(15,23,42,.05)}
+.product-img{height:190px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:72px}
+.product-body{padding:16px}
+.badge{display:inline-block;font-size:11px;color:#166534;background:#dcfce7;padding:5px 8px;border-radius:7px;margin-bottom:9px}
+.product h3{font-size:17px;margin-bottom:7px}
+.product p{font-size:13px;color:var(--muted);height:34px}
+.price{font-size:19px;font-weight:800;margin:12px 0}
+.add{width:100%;border:0;background:var(--green);color:#fff;padding:11px;border-radius:10px;cursor:pointer;font-weight:bold}
+.add:hover{background:#15803d}
+.empty{grid-column:1/-1;text-align:center;padding:45px;color:var(--muted)}
+.overlay{display:none;position:fixed;inset:0;background:rgba(2,6,23,.55);z-index:30}
+.overlay.show{display:block}
+.drawer{position:absolute;right:0;top:0;height:100%;width:min(430px,100%);background:#fff;padding:22px;display:flex;flex-direction:column}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e2e8f0;padding-bottom:15px}
+.close{border:0;background:#f1f5f9;border-radius:8px;padding:8px 11px;cursor:pointer}
+.cart-items{flex:1;overflow:auto;padding:15px 0}
+.cart-item{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid #e2e8f0}
+.cart-icon{width:55px;height:55px;background:#f1f5f9;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:28px}
+.cart-info{flex:1}.cart-info strong{display:block}.cart-info small{color:var(--muted)}
+.qty{display:flex;gap:8px;align-items:center;margin-top:7px}
+.qty button{border:0;background:#e2e8f0;width:25px;height:25px;border-radius:6px;cursor:pointer}
+.total{border-top:1px solid #e2e8f0;padding-top:17px}
+.total-row{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;margin-bottom:14px}
+.checkout{width:100%;border:0;background:var(--dark);color:#fff;padding:14px;border-radius:11px;font-weight:bold;cursor:pointer}
+.modal{display:none;position:fixed;inset:0;background:rgba(2,6,23,.6);z-index:40;align-items:center;justify-content:center;padding:20px}
+.modal.show{display:flex}
+.modal-box{background:#fff;width:min(500px,100%);border-radius:18px;padding:24px}
+.modal-box h2{margin-bottom:18px}
+.form{display:grid;gap:11px}.form input,.form textarea{width:100%;border:1px solid #cbd5e1;border-radius:9px;padding:12px;outline:0}.form textarea{min-height:80px;resize:vertical}
+.confirm{margin-top:15px;width:100%;border:0;background:var(--green);color:#fff;padding:13px;border-radius:10px;font-weight:bold;cursor:pointer}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:36px}.hero-box{font-size:55px}}
+@media(max-width:560px){.nav{gap:8px}.logo{font-size:20px}.search{order:3;flex-basis:100%}.nav{flex-wrap:wrap}.hero-inner{padding:45px 20px}.hero-box{display:none}.grid{grid-template-columns:1fr 1fr}.product-img{height:145px;font-size:55px}.product-body{padding:12px}.product h3{font-size:15px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo">🛒 Kenzz Market</div>
+    <div class="search"><input id="search" type="search" placeholder="Cari produk di Kenzz Market..."></div>
+    <button class="cart-btn" onclick="openCart()">Keranjang <span id="count" class="cart-count">0</span></button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1>Belanja mudah di<br>Kenzz Market.</h1>
+      <p>Temukan berbagai produk pilihan dengan harga menarik. Belanja dari mana saja, kapan saja.</p>
+      <a href="#produk" class="hero-btn">Lihat Produk</a>
+    </div>
+    <div class="hero-box">🛍️</div>
+  </div>
+</section>
+
+<main id="produk">
+  <h2 class="section-title">Kategori</h2>
+  <div class="categories">
+    <button class="cat active" onclick="filterCat('Semua',this)">Semua</button>
+    <button class="cat" onclick="filterCat('Elektronik',this)">Elektronik</button>
+    <button class="cat" onclick="filterCat('Fashion',this)">Fashion</button>
+    <button class="cat" onclick="filterCat('Rumah',this)">Rumah</button>
+    <button class="cat" onclick="filterCat('Aksesoris',this)">Aksesoris</button>
+  </div>
+
+  <h2 class="section-title">Produk Pilihan</h2>
+  <div id="products" class="grid"></div>
+</main>
+
+<div id="cartOverlay" class="overlay" onclick="if(event.target===this)closeCart()">
+  <div class="drawer">
+    <div class="drawer-head"><h2>Keranjang</h2><button class="close" onclick="closeCart()">✕</button></div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="total">
+      <div class="total-row"><span>Total</span><span id="total">Rp0</span></div>
+      <button class="checkout" onclick="openCheckout()">Lanjut Checkout</button>
+    </div>
+  </div>
+</div>
+
+<div id="checkoutModal" class="modal">
+  <div class="modal-box">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h2>Checkout</h2><button class="close" onclick="closeCheckout()">✕</button>
+    </div>
+    <div class="form">
+      <input id="name" placeholder="Nama lengkap">
+      <input id="phone" placeholder="Nomor WhatsApp">
+      <textarea id="address" placeholder="Alamat lengkap"></textarea>
+    </div>
+    <button class="confirm" onclick="placeOrder()">Buat Pesanan</button>
+  </div>
+</div>
+
+<script>
+const products=[
+{id:1,name:"Headphone Wireless",price:249000,cat:"Elektronik",icon:"🎧"},
+{id:2,name:"Smartwatch Sport",price:399000,cat:"Elektronik",icon:"⌚"},
+{id:3,name:"Kaos Premium",price:129000,cat:"Fashion",icon:"👕"},
+{id:4,name:"Sneakers Casual",price:329000,cat:"Fashion",icon:"👟"},
+{id:5,name:"Lampu Meja LED",price:99000,cat:"Rumah",icon:"💡"},
+{id:6,name:"Botol Minum",price:79000,cat:"Rumah",icon:"🧴"},
+{id:7,name:"Tas Selempang",price:179000,cat:"Aksesoris",icon:"👜"},
+{id:8,name:"Kacamata Fashion",price:119000,cat:"Aksesoris",icon:"🕶️"}
+];
+let cart=[];
+let currentCat="Semua";
+
+const rupiah=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(n);
+
+function renderProducts(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const list=products.filter(p=>(currentCat==="Semua"||p.cat===currentCat)&&p.name.toLowerCase().includes(q));
+ const el=document.getElementById("products");
+ el.innerHTML=list.length?list.map(p=>`
+ <article class="product">
+   <div class="product-img">${p.icon}</div>
+   <div class="product-body">
+     <span class="badge">${p.cat}</span>
+     <h3>${p.name}</h3>
+     <p>Produk pilihan Kenzz Market berkualitas.</p>
+     <div class="price">${rupiah(p.price)}</div>
+     <button class="add" onclick="addCart(${p.id})">+ Tambah ke Keranjang</button>
+   </div>
+ </article>`).join(""):`<div class="empty">Produk tidak ditemukan.</div>`;
+}
+function filterCat(cat,btn){
+ currentCat=cat;
+ document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));
+ btn.classList.add("active"); renderProducts();
+}
+document.getElementById("search").addEventListener("input",renderProducts);
+
+function addCart(id){
+ const item=cart.find(x=>x.id===id);
+ if(item)item.qty++;else cart.push({id,qty:1});
+ renderCart();
+}
+function changeQty(id,delta){
+ const item=cart.find(x=>x.id===id);
+ if(!item)return;
+ item.qty+=delta;if(item.qty<=0)cart=cart.filter(x=>x.id!==id);
+ renderCart();
+}
+function renderCart(){
+ const box=document.getElementById("cartItems");
+ let total=0,count=0;
+ if(!cart.length) box.innerHTML='<div class="empty">Keranjang masih kosong 🛒</div>';
+ else box.innerHTML=cart.map(i=>{
+   const p=products.find(x=>x.id===i.id); total+=p.price*i.qty;count+=i.qty;
+   return `<div class="cart-item">
+     <div class="cart-icon">${p.icon}</div>
+     <div class="cart-info"><strong>${p.name}</strong><small>${rupiah(p.price)}</small>
+       <div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${i.qty}</span><button onclick="changeQty(${p.id},1)">+</button></div>
+     </div>
+   </div>`;
+ }).join("");
+ document.getElementById("count").textContent=count;
+ document.getElementById("total").textContent=rupiah(total);
+}
+function openCart(){document.getElementById("cartOverlay").classList.add("show");renderCart()}
+function closeCart(){document.getElementById("cartOverlay").classList.remove("show")}
+function openCheckout(){
+ if(!cart.length){alert("Keranjang masih kosong.");return}
+ document.getElementById("checkoutModal").classList.add("show");
+}
+function closeCheckout(){document.getElementById("checkoutModal").classList.remove("show")}
+function placeOrder(){
+ const name=document.getElementById("name").value.trim(),phone=document.getElementById("phone").value.trim(),address=document.getElementById("address").value.trim();
+ if(!name||!phone||!address){alert("Lengkapi data checkout terlebih dahulu.");return}
+ alert("Pesanan berhasil dibuat! Terima kasih sudah berbelanja di Kenzz Market.");
+ cart=[];renderCart();closeCheckout();closeCart();
+ document.getElementById("name").value="";document.getElementById("phone").value="";document.getElementById("address").value="";
+}
+renderProducts();renderCart();
+</script>
+</body>
+</html>
