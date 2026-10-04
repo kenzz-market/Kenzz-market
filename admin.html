@@ -1,76 +1,24 @@
 <!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Kenzz Market</title>
-<style>
-body{font-family:Arial;background:#09090b;color:white;padding:20px}
-.box{max-width:800px;margin:auto;background:#18181b;padding:20px;border-radius:15px}
-input,select{width:100%;padding:12px;margin:7px 0;background:#09090b;color:white;border:1px solid #444;border-radius:8px}
-button{padding:12px;border:0;border-radius:8px;font-weight:bold;cursor:pointer}
-.add{background:#22c55e}
-.item{background:#27272a;padding:15px;margin-top:10px;border-radius:10px}
-.del{background:#ef4444;color:white}
-.green{color:#4ade80}
-</style>
-</head>
-<body>
-<div class="box">
-<h1>👑 Admin Kenzz Market</h1>
-
-<h2>Tambah Produk</h2>
+<html><body>
+<h1>Admin Kenzz Market</h1>
 <input id="name" placeholder="Nama produk">
-<input id="price" type="number" placeholder="Harga">
-<select id="cat">
-<option>Elektronik</option>
-<option>Fashion</option>
-<option>Rumah</option>
-<option>Aksesoris</option>
-</select>
-<input id="icon" placeholder="Emoji produk">
-<button class="add" onclick="add()">Tambah Produk</button>
-
-<h2>Produk</h2>
+<input id="price" placeholder="Harga">
+<input id="category" placeholder="Kategori">
+<input id="image" placeholder="Link gambar">
+<input id="stock" placeholder="Stok">
+<button onclick="save()">Tambah</button>
 <div id="list"></div>
-</div>
-
+<script src="supabase.js"></script>
 <script>
-let data=JSON.parse(localStorage.getItem("products")||"[]");
-
-function add(){
- let p={
- id:Date.now(),
- name:name.value,
- price:price.value,
- cat:cat.value,
- icon:icon.value||"🛍️"
- };
- if(!p.name||!p.price){alert("Isi data produk");return}
- data.push(p);
- save();
+async function save(){
+ await addProduct({
+  name:name.value,
+  price:Number(price.value),
+  category:category.value,
+  image:image.value,
+  stock:Number(stock.value)
+ });
+ alert("Produk masuk database");
 }
-
-function save(){
- localStorage.setItem("products",JSON.stringify(data));
- render();
-}
-
-function del(id){
- data=data.filter(x=>x.id!==id);
- save();
-}
-
-function render(){
- list.innerHTML=data.length?data.map(p=>`
- <div class="item">
- ${p.icon} <b>${p.name}</b><br>
- <small>${p.cat}</small><br>
- <span class="green">Rp ${Number(p.price).toLocaleString("id-ID")}</span><br><br>
- <button class="del" onclick="del(${p.id})">Hapus</button>
- </div>`).join(""):"Belum ada produk";
-}
-render();
 </script>
-</body>
-</html>
+</body></html>
