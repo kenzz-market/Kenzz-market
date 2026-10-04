@@ -136,10 +136,23 @@ button{font:inherit}
  padding:25px;
  z-index:1000;
  transition:.3s;
+ overflow-y:auto;
 }
 
 .menu.show{
  left:0;
+}
+  .menu h2{
+ margin-top:40px;
+}
+
+.menu a{
+ display:block;
+ color:white;
+ text-decoration:none;
+ padding:18px 0;
+ border-bottom:1px solid rgba(255,255,255,.15);
+ font-size:18px;
 }
 
 .menu a{
@@ -173,7 +186,7 @@ button{font:inherit}
   <div id="menu" class="menu">
   <button onclick="closeMenu()">✕</button>
 
-  <h2>Kenzz Menu</h2>
+  <h2>☰ Kenzz Menu</h2>
 
   <a href="index.html">🏠 Home</a>
   <a href="#store">🛒 Store</a>
