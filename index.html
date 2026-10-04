@@ -194,6 +194,33 @@ button{font:inherit}
 #overlay.show{
  display:block;
 }
+  #menu{
+ position:fixed !important;
+ top:0 !important;
+ left:-320px !important;
+ width:300px !important;
+ height:100vh !important;
+ background:#0b0b12 !important;
+ z-index:99999 !important;
+ transition:.3s ease !important;
+ padding:30px 20px !important;
+}
+
+#menu.show{
+ left:0 !important;
+}
+
+#overlay{
+ position:fixed !important;
+ inset:0 !important;
+ background:rgba(0,0,0,.6) !important;
+ z-index:99998 !important;
+ display:none;
+}
+
+#overlay.show{
+ display:block;
+}
 </style>
 </head>
   
