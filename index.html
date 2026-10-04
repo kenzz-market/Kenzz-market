@@ -165,6 +165,28 @@ button{font:inherit}
  .feature p{font-size:11px}.section{margin:10px}
 }
   <style>
+  .explore{
+ margin:12px;
+}
+
+.category-list{
+ display:flex;
+ gap:10px;
+ flex-wrap:wrap;
+}
+
+.category-list button{
+ background:rgba(255,255,255,.08);
+ color:#fff;
+ border:1px solid rgba(255,255,255,.15);
+ padding:12px 18px;
+ border-radius:20px;
+ cursor:pointer;
+}
+
+.category-list button:hover{
+ background:#ff2f68;
+}
   function toggleMenu(){
 
 let menu = document.getElementById("menu");
@@ -410,6 +432,24 @@ tampilProduk();
   </div>
 </section>
 
+
+<section class="explore">
+
+<h2>🔎 Jelajahi Store</h2>
+
+<div class="category-list">
+
+<button>Semua</button>
+<button>Elektronik</button>
+<button>Fashion</button>
+<button>Aksesoris</button>
+
+</div>
+
+</section>
+
+
+<section class="section panel">
 <section class="section panel">
   <div class="verified">
     <div class="verified-badge">✓</div>
