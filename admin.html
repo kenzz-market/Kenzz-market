@@ -1,24 +1,135 @@
 <!DOCTYPE html>
-<html><body>
-<h1>Admin Kenzz Market</h1>
-<input id="name" placeholder="Nama produk">
-<input id="price" placeholder="Harga">
-<input id="category" placeholder="Kategori">
-<input id="image" placeholder="Link gambar">
-<input id="stock" placeholder="Stok">
-<button onclick="save()">Tambah</button>
-<div id="list"></div>
-<script src="supabase.js"></script>
-<script>
-async function save(){
- await addProduct({
-  name:name.value,
-  price:Number(price.value),
-  category:category.value,
-  image:image.value,
-  stock:Number(stock.value)
- });
- alert("Produk masuk database");
+<html>
+<head>
+<title>Admin Kenzz Market</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#08080d;
+color:white;
+padding:20px;
 }
+
+.admin-box{
+max-width:600px;
+margin:auto;
+background:rgba(20,20,30,.9);
+padding:25px;
+border-radius:20px;
+border:1px solid #333;
+}
+
+h1{
+text-align:center;
+}
+
+input{
+width:100%;
+padding:14px;
+margin:8px 0;
+border-radius:12px;
+border:1px solid #333;
+background:#111;
+color:white;
+box-sizing:border-box;
+}
+
+button{
+width:100%;
+padding:14px;
+margin-top:10px;
+border:0;
+border-radius:15px;
+background:linear-gradient(135deg,#ff316f,#ff9d00);
+color:white;
+font-size:16px;
+font-weight:bold;
+}
+
+#preview{
+width:100%;
+border-radius:15px;
+margin-top:10px;
+display:none;
+}
+
+.product{
+background:#111;
+padding:15px;
+border-radius:15px;
+margin-top:15px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="admin-box">
+
+<h1>👑 Admin Kenzz Market</h1>
+
+<input id="name" placeholder="Nama produk">
+
+<input id="price" placeholder="Harga">
+
+<input id="category" placeholder="Kategori">
+
+<input id="image" placeholder="Link gambar">
+
+<img id="preview">
+
+<input id="stock" placeholder="Stok">
+
+<button onclick="save()">+ Tambah Produk</button>
+
+
+<div id="list"></div>
+
+
+</div>
+
+
+<script src="supabase.js"></script>
+
+<script>
+
+image.oninput=function(){
+preview.src=image.value;
+preview.style.display="block";
+}
+
+
+async function save(){
+
+await addProduct({
+
+name:name.value,
+
+price:Number(price.value),
+
+category:category.value,
+
+image:image.value,
+
+stock:Number(stock.value)
+
+});
+
+
+alert("Produk berhasil ditambahkan");
+
+
+}
+
+
 </script>
-</body></html>
+
+
+</body>
+</html>
