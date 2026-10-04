@@ -2,206 +2,231 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kenzz Market | Belanja Online</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Kenzz Market</title>
 <style>
-:root{--green:#16a34a;--dark:#0f172a;--muted:#64748b;--bg:#f8fafc;--white:#fff}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--dark)}
-header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #e2e8f0}
-.nav{max-width:1150px;margin:auto;padding:16px 20px;display:flex;align-items:center;gap:20px}
-.logo{font-size:25px;font-weight:900;color:var(--green);white-space:nowrap}
-.search{flex:1;display:flex;background:#f1f5f9;border-radius:12px;overflow:hidden}
-.search input{width:100%;border:0;background:transparent;padding:13px 15px;outline:0;font-size:15px}
-.cart-btn{border:0;background:var(--dark);color:#fff;padding:12px 16px;border-radius:12px;cursor:pointer;font-weight:bold}
-.cart-count{background:#22c55e;border-radius:50%;padding:2px 7px;margin-left:5px}
-.hero{background:linear-gradient(120deg,#052e16,#16a34a);color:#fff}
-.hero-inner{max-width:1150px;margin:auto;padding:65px 20px;display:flex;align-items:center;justify-content:space-between;gap:30px}
-.hero h1{font-size:46px;line-height:1.05;margin-bottom:15px}
-.hero p{font-size:18px;color:#dcfce7;max-width:560px}
-.hero-btn{display:inline-block;margin-top:25px;background:#fff;color:var(--green);padding:13px 22px;border-radius:12px;text-decoration:none;font-weight:bold}
-.hero-box{font-size:80px;background:rgba(255,255,255,.1);padding:25px 35px;border-radius:30px}
-main{max-width:1150px;margin:auto;padding:35px 20px 70px}
-.section-title{font-size:26px;margin-bottom:18px}
-.categories{display:flex;gap:10px;overflow:auto;padding-bottom:18px}
-.cat{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:9px 16px;cursor:pointer;white-space:nowrap}
-.cat.active,.cat:hover{background:var(--green);color:#fff;border-color:var(--green)}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.product{background:#fff;border-radius:18px;overflow:hidden;border:1px solid #e2e8f0;box-shadow:0 5px 20px rgba(15,23,42,.05)}
-.product-img{height:190px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:72px}
-.product-body{padding:16px}
-.badge{display:inline-block;font-size:11px;color:#166534;background:#dcfce7;padding:5px 8px;border-radius:7px;margin-bottom:9px}
-.product h3{font-size:17px;margin-bottom:7px}
-.product p{font-size:13px;color:var(--muted);height:34px}
-.price{font-size:19px;font-weight:800;margin:12px 0}
-.add{width:100%;border:0;background:var(--green);color:#fff;padding:11px;border-radius:10px;cursor:pointer;font-weight:bold}
-.add:hover{background:#15803d}
-.empty{grid-column:1/-1;text-align:center;padding:45px;color:var(--muted)}
-.overlay{display:none;position:fixed;inset:0;background:rgba(2,6,23,.55);z-index:30}
-.overlay.show{display:block}
-.drawer{position:absolute;right:0;top:0;height:100%;width:min(430px,100%);background:#fff;padding:22px;display:flex;flex-direction:column}
-.drawer-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e2e8f0;padding-bottom:15px}
-.close{border:0;background:#f1f5f9;border-radius:8px;padding:8px 11px;cursor:pointer}
-.cart-items{flex:1;overflow:auto;padding:15px 0}
-.cart-item{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid #e2e8f0}
-.cart-icon{width:55px;height:55px;background:#f1f5f9;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:28px}
-.cart-info{flex:1}.cart-info strong{display:block}.cart-info small{color:var(--muted)}
-.qty{display:flex;gap:8px;align-items:center;margin-top:7px}
-.qty button{border:0;background:#e2e8f0;width:25px;height:25px;border-radius:6px;cursor:pointer}
-.total{border-top:1px solid #e2e8f0;padding-top:17px}
-.total-row{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;margin-bottom:14px}
-.checkout{width:100%;border:0;background:var(--dark);color:#fff;padding:14px;border-radius:11px;font-weight:bold;cursor:pointer}
-.modal{display:none;position:fixed;inset:0;background:rgba(2,6,23,.6);z-index:40;align-items:center;justify-content:center;padding:20px}
-.modal.show{display:flex}
-.modal-box{background:#fff;width:min(500px,100%);border-radius:18px;padding:24px}
-.modal-box h2{margin-bottom:18px}
-.form{display:grid;gap:11px}.form input,.form textarea{width:100%;border:1px solid #cbd5e1;border-radius:9px;padding:12px;outline:0}.form textarea{min-height:80px;resize:vertical}
-.confirm{margin-top:15px;width:100%;border:0;background:var(--green);color:#fff;padding:13px;border-radius:10px;font-weight:bold;cursor:pointer}
-@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:36px}.hero-box{font-size:55px}}
-@media(max-width:560px){.nav{gap:8px}.logo{font-size:20px}.search{order:3;flex-basis:100%}.nav{flex-wrap:wrap}.hero-inner{padding:45px 20px}.hero-box{display:none}.grid{grid-template-columns:1fr 1fr}.product-img{height:145px;font-size:55px}.product-body{padding:12px}.product h3{font-size:15px}}
+:root{
+  --bg:#08080d;--panel:rgba(17,16,23,.88);--panel2:rgba(25,23,33,.78);
+  --text:#f5f5f7;--muted:#a8a4b1;--line:rgba(255,255,255,.10);
+  --cyan:#27f4d2;--pink:#ff2f68;--purple:#8b5cf6;--yellow:#ffd43b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);background:#050509;min-height:100vh;overflow-x:hidden;
+}
+body:before{
+  content:"";position:fixed;inset:0;z-index:-3;
+  background:
+   radial-gradient(circle at 20% 10%,rgba(255,30,105,.20),transparent 28%),
+   radial-gradient(circle at 85% 35%,rgba(0,255,218,.16),transparent 30%),
+   radial-gradient(circle at 50% 100%,rgba(112,48,255,.20),transparent 35%),
+   linear-gradient(135deg,#08080d,#111018 48%,#050509);
+}
+body:after{
+  content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.70));
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+.app{width:min(100%,760px);margin:auto;padding-bottom:100px}
+.top{
+  position:sticky;top:0;z-index:20;padding:16px 18px 10px;
+  backdrop-filter:blur(18px);background:rgba(6,6,10,.72);border-bottom:1px solid rgba(255,255,255,.06)
+}
+.nav{display:flex;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:900;font-size:20px;letter-spacing:2px;margin-right:auto}
+.crown{font-size:22px}
+.icon-btn{
+  width:42px;height:42px;border:1px solid var(--line);border-radius:50%;
+  color:#fff;background:rgba(255,255,255,.05);display:grid;place-items:center;cursor:pointer
+}
+.search{
+  margin-top:12px;display:flex;align-items:center;gap:10px;padding:12px 15px;
+  background:rgba(20,18,27,.92);border:1px solid var(--line);border-radius:14px
+}
+.search input{border:0;outline:0;background:none;color:#fff;width:100%;font-size:15px}
+.search input::placeholder{color:#8d8996}
+.clock-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.clock{padding:10px 8px;text-align:center;background:rgba(16,15,22,.88);border:1px solid var(--line);border-radius:13px}
+.clock small{display:block;color:#aaa5b1;font-size:11px;letter-spacing:2px}
+.clock strong{display:block;margin-top:4px;color:var(--cyan);font:800 20px/1 monospace}
+.hero{
+  margin:18px 12px 0;min-height:330px;border:1px solid var(--line);border-radius:28px;overflow:hidden;
+  position:relative;background:
+    radial-gradient(circle at 75% 30%,rgba(255,38,110,.35),transparent 30%),
+    radial-gradient(circle at 20% 80%,rgba(78,45,170,.55),transparent 38%),
+    linear-gradient(135deg,#17131e,#26131f 50%,#071d21);
+}
+.hero:before{
+  content:"";position:absolute;inset:0;opacity:.5;
+  background:
+    repeating-linear-gradient(115deg,transparent 0 28px,rgba(255,255,255,.025) 29px 30px),
+    radial-gradient(ellipse at 75% 15%,rgba(255,255,255,.18),transparent 22%);
+}
+.hero-content{position:relative;z-index:1;padding:42px 30px 30px;max-width:650px}
+.jp{font-family:serif;color:#ddd;letter-spacing:5px;font-size:13px}
+.hero h1{font-size:48px;line-height:.98;margin:10px 0 15px;letter-spacing:-2px}
+.hero h1 span{display:block;letter-spacing:9px;font-size:16px;margin-top:13px;color:#ddd}
+.hero p{color:#c7c3cb;line-height:1.7;max-width:560px;margin:0}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.btn{
+  border:1px solid var(--line);border-radius:12px;padding:13px 18px;font-weight:800;cursor:pointer;
+  background:rgba(255,255,255,.08);color:#fff
+}
+.btn.primary{border:0;background:linear-gradient(135deg,#ff315f,#ff9f1c);box-shadow:0 10px 35px rgba(255,65,72,.23)}
+.btn:hover{transform:translateY(-1px)}
+.section{margin:12px}
+.panel{
+  background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px;
+  box-shadow:0 15px 50px rgba(0,0,0,.18);backdrop-filter:blur(15px)
+}
+.verified{display:flex;align-items:center;gap:12px}
+.verified-badge{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#168cff}
+.verified h2{font-size:16px;margin:0}.verified p{font-size:12px;color:#8e8995;margin:5px 0 0}
+.online{margin-left:auto;color:#55e98e;font-size:12px}.online:before{content:"•";font-size:22px;vertical-align:-2px}
+.socials{display:flex;gap:8px;margin:16px 0}
+.social{width:38px;height:38px;display:grid;place-items:center;background:#14131b;border:1px solid var(--line);border-radius:10px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;margin-top:10px}
+.stat strong{font-size:21px}.stat small{display:block;color:#85808d;margin-top:5px}
+.quote{
+  padding:36px 25px;text-align:center;font-weight:800;font-size:18px;line-height:1.5;
+  background:
+   linear-gradient(rgba(15,8,18,.58),rgba(15,8,18,.78)),
+   radial-gradient(circle at 50% 30%,#74345b,#17111d 58%);
+}
+.quote span{color:#ff8bb0}
+.features{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.feature{display:flex;gap:12px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:17px}
+.feature-icon{width:38px;height:38px;flex:0 0 38px;border-radius:11px;background:#16151d;display:grid;place-items:center;font-size:18px}
+.feature h3{font-size:14px;margin:0 0 5px}.feature p{font-size:12px;color:#898592;line-height:1.45;margin:0}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin:24px 4px 12px}
+.section-head h2{font-size:19px;margin:0}.section-head a{font-size:12px;color:#ff557b}
+.updates{display:grid;gap:10px}
+.update{display:flex;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:13px}
+.avatar{width:43px;height:43px;border-radius:12px;background:linear-gradient(135deg,#ff3d69,#6b39ff);display:grid;place-items:center;font-weight:900}
+.update b{font-size:13px}.update small{display:block;color:#8f8a96;margin-top:4px}
+.tag{margin-left:auto;background:#ff285d;color:#fff;border-radius:999px;padding:5px 8px;font-size:10px;font-weight:800}
+.bottom{
+  position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:50;width:min(480px,92%);
+  display:flex;align-items:center;justify-content:space-around;padding:8px;
+  background:rgba(17,16,24,.94);border:1px solid rgba(255,255,255,.1);border-radius:20px;
+  box-shadow:0 15px 50px rgba(0,0,0,.5);backdrop-filter:blur(20px)
+}
+.bottom a,.bottom button{width:52px;height:44px;border:0;background:transparent;color:#77727e;display:grid;place-items:center;border-radius:12px;cursor:pointer}
+.bottom a.active{color:#fff;background:rgba(255,255,255,.06)}
+.bottom .plus{width:56px;height:56px;border-radius:50%;margin-top:-28px;background:#111019;border:2px solid #ff315f;color:#ff557b;font-size:25px;box-shadow:0 0 25px rgba(255,49,95,.25)}
+.toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);background:#fff;color:#111;padding:11px 15px;border-radius:12px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:80}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:560px){
+ .hero{min-height:360px;margin:14px 10px 0}.hero-content{padding:35px 22px}
+ .hero h1{font-size:42px}.features{grid-template-columns:1fr 1fr}.feature{padding:14px}
+ .feature p{font-size:11px}.section{margin:10px}
+}
 </style>
 </head>
 <body>
+<div class="app">
 
-<header>
-  <div class="nav">
-    <div class="logo">🛒 Kenzz Market</div>
-    <div class="search"><input id="search" type="search" placeholder="Cari produk di Kenzz Market..."></div>
-    <button class="cart-btn" onclick="openCart()">Keranjang <span id="count" class="cart-count">0</span></button>
+<header class="top">
+  <nav class="nav">
+    <div class="brand"><span class="crown">👑</span> KENZZ</div>
+    <button class="icon-btn" onclick="toast('Mode malam aktif 🌙')">☾</button>
+    <button class="icon-btn" onclick="toast('Menu dibuka ☰')">☰</button>
+  </nav>
+  <div class="search">🔎 <input id="search" placeholder="Cari produk, kategori, atau informasi..."></div>
+  <div class="clock-row">
+    <div class="clock"><small>WIB</small><strong id="wib">--:--</strong></div>
+    <div class="clock"><small>WITA</small><strong id="wita">--:--</strong></div>
+    <div class="clock"><small>WIT</small><strong id="wit">--:--</strong></div>
   </div>
 </header>
 
 <section class="hero">
-  <div class="hero-inner">
-    <div>
-      <h1>Belanja mudah di<br>Kenzz Market.</h1>
-      <p>Temukan berbagai produk pilihan dengan harga menarik. Belanja dari mana saja, kapan saja.</p>
-      <a href="#produk" class="hero-btn">Lihat Produk</a>
+  <div class="hero-content">
+    <div class="jp">ようこそ</div>
+    <h1>Kenzz.<span>MARKET • STORE • COMMUNITY</span></h1>
+    <p>Selamat datang di Kenzz Market. Temukan produk pilihan, promo menarik, dan layanan digital dalam satu tempat.</p>
+    <div class="actions">
+      <a class="btn primary" href="#store">🛍️ Belanja Sekarang →</a>
+      <a class="btn" href="#updates">📣 Info Terbaru</a>
     </div>
-    <div class="hero-box">🛍️</div>
   </div>
 </section>
 
-<main id="produk">
-  <h2 class="section-title">Kategori</h2>
-  <div class="categories">
-    <button class="cat active" onclick="filterCat('Semua',this)">Semua</button>
-    <button class="cat" onclick="filterCat('Elektronik',this)">Elektronik</button>
-    <button class="cat" onclick="filterCat('Fashion',this)">Fashion</button>
-    <button class="cat" onclick="filterCat('Rumah',this)">Rumah</button>
-    <button class="cat" onclick="filterCat('Aksesoris',this)">Aksesoris</button>
+<section class="section panel">
+  <div class="verified">
+    <div class="verified-badge">✓</div>
+    <div><h2>Verified Official</h2><p>Toko resmi Kenzz Market</p></div>
+    <div class="online">online</div>
   </div>
-
-  <h2 class="section-title">Produk Pilihan</h2>
-  <div id="products" class="grid"></div>
-</main>
-
-<div id="cartOverlay" class="overlay" onclick="if(event.target===this)closeCart()">
-  <div class="drawer">
-    <div class="drawer-head"><h2>Keranjang</h2><button class="close" onclick="closeCart()">✕</button></div>
-    <div id="cartItems" class="cart-items"></div>
-    <div class="total">
-      <div class="total-row"><span>Total</span><span id="total">Rp0</span></div>
-      <button class="checkout" onclick="openCheckout()">Lanjut Checkout</button>
-    </div>
+  <div class="socials">
+    <div class="social">🎵</div><div class="social">▶️</div><div class="social">💬</div>
+    <div class="social">📷</div><div class="social">✈️</div><div class="social">𝕏</div>
   </div>
+  <div class="stats">
+    <div class="stat"><strong>1.2K</strong><small>Pelanggan</small></div>
+    <div class="stat"><strong>25+</strong><small>Produk Store</small></div>
+    <div class="stat"><strong>99%</strong><small>Kepuasan</small></div>
+  </div>
+</section>
+
+<section class="section panel quote">
+  “Di sini bukan siapa paling cepat, tapi siapa paling <span>teliti memilih.</span>”
+</section>
+
+<section class="section">
+  <div class="features">
+    <div class="feature"><div class="feature-icon">🛒</div><div><h3>Store Online</h3><p>Belanja produk Kenzz dengan mudah dan cepat.</p></div></div>
+    <div class="feature"><div class="feature-icon">⚒️</div><div><h3>Tools Premium</h3><p>Fitur digital untuk membantu aktivitas kamu.</p></div></div>
+    <div class="feature"><div class="feature-icon">🔔</div><div><h3>Update Terbaru</h3><p>Dapatkan informasi dan promo terbaru.</p></div></div>
+    <div class="feature"><div class="feature-icon">🎧</div><div><h3>Support</h3><p>Tim siap membantu saat kamu membutuhkan.</p></div></div>
+  </div>
+</section>
+
+<section class="section" id="updates">
+  <div class="section-head"><div><h2>📣 Update Terbaru</h2><small style="color:#77727e">Informasi terbaru Kenzz Market</small></div><a href="#">Lihat Semua →</a></div>
+  <div class="updates">
+    <div class="update"><div class="avatar">K</div><div><b>Promo Kenzz Market</b><small>Diskon produk pilihan minggu ini</small></div><span class="tag">PROMO</span></div>
+    <div class="update"><div class="avatar">🛍️</div><div><b>Produk Baru</b><small>Koleksi baru sudah tersedia di store</small></div><span class="tag">NEW</span></div>
+    <div class="update"><div class="avatar">✓</div><div><b>Store Resmi</b><small>Belanja aman melalui Kenzz Market</small></div><span class="tag">LIVE</span></div>
+  </div>
+</section>
+
+<section class="section panel" id="store" style="margin-top:18px">
+  <h2 style="margin:0 0 8px">🛍️ Kenzz Market Store</h2>
+  <p style="color:#96919d;font-size:13px;line-height:1.6">Halaman ini siap dikembangkan menjadi katalog produk lengkap dengan keranjang, checkout, akun pelanggan, dan panel admin.</p>
+  <a class="btn primary" href="#" onclick="toast('Store sedang dibuka...');return false;" style="display:inline-block;margin-top:15px">Jelajahi Store →</a>
+</section>
+
 </div>
 
-<div id="checkoutModal" class="modal">
-  <div class="modal-box">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <h2>Checkout</h2><button class="close" onclick="closeCheckout()">✕</button>
-    </div>
-    <div class="form">
-      <input id="name" placeholder="Nama lengkap">
-      <input id="phone" placeholder="Nomor WhatsApp">
-      <textarea id="address" placeholder="Alamat lengkap"></textarea>
-    </div>
-    <button class="confirm" onclick="placeOrder()">Buat Pesanan</button>
-  </div>
+<div class="bottom">
+  <a class="active" href="#">⌂</a>
+  <a href="#store">🔗</a>
+  <button class="plus" onclick="toast('Menu cepat Kenzz')">+</button>
+  <a href="#updates">▦</a>
+  <a href="#store">👤</a>
 </div>
+<div id="toast" class="toast"></div>
 
 <script>
-const products=[
-{id:1,name:"Headphone Wireless",price:249000,cat:"Elektronik",icon:"🎧"},
-{id:2,name:"Smartwatch Sport",price:399000,cat:"Elektronik",icon:"⌚"},
-{id:3,name:"Kaos Premium",price:129000,cat:"Fashion",icon:"👕"},
-{id:4,name:"Sneakers Casual",price:329000,cat:"Fashion",icon:"👟"},
-{id:5,name:"Lampu Meja LED",price:99000,cat:"Rumah",icon:"💡"},
-{id:6,name:"Botol Minum",price:79000,cat:"Rumah",icon:"🧴"},
-{id:7,name:"Tas Selempang",price:179000,cat:"Aksesoris",icon:"👜"},
-{id:8,name:"Kacamata Fashion",price:119000,cat:"Aksesoris",icon:"🕶️"}
-];
-let cart=[];
-let currentCat="Semua";
-
-const rupiah=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(n);
-
-function renderProducts(){
- const q=document.getElementById("search").value.toLowerCase();
- const list=products.filter(p=>(currentCat==="Semua"||p.cat===currentCat)&&p.name.toLowerCase().includes(q));
- const el=document.getElementById("products");
- el.innerHTML=list.length?list.map(p=>`
- <article class="product">
-   <div class="product-img">${p.icon}</div>
-   <div class="product-body">
-     <span class="badge">${p.cat}</span>
-     <h3>${p.name}</h3>
-     <p>Produk pilihan Kenzz Market berkualitas.</p>
-     <div class="price">${rupiah(p.price)}</div>
-     <button class="add" onclick="addCart(${p.id})">+ Tambah ke Keranjang</button>
-   </div>
- </article>`).join(""):`<div class="empty">Produk tidak ditemukan.</div>`;
+function clock(){
+ const now=new Date();
+ const f=(tz)=>new Intl.DateTimeFormat('id-ID',{timeZone:tz,hour:'2-digit',minute:'2-digit',hour12:false}).format(now);
+ document.getElementById('wib').textContent=f('Asia/Jakarta');
+ document.getElementById('wita').textContent=f('Asia/Makassar');
+ document.getElementById('wit').textContent=f('Asia/Jayapura');
 }
-function filterCat(cat,btn){
- currentCat=cat;
- document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));
- btn.classList.add("active"); renderProducts();
+clock();setInterval(clock,1000);
+function toast(msg){
+ const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');
+ clearTimeout(window.tt);window.tt=setTimeout(()=>el.classList.remove('show'),1800);
 }
-document.getElementById("search").addEventListener("input",renderProducts);
-
-function addCart(id){
- const item=cart.find(x=>x.id===id);
- if(item)item.qty++;else cart.push({id,qty:1});
- renderCart();
-}
-function changeQty(id,delta){
- const item=cart.find(x=>x.id===id);
- if(!item)return;
- item.qty+=delta;if(item.qty<=0)cart=cart.filter(x=>x.id!==id);
- renderCart();
-}
-function renderCart(){
- const box=document.getElementById("cartItems");
- let total=0,count=0;
- if(!cart.length) box.innerHTML='<div class="empty">Keranjang masih kosong 🛒</div>';
- else box.innerHTML=cart.map(i=>{
-   const p=products.find(x=>x.id===i.id); total+=p.price*i.qty;count+=i.qty;
-   return `<div class="cart-item">
-     <div class="cart-icon">${p.icon}</div>
-     <div class="cart-info"><strong>${p.name}</strong><small>${rupiah(p.price)}</small>
-       <div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${i.qty}</span><button onclick="changeQty(${p.id},1)">+</button></div>
-     </div>
-   </div>`;
- }).join("");
- document.getElementById("count").textContent=count;
- document.getElementById("total").textContent=rupiah(total);
-}
-function openCart(){document.getElementById("cartOverlay").classList.add("show");renderCart()}
-function closeCart(){document.getElementById("cartOverlay").classList.remove("show")}
-function openCheckout(){
- if(!cart.length){alert("Keranjang masih kosong.");return}
- document.getElementById("checkoutModal").classList.add("show");
-}
-function closeCheckout(){document.getElementById("checkoutModal").classList.remove("show")}
-function placeOrder(){
- const name=document.getElementById("name").value.trim(),phone=document.getElementById("phone").value.trim(),address=document.getElementById("address").value.trim();
- if(!name||!phone||!address){alert("Lengkapi data checkout terlebih dahulu.");return}
- alert("Pesanan berhasil dibuat! Terima kasih sudah berbelanja di Kenzz Market.");
- cart=[];renderCart();closeCheckout();closeCart();
- document.getElementById("name").value="";document.getElementById("phone").value="";document.getElementById("address").value="";
-}
-renderProducts();renderCart();
+document.getElementById('search').addEventListener('keydown',e=>{
+ if(e.key==='Enter') toast('Pencarian: '+e.target.value);
+});
 </script>
 </body>
 </html>
