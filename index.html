@@ -5,22 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Kenzz Market</title>
 <style>
-  #bg-video{
-  position:fixed;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  z-index:-5;
-}
-
-body:before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.55);
-  z-index:-4;
-}
 :root{
   --bg:#08080d;--panel:rgba(17,16,23,.88);--panel2:rgba(25,23,33,.78);
   --text:#f5f5f7;--muted:#a8a4b1;--line:rgba(255,255,255,.10);
@@ -33,21 +17,7 @@ body{
   color:var(--text);background:#050509;min-height:100vh;overflow-x:hidden;
 }
 body:before{
- content:"";
- position:fixed;
- inset:0;
- background:rgba(0,0,0,.5);
- z-index:-5;
-}
- background:
- linear-gradient(
- rgba(0,0,0,.65),
- rgba(0,0,0,.75)
- ),
-
- background-size:cover;
- background-position:center;
- background-attachment:fixed;
+  content:"";position:fixed;inset:0;background:rgba(0,0,0,.50);z-index:-4;
 }
 body:after{
   content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
@@ -55,10 +25,15 @@ body:after{
 }
 a{color:inherit;text-decoration:none}
 button{font:inherit}
+#bg-video{
+  position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-5;
+}
 .app{width:min(100%,760px);margin:auto;padding-bottom:100px}
+
 .top{
   position:sticky;top:0;z-index:20;padding:16px 18px 10px;
-  backdrop-filter:blur(18px);background:rgba(6,6,10,.72);border-bottom:1px solid rgba(255,255,255,.06)
+  backdrop-filter:blur(18px);background:rgba(6,6,10,.72);
+  border-bottom:1px solid rgba(255,255,255,.06)
 }
 .nav{display:flex;align-items:center;gap:10px}
 .brand{display:flex;align-items:center;gap:9px;font-weight:900;font-size:20px;letter-spacing:2px;margin-right:auto}
@@ -77,21 +52,14 @@ button{font:inherit}
 .clock{padding:10px 8px;text-align:center;background:rgba(16,15,22,.88);border:1px solid var(--line);border-radius:13px}
 .clock small{display:block;color:#aaa5b1;font-size:11px;letter-spacing:2px}
 .clock strong{display:block;margin-top:4px;color:var(--cyan);font:800 20px/1 monospace}
+
 .hero{
- margin:18px 12px 0;
- min-height:330px;
- border:1px solid var(--line);
- position:relative;
-
- background:
- linear-gradient(
- rgba(0,0,0,.55),
- rgba(0,0,0,.65)
- ),
- url("https://c.termai.cc/i148/N28g6Y6.jpg");
-
- background-size:cover;
- background-position:center;
+  margin:18px 12px 0;min-height:330px;border:1px solid var(--line);
+  border-radius:22px;position:relative;overflow:hidden;
+  background:
+    linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.65)),
+    url("https://c.termai.cc/i148/N28g6Y6.jpg");
+  background-size:cover;background-position:center;
 }
 .hero:before{
   content:"";position:absolute;inset:0;opacity:.5;
@@ -107,17 +75,12 @@ button{font:inherit}
 .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
 .btn{
   border:1px solid var(--line);border-radius:12px;padding:13px 18px;font-weight:800;cursor:pointer;
-  background:rgba(255,255,255,.08);color:#fff
+  background:rgba(255,255,255,.08);color:#fff;transition:.2s
 }
-  <section id="store" class="section">
-<h2>🛒 Produk Kenzz Store</h2>
-
-<div id="product-list" class="products"></div>
-
-</section>
 .btn.primary{border:0;background:linear-gradient(135deg,#ff315f,#ff9f1c);box-shadow:0 10px 35px rgba(255,65,72,.23)}
 .btn:hover{transform:translateY(-1px)}
-.section{margin:12px}
+
+.section,.explore{margin:12px}
 .panel{
   background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px;
   box-shadow:0 15px 50px rgba(0,0,0,.18);backdrop-filter:blur(15px)
@@ -132,9 +95,7 @@ button{font:inherit}
 .stat strong{font-size:21px}.stat small{display:block;color:#85808d;margin-top:5px}
 .quote{
   padding:36px 25px;text-align:center;font-weight:800;font-size:18px;line-height:1.5;
-  background:
-   linear-gradient(rgba(15,8,18,.58),rgba(15,8,18,.78)),
-   radial-gradient(circle at 50% 30%,#74345b,#17111d 58%);
+  background:linear-gradient(rgba(15,8,18,.58),rgba(15,8,18,.78)),radial-gradient(circle at 50% 30%,#74345b,#17111d 58%);
 }
 .quote span{color:#ff8bb0}
 .features{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -148,418 +109,315 @@ button{font:inherit}
 .avatar{width:43px;height:43px;border-radius:12px;background:linear-gradient(135deg,#ff3d69,#6b39ff);display:grid;place-items:center;font-weight:900}
 .update b{font-size:13px}.update small{display:block;color:#8f8a96;margin-top:4px}
 .tag{margin-left:auto;background:#ff285d;color:#fff;border-radius:999px;padding:5px 8px;font-size:10px;font-weight:800}
+
+.category-list{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.category-list button{
+  background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.15);
+  padding:12px 18px;border-radius:20px;cursor:pointer;transition:.2s
+}
+.category-list button:hover,.category-list button.active{background:#ff2f68;border-color:#ff2f68}
+
+#product-list{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-top:20px;
+}
+.product-card{
+  background:rgba(20,20,30,.86);border:1px solid #333;border-radius:15px;padding:15px;
+  overflow:hidden;transition:.2s
+}
+.product-card:hover{transform:translateY(-2px);border-color:rgba(255,47,104,.45)}
+.product-card img{width:100%;height:180px;object-fit:cover;border-radius:12px;display:block}
+.product-card h3{margin:10px 0;color:white}
+.product-card p{color:#aaa;margin:5px 0}
+.price{color:#00ffd5!important;font-weight:bold;font-size:18px!important}
+.empty-products{grid-column:1/-1;text-align:center;color:#aaa;padding:30px 10px}
+
+.menu{
+  position:fixed;top:0;left:-320px;width:300px;height:100vh;background:#0b0b12;
+  padding:30px 20px;z-index:99999;transition:.3s ease;box-shadow:10px 0 30px rgba(0,0,0,.5)
+}
+.menu.show{left:0}
+.menu h2{margin-top:40px;margin-bottom:25px}
+.menu a{
+  display:block;color:white;text-decoration:none;font-size:18px;padding:15px 0;
+  border-bottom:1px solid rgba(255,255,255,.15)
+}
+.menu button{background:none;color:white;border:0;font-size:22px;cursor:pointer}
+#overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99998;display:none
+}
+#overlay.show{display:block}
+
 .bottom{
   position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:50;width:min(480px,92%);
   display:flex;align-items:center;justify-content:space-around;padding:8px;
   background:rgba(17,16,24,.94);border:1px solid rgba(255,255,255,.1);border-radius:20px;
   box-shadow:0 15px 50px rgba(0,0,0,.5);backdrop-filter:blur(20px)
 }
-.bottom a,.bottom button{width:52px;height:44px;border:0;background:transparent;color:#77727e;display:grid;place-items:center;border-radius:12px;cursor:pointer}
+.bottom a,.bottom button{
+  width:52px;height:44px;border:0;background:transparent;color:#77727e;display:grid;
+  place-items:center;border-radius:12px;cursor:pointer
+}
 .bottom a.active{color:#fff;background:rgba(255,255,255,.06)}
-.bottom .plus{width:56px;height:56px;border-radius:50%;margin-top:-28px;background:#111019;border:2px solid #ff315f;color:#ff557b;font-size:25px;box-shadow:0 0 25px rgba(255,49,95,.25)}
-.toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);background:#fff;color:#111;padding:11px 15px;border-radius:12px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:80}
+.bottom .plus{
+  width:56px;height:56px;border-radius:50%;margin-top:-28px;background:#111019;
+  border:2px solid #ff315f;color:#ff557b;font-size:25px;box-shadow:0 0 25px rgba(255,49,95,.25)
+}
+.toast{
+  position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);background:#fff;color:#111;
+  padding:11px 15px;border-radius:12px;font-size:13px;font-weight:700;opacity:0;
+  pointer-events:none;transition:.25s;z-index:100000
+}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:560px){
- .hero{min-height:360px;margin:14px 10px 0}.hero-content{padding:35px 22px}
- .hero h1{font-size:42px}.features{grid-template-columns:1fr 1fr}.feature{padding:14px}
- .feature p{font-size:11px}.section{margin:10px}
-}
-  <style>
-  .explore{
- margin:12px;
-}
-
-.category-list{
- display:flex;
- gap:10px;
- flex-wrap:wrap;
-}
-
-.category-list button{
- background:rgba(255,255,255,.08);
- color:#fff;
- border:1px solid rgba(255,255,255,.15);
- padding:12px 18px;
- border-radius:20px;
- cursor:pointer;
-}
-
-.category-list button:hover{
- background:#ff2f68;
-}
-  function toggleMenu(){
-
-let menu = document.getElementById("menu");
-let overlay = document.getElementById("overlay");
-
-menu.classList.toggle("show");
-overlay.classList.toggle("show");
-
-}
-  .menu{
-    position:fixed;
-    top:0;
-    left:-320px;
-    width:300px;
-    height:100vh;
-    background:#0b0b12;
-    padding:25px;
-    z-index:9999;
-    transition:.35s ease;
-    box-shadow:10px 0 30px rgba(0,0,0,.5);
-}
-
-.menu.show{
-    left:0;
-}
-
-.menu h2{
-    margin-top:40px;
-    margin-bottom:25px;
-}
-
-.menu a{
-    display:block;
-    color:white;
-    text-decoration:none;
-    font-size:18px;
-    padding:18px 0;
-    border-bottom:1px solid rgba(255,255,255,.15);
-}
-
-#overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.65);
-    z-index:9998;
-    display:none;
-}
-
-#overlay.show{
-    display:block;
-}
-
-.menu a{
- display:block;
- color:white;
- text-decoration:none;
- padding:15px 0;
- border-bottom:1px solid #333;
-}
-
-.menu button{
- background:none;
- color:white;
- border:0;
- font-size:22px;
-}
-
-#overlay{
- position:fixed;
- inset:0;
- background:rgba(0,0,0,.6);
- display:none;
- z-index:999;
-}
-
-#overlay.show{
- display:block;
-}
-  #menu{
- position:fixed !important;
- top:0 !important;
- left:-320px !important;
- width:300px !important;
- height:100vh !important;
- background:#0b0b12 !important;
- z-index:99999 !important;
- transition:.3s ease !important;
- padding:30px 20px !important;
-}
-
-#menu.show{
- left:0 !important;
-}
-
-#overlay{
- position:fixed !important;
- inset:0 !important;
- background:rgba(0,0,0,.6) !important;
- z-index:99998 !important;
- display:none;
-}
-
-#overlay.show{
- display:block;
-}
-  <style>
-  #product-list{
- display:grid;
- grid-template-columns:repeat(2,1fr);
- gap:12px;
- margin:15px;
-}
-
-.product-card{
- background:#17151f;
- border:1px solid #333;
- border-radius:18px;
- padding:12px;
-}
-
-.product-card img{
- width:100%;
- height:150px;
- object-fit:cover;
- border-radius:12px;
-}
-
-.product-card h3{
- margin:8px 0;
-}
-
-.price{
- color:#00ffd5;
- font-weight:bold;
-}
 
 @media(max-width:600px){
- #product-list{
-  grid-template-columns:1fr;
- }
+  .hero{min-height:360px;margin:14px 10px 0}.hero-content{padding:35px 22px}
+  .hero h1{font-size:42px}.hero h1 span{letter-spacing:5px}
+  .features{grid-template-columns:1fr 1fr}.feature{padding:14px}.feature p{font-size:11px}
+  #product-list{grid-template-columns:1fr}
 }
-  #product-list{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:15px;
-margin-top:20px;
-}
-
-.product-card{
-background:rgba(20,20,30,.8);
-border:1px solid #333;
-border-radius:15px;
-padding:15px;
-}
-
-.product-card img{
-width:100%;
-height:180px;
-object-fit:cover;
-border-radius:12px;
-}
-
-.product-card h3{
-margin:10px 0;
-color:white;
-}
-
-.product-card p{
-color:#aaa;
-margin:5px 0;
-}
-
-.price{
-color:#00ffd5;
-font-weight:bold;
-font-size:18px;
-}
-
-@media(max-width:600px){
-#product-list{
-grid-template-columns:1fr;
-}
-}
-
 </style>
 </head>
-  
 <body>
 
-  <video autoplay muted loop playsinline id="bg-video">
+<video autoplay muted loop playsinline id="bg-video">
   <source src="https://c.termai.cc/v154/apv.mp4" type="video/mp4">
 </video>
 
+<div id="overlay" onclick="closeMenu()"></div>
 
+<div class="app">
+  <aside id="menu" class="menu" aria-label="Menu utama">
+    <button type="button" onclick="closeMenu()" aria-label="Tutup menu">✕</button>
+    <h2>👑 Kenzz Menu</h2>
+    <a href="index.html" onclick="closeMenu()">🏠 Home</a>
+    <a href="#store" onclick="closeMenu()">🛒 Store</a>
+    <a href="#updates" onclick="closeMenu()">🔔 Update</a>
+    <a href="admin.html">👑 Admin</a>
+  </aside>
 
-  <div class="app">
-  <div id="menu" class="menu">
+  <header class="top">
+    <nav class="nav">
+      <div class="brand"><span class="crown">🛒</span> KENZZ STORE</div>
+      <button class="icon-btn" type="button" onclick="toast('Mode malam aktif 🌙')" aria-label="Mode malam">☾</button>
+      <button class="icon-btn" type="button" onclick="openMenu()" aria-label="Buka menu">☰</button>
+    </nav>
 
-
-<h2>👑 Kenzz Menu</h2>
-
-<a href="index.html">🏠 Home</a>
-<a href="#store">🛒 Store</a>
-<a href="#updates">🔔 Update</a>
-<a href="admin.html">👑 Admin</a>
-
-</div>
-
-<script>
-function openMenu(){
- document.getElementById("menu").classList.add("show");
- document.getElementById("overlay").classList.add("show");
-}
-
-function closeMenu(){
- document.getElementById("menu").classList.remove("show");
- document.getElementById("overlay").classList.remove("show");
-}
-<script>
-function openMenu(){
- document.getElementById("menu").classList.add("show");
- document.getElementById("overlay").classList.add("show");
-}
-
-function closeMenu(){
- document.getElementById("menu").classList.remove("show");
- document.getElementById("overlay").classList.remove("show");
-}
-async function tampilProduk(){
-
-let produk = await getProducts();
-
-console.log(produk);
-  
-let tempat = document.getElementById("product-list");
-
-tempat.innerHTML = produk.map(p=>`
-
-<div class="product-card">
-
-<img src="${p.image || 'https://via.placeholder.com/300'}">
-
-<h3>${p.name}</h3>
-
-<p class="price">
-Rp ${Number(p.price).toLocaleString("id-ID")}
-</p>
-
-<p>${p.category}</p>
-
-<p>Stok: ${p.stock}</p>
-
-</div>
-
-`).join("");
-
-}
-
-tampilProduk();
-
-</script>
-
-
-<header class="top">
-  <nav class="nav">
-    <div class="brand"><span class="crown">🛒</span> KENZZ STORE</div>
-    <button class="icon-btn" onclick="toast('Mode malam aktif 🌙')">☾</button>
-    <button class="icon-btn" onclick="document.getElementById('menu').classList.toggle('show')">☰</button>
-  </nav>
-  <div class="search">🔎 <input id="search" placeholder="Cari produk, kategori, atau informasi..."></div>
-  <div class="clock-row">
-    <div class="clock"><small>WIB</small><strong id="wib">--:--</strong></div>
-    <div class="clock"><small>WITA</small><strong id="wita">--:--</strong></div>
-    <div class="clock"><small>WIT</small><strong id="wit">--:--</strong></div>
-  </div>
-</header>
-
-<section class="hero">
-  <div class="hero-content">
-    <div class="jp">ようこそ</div>
-    <h1>KENZZ STORE.<span>MURAH • AMAN • TERPERCAYA</span></h1>
-    <p>Selamat datang di Kenzz Store. Temukan produk yang anda inginkan disini.</p>
-    <div class="actions">
-      <a class="btn primary" href="#store">🛍️ List Produk→</a>
-      <a class="btn" href="#updates">📣 Announcement</a>
+    <div class="search">
+      🔎
+      <input id="search" type="search" autocomplete="off" placeholder="Cari produk, kategori, atau informasi...">
     </div>
-  </div>
-</section>
 
+    <div class="clock-row">
+      <div class="clock"><small>WIB</small><strong id="wib">--:--</strong></div>
+      <div class="clock"><small>WITA</small><strong id="wita">--:--</strong></div>
+      <div class="clock"><small>WIT</small><strong id="wit">--:--</strong></div>
+    </div>
+  </header>
 
-<section class="explore">
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <div class="jp">ようこそ</div>
+        <h1>KENZZ STORE.<span>MURAH • AMAN • TERPERCAYA</span></h1>
+        <p>Selamat datang di Kenzz Store. Temukan produk yang anda inginkan disini.</p>
+        <div class="actions">
+          <a class="btn primary" href="#store">🛍️ List Produk →</a>
+          <a class="btn" href="#updates">📣 Announcement</a>
+        </div>
+      </div>
+    </section>
 
-<h2> 🔎 Jelajahi Produk</h2>
+    <section id="store" class="explore">
+      <h2>🔎 Jelajahi Produk</h2>
+      <div class="category-list" role="group" aria-label="Filter kategori">
+        <button type="button" class="active" data-category="Semua">Semua</button>
+        <button type="button" data-category="Apk Premium">Apk Premium</button>
+        <button type="button" data-category="Panel Pterodactyl">Panel Pterodactyl</button>
+        <button type="button" data-category="Nokos">Nokos</button>
+        <button type="button" data-category="Sewa bot">Sewa bot</button>
+      </div>
+      <div id="product-list">
+        <div class="empty-products">Memuat produk...</div>
+      </div>
+    </section>
 
-<div class="category-list">
-<button>Semua</button>
-<button>Apk Premium</button>
-<button>Panel Pterodactyl</button>
-<button>Nokos</button>
-<button>Sewa bot</button>
+    <section class="section panel">
+      <div class="verified">
+        <div class="verified-badge">✓</div>
+        <div><h2>Verified Official</h2><p>Toko resmi Kenzz Store</p></div>
+        <div class="online">online</div>
+      </div>
+      <div class="socials">
+        <div class="social">🎵</div><div class="social">▶️</div><div class="social">💬</div>
+        <div class="social">📷</div><div class="social">✈️</div><div class="social">𝕏</div>
+      </div>
+      <div class="stats">
+        <div class="stat"><strong>0</strong><small>Pelanggan</small></div>
+        <div class="stat"><strong id="product-count">0</strong><small>Produk Store</small></div>
+        <div class="stat"><strong>0%</strong><small>Kepuasan</small></div>
+      </div>
+    </section>
+
+    <section class="section panel quote">
+      “Yang Asli Ada <span>Badaknya.</span>”
+    </section>
+
+    <section class="section">
+      <div class="features">
+        <div class="feature"><div class="feature-icon">🛒</div><div><h3>Store Online</h3><p>Belanja produk Kenzz dengan mudah dan cepat.</p></div></div>
+        <div class="feature"><div class="feature-icon">⚒️</div><div><h3>Tools Premium</h3><p>Fitur digital untuk membantu aktivitas kamu.</p></div></div>
+        <div class="feature"><div class="feature-icon">🔔</div><div><h3>Update Terbaru</h3><p>Dapatkan informasi dan promo terbaru.</p></div></div>
+        <div class="feature"><div class="feature-icon">🎧</div><div><h3>Support</h3><p>Tim siap membantu saat kamu membutuhkan.</p></div></div>
+      </div>
+    </section>
+
+    <section id="updates" class="section panel">
+      <div class="section-head">
+        <h2>🔔 Update</h2>
+        <a href="#updates">Lihat semua</a>
+      </div>
+      <div class="updates">
+        <div class="update"><div class="avatar">K</div><div><b>Kenzz Store</b><small>Selamat datang di website resmi Kenzz Store.</small></div><span class="tag">INFO</span></div>
+      </div>
+    </section>
+  </main>
 </div>
 
-  <div id="product-list"></div>
+<nav class="bottom" aria-label="Navigasi bawah">
+  <a class="active" href="#" aria-label="Home">⌂</a>
+  <a href="#updates" aria-label="Update">▦</a>
+  <button class="plus" type="button" onclick="toast('Menu cepat Kenzz')" aria-label="Menu cepat">+</button>
+  <a href="#store" aria-label="Store">🛒</a>
+  <a href="admin.html" aria-label="Admin">👑</a>
+</nav>
 
-</section>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-
-
-<section class="section panel">
-  <div class="verified">
-    <div class="verified-badge">✓</div>
-    <div><h2>Verified Official</h2><p>Toko resmi Kenzz Store</p></div>
-    <div class="online">online</div>
-  </div>
-  <div class="socials">
-    <div class="social">🎵</div><div class="social">▶️</div><div class="social">💬</div>
-    <div class="social">📷</div><div class="social">✈️</div><div class="social">𝕏</div>
-  </div>
-  <div class="stats">
-    <div class="stat"><strong>0</strong><small>Pelanggan</small></div>
-    <div class="stat"><strong>0</strong><small>Produk Store</small></div>
-    <div class="stat"><strong>0%</strong><small>Kepuasan</small></div>
-  </div>
-</section>
-
-<section class="section panel quote">
-  “Yang Asli Ada <span>Badaknya.</span>”
-</section>
-
-<section class="section">
-  <div class="features">
-    <div class="feature"><div class="feature-icon">🛒</div><div><h3>Store Online</h3><p>Belanja produk Kenzz dengan mudah dan cepat.</p></div></div>
-    <div class="feature"><div class="feature-icon">⚒️</div><div><h3>Tools Premium</h3><p>Fitur digital untuk membantu aktivitas kamu.</p></div></div>
-    <div class="feature"><div class="feature-icon">🔔</div><div><h3>Update Terbaru</h3><p>Dapatkan informasi dan promo terbaru.</p></div></div>
-    <div class="feature"><div class="feature-icon">🎧</div><div><h3>Support</h3><p>Tim siap membantu saat kamu membutuhkan.</p></div></div>
-  </div>
-</section>
-
-
-
-
-
-</div>
-
-<div class="bottom">
-  <a class="active" href="#">⌂</a>
-  <a href="#updates">▦</a>
-  <button class="plus" onclick="toast('Menu cepat Kenzz')">+</button>
-  <a href="#store">👤</a>
-  <a href="admin.html">👑</a>
-</div>
-<div id="toast" class="toast"></div>
 
 <script>
-function clock(){
- const now=new Date();
- const f=(tz)=>new Intl.DateTimeFormat('id-ID',{timeZone:tz,hour:'2-digit',minute:'2-digit',hour12:false}).format(now);
- document.getElementById('wib').textContent=f('Asia/Jakarta');
- document.getElementById('wita').textContent=f('Asia/Makassar');
- document.getElementById('wit').textContent=f('Asia/Jayapura');
-}
-clock();setInterval(clock,1000);
-function toast(msg){
- const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');
- clearTimeout(window.tt);window.tt=setTimeout(()=>el.classList.remove('show'),1800);
-}
-document.getElementById('search').addEventListener('keydown',e=>{
- if(e.key==='Enter') toast('Pencarian: '+e.target.value);
-});
+(function () {
+  "use strict";
+
+  let allProducts = [];
+  let activeCategory = "Semua";
+
+  const $ = (selector) => document.querySelector(selector);
+
+  window.openMenu = function () {
+    $("#menu").classList.add("show");
+    $("#overlay").classList.add("show");
+  };
+
+  window.closeMenu = function () {
+    $("#menu").classList.remove("show");
+    $("#overlay").classList.remove("show");
+  };
+
+  window.toast = function (msg) {
+    const el = $("#toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(window.__toastTimer);
+    window.__toastTimer = setTimeout(() => el.classList.remove("show"), 1800);
+  };
+
+  function clock() {
+    const now = new Date();
+    const format = (tz) => new Intl.DateTimeFormat("id-ID", {
+      timeZone: tz, hour: "2-digit", minute: "2-digit", hour12: false
+    }).format(now);
+
+    $("#wib").textContent = format("Asia/Jakarta");
+    $("#wita").textContent = format("Asia/Makassar");
+    $("#wit").textContent = format("Asia/Jayapura");
+  }
+
+  function normalize(value) {
+    return String(value ?? "").toLowerCase().trim();
+  }
+
+  function renderProducts() {
+    const list = $("#product-list");
+    const query = normalize($("#search").value);
+
+    const filtered = allProducts.filter((p) => {
+      const category = String(p.category ?? "");
+      const matchesCategory = activeCategory === "Semua" ||
+        normalize(category) === normalize(activeCategory);
+      const haystack = [
+        p.name, p.category, p.description, p.price, p.stock
+      ].map(normalize).join(" ");
+      return matchesCategory && (!query || haystack.includes(query));
+    });
+
+    $("#product-count").textContent = allProducts.length;
+
+    if (!filtered.length) {
+      list.innerHTML = '<div class="empty-products">Produk tidak ditemukan.</div>';
+      return;
+    }
+
+    list.innerHTML = filtered.map((p) => {
+      const image = p.image || "https://via.placeholder.com/300";
+      const price = Number(p.price || 0).toLocaleString("id-ID");
+      const stock = p.stock ?? 0;
+
+      return `
+        <article class="product-card">
+          <img src="${image}" alt="${escapeHtml(p.name || "Produk")}" loading="lazy"
+               onerror="this.src='https://via.placeholder.com/300'">
+          <h3>${escapeHtml(p.name || "Produk")}</h3>
+          <p class="price">Rp ${price}</p>
+          <p>${escapeHtml(p.category || "Tanpa kategori")}</p>
+          <p>Stok: ${escapeHtml(stock)}</p>
+        </article>
+      `;
+    }).join("");
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;"
+    }[char]));
+  }
+
+  async function loadProducts() {
+    const list = $("#product-list");
+
+    try {
+      if (typeof window.getProducts !== "function") {
+        throw new Error("getProducts() belum tersedia.");
+      }
+
+      const products = await window.getProducts();
+      allProducts = Array.isArray(products) ? products : [];
+      renderProducts();
+    } catch (error) {
+      console.error("Gagal memuat produk:", error);
+      allProducts = [];
+      list.innerHTML =
+        '<div class="empty-products">Produk belum dapat dimuat. Pastikan koneksi database/API tersedia.</div>';
+      $("#product-count").textContent = "0";
+    }
+  }
+
+  $("#search").addEventListener("input", renderProducts);
+
+  document.querySelectorAll(".category-list button").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeCategory = button.dataset.category;
+      document.querySelectorAll(".category-list button").forEach((btn) => {
+        btn.classList.toggle("active", btn === button);
+      });
+      renderProducts();
+    });
+  });
+
+  clock();
+  setInterval(clock, 1000);
+  loadProducts();
+})();
 </script>
-  
-  <script>
-tampilProduk();
-  </script>
+
 </body>
 </html>
