@@ -420,6 +420,8 @@ async function tampilProduk(){
 
 let produk = await getProducts();
 
+  console.log(produk);
+  
 let tempat = document.getElementById("product-list");
 
 tempat.innerHTML = produk.map(p=>`
@@ -483,7 +485,6 @@ tampilProduk();
 <h2> 🔎 Jelajahi Produk</h2>
 
 <div class="category-list">
-
 <button>Semua</button>
 <button>Apk Premium</button>
 <button>Panel Pterodactyl</button>
@@ -492,7 +493,7 @@ tampilProduk();
 </div>
 
   <div id="product-list"></div>
-  
+</div>
 </section>
 
 
