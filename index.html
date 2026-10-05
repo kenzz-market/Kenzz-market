@@ -420,7 +420,7 @@ async function tampilProduk(){
 
 let produk = await getProducts();
 
-  console.log(produk);
+console.log(produk);
   
 let tempat = document.getElementById("product-list");
 
@@ -494,9 +494,6 @@ tampilProduk();
 
 </section>
 
-<script>
-tampilProduk();
-</script>
 
 
 <section class="section panel">
@@ -561,5 +558,9 @@ document.getElementById('search').addEventListener('keydown',e=>{
  if(e.key==='Enter') toast('Pencarian: '+e.target.value);
 });
 </script>
+  
+  <script>
+tampilProduk();
+  </script>
 </body>
 </html>
