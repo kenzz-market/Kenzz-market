@@ -138,21 +138,19 @@ async function save(){
 
 await addProduct({
 
-name:name.value,
+name: document.getElementById("name").value,
 
-price:Number(price.value),
+price: Number(document.getElementById("price").value),
 
-category:category.value,
+category: document.getElementById("category").value,
 
-image:image.value,
+image: document.getElementById("image").value,
 
-stock:Number(stock.value)
+stock: Number(document.getElementById("stock").value)
 
 });
 
-
 alert("Produk berhasil ditambahkan");
-
 
 }
 
