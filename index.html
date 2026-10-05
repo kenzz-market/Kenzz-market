@@ -286,11 +286,15 @@ button{font:inherit}
 <nav class="bottom" aria-label="Navigasi bawah">
   <a class="active" href="#" aria-label="Home">⌂</a>
   <a href="#updates" aria-label="Update">▦</a>
+  <button class="plus" type="button" onclick="toast('Menu cepat Kenzz')" aria-label="Menu cepat">+</button>
+  <a href="#store" aria-label="Store">🛒</a>
+  <a href="admin.html" aria-label="Admin">👑</a>
 </nav>
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 
+<script src="supabase.js"></script>
 <script>
 (function () {
   "use strict";
