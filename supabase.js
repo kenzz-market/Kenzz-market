@@ -78,61 +78,19 @@ async function logoutUser(){
 
 async function checkRole(){
 
-    const {
+const {data:userData}=await supabaseClient.auth.getUser();
 
-        data:{
-            user
+console.log("USER LOGIN:",userData);
 
-        }
+const {data,error}=await supabaseClient
+.from("admins")
+.select("*")
+.eq("user_id",userData.user.id);
 
-    } =
-    await supabaseClient
-    .auth
-    .getUser();
+console.log("DATA ADMIN:",data);
+console.log("ERROR:",error);
 
-
-
-    if(!user){
-
-        return null;
-
-    }
-
-
-
-    const {
-        data,
-        error
-
-    } =
-
-    await supabaseClient
-
-    .from("admins")
-
-    .select("role")
-
-    .eq(
-        "user_id",
-        user.id
-    )
-
-    .maybeSingle();
-
-
-
-    if(error){
-
-        console.log(error);
-
-        return null;
-
-    }
-
-
-    return data?.role || null;
-
-
+return data?.[0]?.role || null;
 }
 
 
