@@ -4,11 +4,9 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Login Admin Kenzz Store</title>
-
 
 <style>
 
@@ -16,37 +14,27 @@
 box-sizing:border-box;
 }
 
-
 body{
 
 margin:0;
-
 height:100vh;
-
 display:flex;
-
 align-items:center;
-
 justify-content:center;
 
 background:#08080d;
-
 font-family:Arial,sans-serif;
-
 color:white;
 
 }
 
 
-
 .box{
 
 width:350px;
-
 background:#111119;
 
 border:1px solid #333;
-
 border-radius:20px;
 
 padding:30px;
@@ -54,13 +42,11 @@ padding:30px;
 }
 
 
-
 h2{
 
 text-align:center;
 
 }
-
 
 
 input{
@@ -82,7 +68,6 @@ color:white;
 outline:none;
 
 }
-
 
 
 button{
@@ -112,7 +97,6 @@ cursor:pointer;
 }
 
 
-
 #msg{
 
 text-align:center;
@@ -123,12 +107,9 @@ color:#aaa;
 
 }
 
-
-
 </style>
 
 </head>
-
 
 
 <body>
@@ -142,24 +123,16 @@ color:#aaa;
 </h2>
 
 
-
 <input
-
 id="email"
-
 type="email"
-
 placeholder="Email">
 
 
 <input
-
 id="password"
-
 type="password"
-
 placeholder="Password">
-
 
 
 <button onclick="login()">
@@ -169,114 +142,105 @@ Masuk
 </button>
 
 
-
-<div id="msg">
-
-</div>
-
+<div id="msg"></div>
 
 
 </div>
 
 
 
-
-
-<!-- WAJIB URUTAN INI -->
+<!-- URUTAN PENTING -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="settings.js"></script>
-
 <script src="supabase.js"></script>
+
+<script src="settings.js"></script>
 
 
 
 <script>
 
 
+console.log("Login page aktif");
+
+
+
 async function login(){
 
 
 const email =
-
-document
-.getElementById("email")
-.value;
+document.getElementById("email").value.trim();
 
 
 
 const password =
-
-document
-.getElementById("password")
-.value;
+document.getElementById("password").value;
 
 
 
 const msg =
-
-document
-.getElementById("msg");
+document.getElementById("msg");
 
 
 
 try{
 
 
-msg.innerHTML =
-"Memeriksa akun...";
+msg.innerHTML="Memeriksa akun...";
 
 
+
+// cek fungsi tersedia
+
+if(typeof loginUser !== "function"){
+
+throw new Error(
+"Supabase belum terhubung. Periksa supabase.js"
+);
+
+}
+
+
+
+// login
 
 await loginUser(
-
 email,
-
 password
-
 );
 
 
 
-const role =
+// cek role admin
 
+const role =
 await checkRole();
 
 
 
-
-
 if(
-role === "owner"
-||
-role === "admin"
+role==="owner" ||
+role==="admin"
 ){
 
 
 
 localStorage.setItem(
-
 "kenzz_role",
-
 role
-
 );
 
 
 
-msg.innerHTML =
+msg.innerHTML=
 "Login berhasil";
 
 
 
 setTimeout(()=>{
 
-
-location.href =
-"admin.html";
-
-
+location.href="admin.html";
 
 },700);
 
@@ -285,12 +249,17 @@ location.href =
 }else{
 
 
-msg.innerHTML =
 
+msg.innerHTML=
 "Akun tidak memiliki akses admin";
 
 
+
+if(typeof logoutUser==="function"){
+
 await logoutUser();
+
+}
 
 
 }
@@ -303,19 +272,14 @@ await logoutUser();
 catch(error){
 
 
-
 console.log(error);
 
 
-
-msg.innerHTML =
-
+msg.innerHTML=
 error.message;
 
 
-
 }
-
 
 
 }
@@ -323,7 +287,6 @@ error.message;
 
 
 </script>
-
 
 
 </body>
