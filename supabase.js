@@ -34,9 +34,9 @@ async function loginUser(email, password){
 }
 
 
-// supaya bisa dipanggil dari HTML
 window.loginUser = loginUser;
 
+console.log("SUPABASE JS TERLOAD");
 
 
 // ===============================
