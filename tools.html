@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Tools Premium</title>
+
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+
+body{
+
+margin:0;
+
+padding:20px;
+
+background:#08080d;
+
+color:white;
+
+font-family:Arial,sans-serif;
+
+}
+
+
+
+.container{
+
+max-width:900px;
+
+margin:auto;
+
+}
+
+
+
+h1{
+
+text-align:center;
+
+}
+
+
+
+.grid{
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:15px;
+
+margin-top:25px;
+
+}
+
+
+
+.card{
+
+background:#111119;
+
+border:1px solid rgba(255,255,255,.1);
+
+border-radius:20px;
+
+padding:20px;
+
+}
+
+
+
+.icon{
+
+font-size:35px;
+
+}
+
+
+
+.price{
+
+color:#00ffd5;
+
+font-size:20px;
+
+font-weight:bold;
+
+}
+
+
+
+button{
+
+width:100%;
+
+margin-top:15px;
+
+padding:12px;
+
+border:0;
+
+border-radius:12px;
+
+background:#25d366;
+
+color:white;
+
+font-weight:bold;
+
+cursor:pointer;
+
+}
+
+
+
+@media(max-width:600px){
+
+.grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<h1>
+⚒️ Tools Premium
+</h1>
+
+
+<p style="text-align:center;color:#aaa">
+
+Layanan digital premium Kenzz Store
+
+</p>
+
+
+
+
+
+<div class="grid">
+
+
+
+<div class="card">
+
+<div class="icon">
+🤖
+</div>
+
+
+<h2>
+Bot Premium
+</h2>
+
+
+<p>
+Layanan bot untuk kebutuhan digital.
+</p>
+
+
+<div class="price">
+
+Rp 25.000
+
+</div>
+
+
+<button onclick="buy('Bot Premium')">
+
+💬 Beli
+
+</button>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="card">
+
+<div class="icon">
+🚀
+</div>
+
+
+<h2>
+Panel Premium
+</h2>
+
+
+<p>
+Panel server berkualitas untuk kebutuhan online.
+</p>
+
+
+<div class="price">
+
+Rp 50.000
+
+</div>
+
+
+<button onclick="buy('Panel Premium')">
+
+💬 Beli
+
+</button>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="card">
+
+<div class="icon">
+📱
+</div>
+
+
+<h2>
+APK Premium
+</h2>
+
+
+<p>
+Aplikasi premium digital.
+</p>
+
+
+<div class="price">
+
+Rp 15.000
+
+</div>
+
+
+<button onclick="buy('APK Premium')">
+
+💬 Beli
+
+</button>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="card">
+
+<div class="icon">
+🛠️
+</div>
+
+
+<h2>
+Jasa Digital
+</h2>
+
+
+<p>
+Berbagai layanan digital lainnya.
+</p>
+
+
+<div class="price">
+
+Custom
+
+</div>
+
+
+<button onclick="buy('Jasa Digital')">
+
+💬 Beli
+
+</button>
+
+
+</div>
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+<script src="settings.js"></script>
+
+
+<script>
+
+
+function buy(product){
+
+
+let text =
+
+`Halo ${STORE_SETTINGS.storeName},
+
+Saya ingin membeli:
+
+${product}
+
+Mohon informasi lebih lanjut.`;
+
+
+
+window.open(
+
+"https://wa.me/"
++
+STORE_SETTINGS.whatsappOwner
++
+"?text="
++
+encodeURIComponent(text),
+
+"_blank"
+
+);
+
+
+
+}
+
+
+
+</script>
+
+
+</body>
+
+</html>
