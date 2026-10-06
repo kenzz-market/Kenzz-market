@@ -1,108 +1,92 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Login Admin Kenzz Store</title>
 
+
 <style>
 
-*{
-box-sizing:border-box;
-}
-
 body{
+
 margin:0;
-min-height:100vh;
+height:100vh;
 display:flex;
-align-items:center;
 justify-content:center;
-font-family:Inter,Arial,sans-serif;
+align-items:center;
 background:#08080d;
+font-family:Arial,sans-serif;
 color:white;
+
 }
 
 
-.login-box{
 
-width:min(90%,400px);
+.box{
+
+width:350px;
 background:#111119;
 padding:30px;
 border-radius:20px;
-border:1px solid rgba(255,255,255,.1);
-box-shadow:0 20px 50px rgba(0,0,0,.5);
+border:1px solid #333;
 
 }
 
 
-h1{
+
+h2{
+
 text-align:center;
-margin-bottom:10px;
+
 }
 
-
-p{
-text-align:center;
-color:#aaa;
-font-size:14px;
-}
 
 
 input{
 
 width:100%;
-padding:14px;
-margin-top:20px;
-border-radius:12px;
-border:1px solid #333;
+padding:13px;
+margin-top:12px;
 background:#08080d;
+border:1px solid #333;
+border-radius:10px;
 color:white;
-outline:none;
 
 }
+
 
 
 button{
 
 width:100%;
-margin-top:15px;
-padding:14px;
+padding:13px;
+margin-top:20px;
 border:0;
 border-radius:12px;
-font-weight:800;
-cursor:pointer;
-color:white;
 background:linear-gradient(135deg,#ff316f,#ff9d00);
+color:white;
+font-weight:bold;
+cursor:pointer;
 
 }
 
 
-button:hover{
-opacity:.9;
-}
 
-
-#status{
+#msg{
 
 text-align:center;
 margin-top:15px;
-font-size:13px;
+font-size:14px;
 
-}
-
-
-.error{
-color:#ff6b8a;
-}
-
-
-.success{
-color:#55e98e;
 }
 
 
 </style>
+
 
 </head>
 
@@ -110,35 +94,44 @@ color:#55e98e;
 <body>
 
 
-<div class="login-box">
+<div class="box">
 
 
-<h1>👑 Kenzz Admin</h1>
-
-<p>
-Login khusus Owner dan Admin
-</p>
+<h2>
+👑 Kenzz Admin
+</h2>
 
 
 <input 
 id="email"
 type="email"
-placeholder="kenzzeln57@gmail.com">
+placeholder="Email">
+
+
+<input 
+id="password"
+type="password"
+placeholder="Password">
 
 
 <button onclick="login()">
+
 Masuk
+
 </button>
 
 
-<div id="status"></div>
+<div id="msg"></div>
 
 
 </div>
 
 
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="supabase.js"></script>
+
 
 
 <script>
@@ -147,57 +140,58 @@ Masuk
 async function login(){
 
 
-const email=document
-.getElementById("email")
-.value
-.trim();
+const email =
+document.getElementById("email").value;
 
 
-
-const status=document.getElementById("status");
-
-
-
-if(!email){
-
-status.innerHTML="Masukkan email terlebih dahulu";
-status.className="error";
-return;
-
-}
+const password =
+document.getElementById("password").value;
 
 
-
-status.innerHTML="Memeriksa akses...";
+const msg =
+document.getElementById("msg");
 
 
 
 try{
 
 
-const allowed = await checkAdmin(email);
+msg.innerHTML="Memeriksa akun...";
 
 
 
-if(allowed){
-
-
-localStorage.setItem(
-"kenzz_admin",
-email
+await loginUser(
+email,
+password
 );
 
 
-status.innerHTML=
-"Akses diterima. Membuka admin...";
 
-status.className="success";
+const role =
+await checkRole();
 
+
+
+if(
+role === "owner" ||
+role === "admin"
+){
+
+
+localStorage.setItem(
+"kenzz_role",
+role
+);
+
+
+
+msg.innerHTML=
+"Login berhasil";
 
 
 setTimeout(()=>{
 
-window.location.href="admin.html";
+location.href="admin.html";
 
 },800);
 
@@ -206,10 +200,11 @@ window.location.href="admin.html";
 }else{
 
 
-status.innerHTML=
-"Akses ditolak. Email bukan admin.";
+msg.innerHTML=
+"Akun tidak memiliki akses admin";
 
-status.className="error";
+
+await logoutUser();
 
 
 }
@@ -219,13 +214,11 @@ status.className="error";
 }catch(error){
 
 
-status.innerHTML=
-"Terjadi kesalahan koneksi.";
-
-status.className="error";
+msg.innerHTML=
+"Email atau password salah";
 
 
-console.error(error);
+console.log(error);
 
 
 }
@@ -240,4 +233,5 @@ console.error(error);
 
 
 </body>
+
 </html>
