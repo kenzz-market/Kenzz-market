@@ -212,9 +212,9 @@ text-decoration:none;
 
 <div class="card statistik">
 <h2>📊 Statistik</h2>
-<p>56 Member</p>
-<p>0 Produk Store</p>
-<p>99% Uptime</p>
+<p id="memberCount">56 Member</p>
+<p id="productCount">0 Produk Store</p>
+<p id="uptimeCount">99% Uptime</p>
 </div>
 
 <div class="card announcement">
@@ -275,6 +275,24 @@ tg.href=STORE_SETTINGS.socialMedia.telegram;
 waChannel.href=STORE_SETTINGS.whatsappChannel;
 waGroup.href=STORE_SETTINGS.whatsappGroup;
 }
+</script>
+
+
+<script>
+async function loadStats(){
+
+    const stats = await getStats();
+
+    const product = document.getElementById("productCount");
+    const member = document.getElementById("memberCount");
+    const uptime = document.getElementById("uptimeCount");
+
+    if(product) product.innerHTML = stats.products + " Produk Store";
+    if(member) member.innerHTML = stats.member + " Member";
+    if(uptime) uptime.innerHTML = stats.uptime + " Uptime";
+}
+
+loadStats();
 </script>
 
 </body>
