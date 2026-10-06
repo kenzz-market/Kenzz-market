@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Produk Kenzz Store</title>
+
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+
+body{
+
+margin:0;
+padding:20px;
+font-family:Arial,sans-serif;
+background:#08080d;
+color:white;
+
+}
+
+
+.container{
+
+max-width:900px;
+margin:auto;
+
+}
+
+
+
+h1{
+
+text-align:center;
+
+}
+
+
+
+.category{
+
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+justify-content:center;
+margin:20px 0;
+
+}
+
+
+
+.category button{
+
+padding:10px 18px;
+border-radius:20px;
+border:1px solid #333;
+background:#15151f;
+color:white;
+cursor:pointer;
+
+}
+
+
+
+.category button.active{
+
+background:#ff316f;
+
+}
+
+
+
+.products{
+
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+
+}
+
+
+
+.card{
+
+background:#111119;
+border:1px solid rgba(255,255,255,.1);
+border-radius:18px;
+padding:15px;
+
+}
+
+
+
+.card img{
+
+width:100%;
+height:180px;
+object-fit:cover;
+border-radius:12px;
+
+}
+
+
+
+.card h3{
+
+margin:12px 0 5px;
+
+}
+
+
+
+.price{
+
+color:#00ffd5;
+font-size:18px;
+font-weight:bold;
+
+}
+
+
+
+.info{
+
+color:#aaa;
+font-size:14px;
+
+}
+
+
+
+.buy{
+
+display:block;
+margin-top:15px;
+text-align:center;
+background:#25d366;
+color:white;
+padding:12px;
+border-radius:12px;
+text-decoration:none;
+font-weight:bold;
+
+}
+
+
+
+.empty{
+
+text-align:center;
+color:#aaa;
+padding:40px;
+
+}
+
+
+
+@media(max-width:600px){
+
+.products{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+
+
+</style>
+
+
+</head>
+
+
+
+<body>
+
+
+
+<div class="container">
+
+
+<h1>🛒 Kenzz Store</h1>
+
+
+
+<div class="category">
+
+
+<button class="active"
+onclick="filterProduct('Semua',this)">
+Semua
+</button>
+
+
+<button onclick="filterProduct('Apk Premium',this)">
+APK Premium
+</button>
+
+
+<button onclick="filterProduct('Panel Pterodactyl',this)">
+Panel
+</button>
+
+
+<button onclick="filterProduct('Nokos',this)">
+Nokos
+</button>
+
+
+<button onclick="filterProduct('Sewa bot',this)">
+Sewa Bot
+</button>
+
+
+</div>
+
+
+
+
+<div id="products" class="products">
+
+<div class="empty">
+Memuat produk...
+</div>
+
+</div>
+
+
+
+</div>
+
+
+
+
+<script src="supabase.js"></script>
+
+
+<script>
+
+
+let allProducts=[];
+
+let category="Semua";
+
+
+// GANTI NOMOR WA OWNER DI SINI
+
+const whatsapp =
+"6281234567890";
+
+
+
+
+async function loadProducts(){
+
+
+try{
+
+
+allProducts =
+await getProducts();
+
+
+render();
+
+
+
+}catch(error){
+
+
+document.getElementById("products")
+.innerHTML=
+`
+<div class="empty">
+Produk gagal dimuat
+</div>
+`;
+
+
+
+console.error(error);
+
+
+
+}
+
+
+
+}
+
+
+
+
+
+function filterProduct(cat,btn){
+
+
+category=cat;
+
+
+document
+.querySelectorAll(".category button")
+.forEach(x=>
+x.classList.remove("active")
+);
+
+
+btn.classList.add("active");
+
+
+render();
+
+
+}
+
+
+
+
+
+function render(){
+
+
+
+const box=
+document.getElementById("products");
+
+
+
+let data =
+allProducts;
+
+
+
+if(category !== "Semua"){
+
+data =
+allProducts.filter(
+p =>
+p.category.toLowerCase()
+===
+category.toLowerCase()
+);
+
+}
+
+
+
+if(!data.length){
+
+
+box.innerHTML=
+`
+<div class="empty">
+Belum ada produk
+</div>
+`;
+
+
+return;
+
+}
+
+
+
+
+box.innerHTML =
+data.map(p=>{
+
+
+const message =
+encodeURIComponent(
+`Halo Kenzz Store,
+
+Saya ingin membeli:
+
+Produk: ${p.name}
+Harga: Rp ${Number(p.price).toLocaleString("id-ID")}
+
+Mohon diproses.`
+);
+
+
+
+return `
+
+<div class="card">
+
+
+<img src="${p.image || 'https://via.placeholder.com/300'}">
+
+
+<h3>
+${p.name}
+</h3>
+
+
+<div class="price">
+Rp ${Number(p.price).toLocaleString("id-ID")}
+</div>
+
+
+<p class="info">
+Kategori: ${p.category}
+<br>
+Stok: ${p.stock}
+</p>
+
+
+
+<a class="buy"
+href="https://wa.me/${whatsapp}?text=${message}"
+target="_blank">
+
+🛒 Beli Sekarang
+
+</a>
+
+
+</div>
+
+`;
+
+
+
+}).join("");
+
+
+
+}
+
+
+
+loadProducts();
+
+
+</script>
+
+
+
+</body>
+
+</html>
