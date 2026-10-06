@@ -15,9 +15,9 @@ const STORE_SETTINGS = {
 
     storeName: "Kenzz Store",
 
-    ownerName: "Nama Owner",
+    ownerName: "Kenzzel",
 
-    scriptOwner: "Nama Pembuat Script",
+    scriptOwner: "kenzzel",
 
     version: "1.0.0",
 
@@ -26,9 +26,9 @@ const STORE_SETTINGS = {
     // KONTAK WHATSAPP
     // =========================
 
-    whatsappOwner: "628xxxxxxxxxx",
+    whatsappOwner: "6283194748380",
 
-    supportWhatsapp: "628xxxxxxxxxx",
+    supportWhatsapp: "6283194748380",
 
 
     // =========================
