@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
 
 <meta charset="UTF-8">
@@ -19,22 +20,21 @@ body{
 
 margin:0;
 padding:20px;
-font-family:Arial,sans-serif;
 background:#08080d;
 color:white;
+font-family:Arial,sans-serif;
 
 }
 
 
-
 .container{
 
-max-width:600px;
+max-width:650px;
 margin:auto;
 background:#111119;
 padding:25px;
 border-radius:20px;
-border:1px solid rgba(255,255,255,.1);
+border:1px solid #333;
 
 }
 
@@ -48,15 +48,21 @@ text-align:center;
 
 
 
-input{
+.top{
 
-width:100%;
-padding:13px;
-margin:8px 0;
-border-radius:12px;
-border:1px solid #333;
-background:#08080d;
-color:white;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+
+}
+
+
+
+.role{
+
+color:#55e98e;
+font-size:14px;
 
 }
 
@@ -74,21 +80,39 @@ font-weight:bold;
 
 
 
-.add{
+.logout{
 
-width:100%;
-background:linear-gradient(135deg,#ff316f,#ff9d00);
+background:#333;
 color:white;
 
 }
 
 
 
-.logout{
+input{
 
-background:#333;
+width:100%;
+padding:13px;
+margin:7px 0;
+background:#08080d;
+border:1px solid #333;
+border-radius:12px;
 color:white;
-margin-bottom:15px;
+
+}
+
+
+
+.add{
+
+width:100%;
+margin-top:10px;
+background:linear-gradient(
+135deg,
+#ff316f,
+#ff9d00
+);
+color:white;
 
 }
 
@@ -101,8 +125,8 @@ gap:12px;
 align-items:center;
 background:#181823;
 padding:12px;
-border-radius:15px;
 margin-top:12px;
+border-radius:15px;
 
 }
 
@@ -112,8 +136,8 @@ margin-top:12px;
 
 width:70px;
 height:70px;
-object-fit:cover;
 border-radius:10px;
+object-fit:cover;
 
 }
 
@@ -137,8 +161,8 @@ margin:0;
 
 .info p{
 
-margin:5px 0;
 color:#aaa;
+margin:5px 0;
 
 }
 
@@ -146,17 +170,8 @@ color:#aaa;
 
 .delete{
 
-background:#ff405f;
+background:#ff315f;
 color:white;
-
-}
-
-
-
-#status{
-
-text-align:center;
-margin:15px 0;
 
 }
 
@@ -164,99 +179,152 @@ margin:15px 0;
 
 </style>
 
+
 </head>
 
 
 <body>
 
 
-<div class="container">
+<div class="container" id="panel" style="display:none;">
 
 
-<h1>👑 Admin Kenzz Store</h1>
+<div class="top">
+
+<div>
+
+<h1>
+👑 Admin
+</h1>
+
+<span class="role" id="role"></span>
+
+</div>
 
 
-<button class="logout" onclick="logout()">
+<button class="logout"
+onclick="logoutUser()">
+
 Keluar
+
 </button>
 
 
-
-<input id="name"
-placeholder="Nama Produk">
+</div>
 
 
-<input id="price"
+
+<input 
+id="name"
+placeholder="Nama produk">
+
+
+
+<input 
+id="price"
 type="number"
 placeholder="Harga">
 
 
-<input id="category"
+
+<input 
+id="category"
 placeholder="Kategori">
 
 
-<input id="image"
-placeholder="Link Gambar">
+
+<input 
+id="image"
+placeholder="Link gambar">
 
 
-<input id="stock"
+
+<input 
+id="stock"
 type="number"
 placeholder="Stok">
 
 
 
-<button class="add" onclick="saveProduct()">
+<button class="add"
+onclick="saveProduct()">
+
 + Tambah Produk
+
 </button>
 
 
 
-<div id="status"></div>
-
-
-<h2>📦 Produk</h2>
+<h2>
+📦 Produk
+</h2>
 
 
 <div id="list">
+
 Memuat...
-</div>
-
-
 
 </div>
 
 
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="supabase.js"></script>
+
 
 
 <script>
 
 
-const admin =
-localStorage.getItem("kenzz_admin");
+async function checkAccess(){
+
+
+const role =
+await checkRole();
 
 
 
-if(!admin){
+if(
+role !== "owner" &&
+role !== "admin"
+){
 
-alert("Akses ditolak");
 
-window.location.href="login.html";
+alert(
+"Akses ditolak"
+);
+
+
+location.href="login.html";
+
+
+return;
 
 }
 
 
 
+document
+.getElementById("panel")
+.style.display="block";
 
-function logout(){
 
-localStorage.removeItem("kenzz_admin");
+document
+.getElementById("role")
+.innerHTML=
+"Role: "+role;
 
-window.location.href="login.html";
+
+
+loadProducts();
+
 
 }
-
 
 
 
@@ -266,56 +334,38 @@ async function saveProduct(){
 
 const data={
 
-
 name:
 document.getElementById("name").value,
-
 
 price:
 Number(
 document.getElementById("price").value
 ),
 
-
 category:
 document.getElementById("category").value,
 
-
 image:
 document.getElementById("image").value,
-
 
 stock:
 Number(
 document.getElementById("stock").value
 )
 
-
 };
 
-
-
-try{
 
 
 await addProduct(data);
 
 
-alert("Produk berhasil ditambahkan");
+alert(
+"Produk ditambahkan"
+);
 
 
 loadProducts();
-
-
-
-}catch(error){
-
-
-alert(error.message);
-
-
-}
-
 
 
 }
@@ -326,26 +376,12 @@ alert(error.message);
 async function loadProducts(){
 
 
-const list=
+const list =
 document.getElementById("list");
-
-
-try{
 
 
 const products =
 await getProducts();
-
-
-
-if(!products.length){
-
-list.innerHTML=
-"Tidak ada produk";
-
-return;
-
-}
 
 
 
@@ -356,19 +392,21 @@ products.map(p=>`
 <div class="product">
 
 
-<img src="${p.image || 'https://via.placeholder.com/100'}">
+<img src="${p.image}">
 
 
 <div class="info">
 
-<h3>${p.name}</h3>
+<h3>
+${p.name}
+</h3>
 
 <p>
 Rp ${Number(p.price).toLocaleString("id-ID")}
 </p>
 
 <p>
-${p.category} | Stok ${p.stock}
+${p.category}
 </p>
 
 </div>
@@ -389,17 +427,6 @@ Hapus
 
 
 
-}catch(error){
-
-
-list.innerHTML=
-"Gagal mengambil produk";
-
-
-}
-
-
-
 }
 
 
@@ -408,43 +435,30 @@ list.innerHTML=
 async function removeProduct(id){
 
 
-if(!confirm("Hapus produk ini?"))
-return;
-
-
-
-try{
+if(
+confirm("Hapus produk?")
+){
 
 
 await deleteProduct(id);
 
 
-alert("Produk dihapus");
-
-
 loadProducts();
 
 
-
-}catch(error){
-
-
-alert(error.message);
+}
 
 
 }
 
 
 
-}
-
-
-
-loadProducts();
+checkAccess();
 
 
 </script>
 
 
 </body>
+
 </html>
