@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kenzz Store</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+
+<style>
+
+
+:root{
+
+--bg:#050509;
+--panel:#111119;
+--text:#ffffff;
+--muted:#aaa;
+
+--primary:#ff316f;
+--secondary:#ff9d00;
+
+--line:rgba(255,255,255,.12);
+
+}
+
+
+
+.light{
+
+--bg:#f5f5f5;
+--panel:#ffffff;
+--text:#111;
+--muted:#666;
+
+--line:rgba(0,0,0,.12);
+
+}
+
+
+
+*{
+
+box-sizing:border-box;
+
+}
+
+
+
+body{
+
+margin:0;
+
+font-family:Inter,Arial,sans-serif;
+
+background:var(--bg);
+
+color:var(--text);
+
+transition:.3s;
+
+}
+
+
+
+
+a{
+
+color:inherit;
+
+text-decoration:none;
+
+}
+
+
+
+
+.app{
+
+max-width:760px;
+
+margin:auto;
+
+padding-bottom:100px;
+
+}
+
+
+
+/* TOP NAV */
+
+
+.top{
+
+position:sticky;
+
+top:0;
+
+z-index:50;
+
+padding:15px;
+
+background:rgba(5,5,9,.75);
+
+backdrop-filter:blur(15px);
+
+border-bottom:1px solid var(--line);
+
+}
+
+
+
+.nav{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+}
+
+
+
+.logo{
+
+font-size:22px;
+
+font-weight:900;
+
+margin-right:auto;
+
+}
+
+
+
+.icon{
+
+width:42px;
+
+height:42px;
+
+border-radius:50%;
+
+border:1px solid var(--line);
+
+background:var(--panel);
+
+color:var(--text);
+
+cursor:pointer;
+
+}
+
+
+
+
+.search{
+
+margin-top:15px;
+
+display:flex;
+
+padding:12px;
+
+border-radius:15px;
+
+background:var(--panel);
+
+border:1px solid var(--line);
+
+}
+
+
+
+.search input{
+
+width:100%;
+
+background:none;
+
+border:0;
+
+outline:0;
+
+color:var(--text);
+
+}
+
+
+
+
+/* MENU */
+
+
+.side-menu{
+
+position:fixed;
+
+left:-320px;
+
+top:0;
+
+width:300px;
+
+height:100vh;
+
+background:var(--panel);
+
+z-index:999;
+
+padding:25px;
+
+transition:.3s;
+
+}
+
+
+
+.side-menu.show{
+
+left:0;
+
+}
+
+
+
+.side-menu a{
+
+display:block;
+
+padding:15px 0;
+
+border-bottom:1px solid var(--line);
+
+}
+
+
+
+
+.overlay{
+
+display:none;
+
+position:fixed;
+
+inset:0;
+
+background:rgba(0,0,0,.6);
+
+z-index:998;
+
+}
+
+
+
+.overlay.show{
+
+display:block;
+
+}
+
+
+
+
+
+/* HERO */
+
+
+.hero{
+
+margin:15px;
+
+min-height:350px;
+
+border-radius:25px;
+
+overflow:hidden;
+
+position:relative;
+
+background:
+
+linear-gradient(
+rgba(0,0,0,.55),
+rgba(0,0,0,.7)
+),
+
+url("https://c.termai.cc/i148/N28g6Y6.jpg");
+
+background-size:cover;
+
+background-position:center;
+
+}
+
+
+
+.hero-content{
+
+padding:40px 25px;
+
+}
+
+
+
+.hero h1{
+
+font-size:45px;
+
+margin:10px 0;
+
+}
+
+
+
+.hero span{
+
+font-size:15px;
+
+letter-spacing:5px;
+
+}
+
+
+
+.hero p{
+
+color:#ddd;
+
+line-height:1.6;
+
+}
+
+
+
+.btn-area{
+
+display:flex;
+
+gap:10px;
+
+flex-wrap:wrap;
+
+margin-top:25px;
+
+}
+
+
+
+.btn{
+
+padding:13px 18px;
+
+border-radius:12px;
+
+font-weight:800;
+
+background:rgba(255,255,255,.1);
+
+border:1px solid var(--line);
+
+}
+
+
+
+.btn.primary{
+
+background:linear-gradient(
+135deg,
+var(--primary),
+var(--secondary)
+);
+
+border:0;
+
+}
+<!-- VERIFIED OFFICIAL -->
+
+<section class="panel">
+
+<div class="verified">
+
+<div class="badge">
+✓
+</div>
+
+
+<div>
+
+<h3>
+Verified Official
+</h3>
+
+<p>
+Toko resmi Kenzz Store
+</p>
+
+</div>
+
+
+<div class="online">
+
+🟢 Online
+
+</div>
+
+
+</div>
+
+
+
+<div class="socials">
+
+
+<a class="social" id="tiktok">
+🎵
+</a>
+
+
+<a class="social" id="instagram">
+📷
+</a>
+
+
+<a class="social" id="youtube">
+▶️
+</a>
+
+
+<a class="social" id="telegram">
+✈️
+</a>
+
+
+<a class="social" id="whatsapp">
+💬
+</a>
+
+
+
+</div>
+
+
+
+
+<div class="stats">
+
+
+<div>
+
+<b id="customer-count">
+0
+</b>
+
+<small>
+Pelanggan
+</small>
+
+</div>
+
+
+
+<div>
+
+<b id="product-count">
+0
+</b>
+
+<small>
+Produk
+</small>
+
+</div>
+
+
+
+<div>
+
+<b>
+100%
+</b>
+
+<small>
+Kepuasan
+</small>
+
+</div>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+<!-- MENU FITUR -->
+
+
+<section class="features">
+
+
+
+<a href="products.html" class="feature">
+
+
+<div>
+🛒
+</div>
+
+
+<section>
+
+<h3>
+Store Online
+</h3>
+
+<p>
+Belanja produk Kenzz Store
+</p>
+
+</section>
+
+
+</a>
+
+
+
+
+
+<a href="tools.html" class="feature">
+
+
+<div>
+⚒️
+</div>
+
+
+<section>
+
+<h3>
+Tools Premium
+</h3>
+
+<p>
+Tools digital premium
+</p>
+
+
+</section>
+
+
+</a>
+
+
+
+
+
+<a href="announcement.html" class="feature">
+
+
+<div>
+🔔
+</div>
+
+
+<section>
+
+<h3>
+Update Terbaru
+</h3>
+
+<p>
+Info dan promo terbaru
+</p>
+
+
+</section>
+
+
+</a>
+
+
+
+
+
+<a href="support.html" class="feature">
+
+
+<div>
+🎧
+</div>
+
+
+<section>
+
+<h3>
+Support
+</h3>
+
+
+<p>
+Hubungi admin toko
+</p>
+
+
+</section>
+
+
+</a>
+
+
+
+
+</section>
+
+
+
+
+
+
+
+
+<!-- ANNOUNCEMENT -->
+
+
+<section class="panel">
+
+
+<div class="title">
+
+<h2>
+🔔 Announcement
+</h2>
+
+
+<a href="announcement.html">
+Lihat Semua
+</a>
+
+
+</div>
+
+
+
+
+<div class="announcement">
+
+
+<div class="avatar">
+
+K
+
+</div>
+
+
+<div>
+
+
+<b>
+Kenzz Store
+</b>
+
+
+<p>
+Selamat datang di website resmi Kenzz Store.
+</p>
+
+
+</div>
+
+
+<span>
+INFO
+</span>
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<!-- KATALOG -->
+
+
+<section class="panel" id="catalog">
+
+
+<div class="title">
+
+
+<h2>
+📚 Katalog
+</h2>
+
+
+<a href="products.html">
+Buka
+</a>
+
+
+</div>
+
+
+
+<div class="catalog">
+
+
+<a href="products.html?cat=Apk Premium">
+APK Premium
+</a>
+
+
+<a href="products.html?cat=Panel Pterodactyl">
+Panel
+</a>
+
+
+<a href="products.html?cat=Nokos">
+Nokos
+</a>
+
+
+<a href="products.html?cat=Sewa bot">
+Bot
+</a>
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+<!-- MENU CEPAT -->
+
+
+<div class="quick-menu" id="quickMenu">
+
+
+<a href="cart.html">
+🛒 Keranjang
+</a>
+
+
+<a href="products.html">
+📦 Katalog
+</a>
+
+
+<a href="announcement.html">
+🔔 Update
+</a>
+
+
+<a href="support.html">
+🎧 Support
+</a>
+
+
+<a href="login.html">
+👑 Admin
+</a>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- BOTTOM NAV -->
+
+
+<nav class="bottom">
+
+
+<a href="index.html">
+⌂
+</a>
+
+
+<a href="announcement.html">
+🔔
+</a>
+
+
+<button onclick="openQuick()">
++
+</button>
+
+
+<a href="cart.html">
+🛒
+</a>
+
+
+<a href="login.html">
+👑
+</a>
+
+
+
+</nav>
+
+
+
+
+
+<footer>
+
+
+<p>
+© 2026 Kenzz Store
+</p>
+
+
+<p id="copyright">
+</p>
+
+
+</footer>
+<!-- SCRIPT -->
+
+<script src="settings.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+
+
+<script>
+
+
+// ===============================
+// MENU
+// ===============================
+
+
+function openMenu(){
+
+document
+.querySelector(".side-menu")
+.classList.add("show");
+
+
+document
+.querySelector(".overlay")
+.classList.add("show");
+
+}
+
+
+
+function closeMenu(){
+
+document
+.querySelector(".side-menu")
+.classList.remove("show");
+
+
+document
+.querySelector(".overlay")
+.classList.remove("show");
+
+}
+
+
+
+function openQuick(){
+
+document
+.getElementById("quickMenu")
+.classList.toggle("show");
+
+}
+
+
+
+
+
+// ===============================
+// DARK / LIGHT MODE
+// ===============================
+
+
+const themeButton =
+document.getElementById("themeButton");
+
+
+function loadTheme(){
+
+
+let theme =
+localStorage.getItem(
+"kenzz_theme"
+);
+
+
+
+if(theme==="light"){
+
+document.body.classList.add(
+"light"
+);
+
+}
+
+
+}
+
+
+
+function changeTheme(){
+
+
+document.body.classList.toggle(
+"light"
+);
+
+
+
+localStorage.setItem(
+
+"kenzz_theme",
+
+document.body.classList.contains("light")
+?
+"light"
+:
+"dark"
+
+);
+
+
+}
+
+
+
+
+// ===============================
+// SETTINGS
+// ===============================
+
+
+
+document.title =
+STORE_SETTINGS.storeName;
+
+
+
+document
+.getElementById("copyright")
+.innerHTML =
+
+"Script by: "
++
+STORE_SETTINGS.scriptOwner
++
+" | Owner: "
++
+STORE_SETTINGS.ownerName;
+
+
+
+
+
+// SOCIAL MEDIA
+
+
+document
+.getElementById("tiktok")
+.href =
+STORE_SETTINGS.socialMedia.tiktok;
+
+
+document
+.getElementById("instagram")
+.href =
+STORE_SETTINGS.socialMedia.instagram;
+
+
+document
+.getElementById("youtube")
+.href =
+STORE_SETTINGS.socialMedia.youtube;
+
+
+document
+.getElementById("telegram")
+.href =
+STORE_SETTINGS.socialMedia.telegram;
+
+
+
+
+// WHATSAPP
+
+
+document
+.getElementById("whatsapp")
+.href =
+
+"https://wa.me/"
++
+STORE_SETTINGS.whatsappOwner;
+
+
+
+
+// ===============================
+// PRODUK COUNT
+// ===============================
+
+
+async function loadProductCount(){
+
+
+try{
+
+
+let products =
+await getProducts();
+
+
+document
+.getElementById("product-count")
+.innerHTML =
+products.length;
+
+
+
+}
+
+catch(error){
+
+console.log(error);
+
+}
+
+
+
+}
+
+
+
+
+// ===============================
+// CLOCK
+// ===============================
+
+
+function clock(){
+
+
+let now =
+new Date();
+
+
+document
+.getElementById("time")
+.innerHTML =
+
+now.toLocaleTimeString(
+"id-ID"
+);
+
+
+}
+
+
+
+
+// ===============================
+// START
+// ===============================
+
+
+loadTheme();
+
+loadProductCount();
+
+
+setInterval(
+clock,
+1000
+);
+
+
+
+</script>
+
+
+</body>
+
+</html>
