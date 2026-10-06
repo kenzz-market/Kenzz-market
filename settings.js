@@ -38,16 +38,16 @@ const STORE_SETTINGS = {
     socialMedia: {
 
         tiktok:
-        "https://www.tiktok.com/@username",
+        "https://www.tiktok.com/@kenzzel",
 
         instagram:
-        "https://www.instagram.com/username",
+        "https://www.instagram.com/@kenzzeln",
 
         youtube:
-        "https://www.youtube.com/@username",
+        "https://www.youtube.com/@rakenn_yt",
 
         telegram:
-        "https://t.me/username"
+        "https://t.me/ryukenntzy"
 
     },
 
@@ -67,7 +67,7 @@ const STORE_SETTINGS = {
 
     whatsappMessage:
 
-    "Halo Kenzz Store, saya ingin bertanya mengenai produk."
+    "Halo bg kenzz, apakah ini pemilik kenzz store? ."
 
 
 };
