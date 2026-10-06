@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login Admin Kenzz Store</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+font-family:Inter,Arial,sans-serif;
+background:#08080d;
+color:white;
+}
+
+
+.login-box{
+
+width:min(90%,400px);
+background:#111119;
+padding:30px;
+border-radius:20px;
+border:1px solid rgba(255,255,255,.1);
+box-shadow:0 20px 50px rgba(0,0,0,.5);
+
+}
+
+
+h1{
+text-align:center;
+margin-bottom:10px;
+}
+
+
+p{
+text-align:center;
+color:#aaa;
+font-size:14px;
+}
+
+
+input{
+
+width:100%;
+padding:14px;
+margin-top:20px;
+border-radius:12px;
+border:1px solid #333;
+background:#08080d;
+color:white;
+outline:none;
+
+}
+
+
+button{
+
+width:100%;
+margin-top:15px;
+padding:14px;
+border:0;
+border-radius:12px;
+font-weight:800;
+cursor:pointer;
+color:white;
+background:linear-gradient(135deg,#ff316f,#ff9d00);
+
+}
+
+
+button:hover{
+opacity:.9;
+}
+
+
+#status{
+
+text-align:center;
+margin-top:15px;
+font-size:13px;
+
+}
+
+
+.error{
+color:#ff6b8a;
+}
+
+
+.success{
+color:#55e98e;
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="login-box">
+
+
+<h1>👑 Kenzz Admin</h1>
+
+<p>
+Login khusus Owner dan Admin
+</p>
+
+
+<input 
+id="email"
+type="email"
+placeholder="Email admin">
+
+
+<button onclick="login()">
+Masuk
+</button>
+
+
+<div id="status"></div>
+
+
+</div>
+
+
+
+<script src="supabase.js"></script>
+
+
+<script>
+
+
+async function login(){
+
+
+const email=document
+.getElementById("email")
+.value
+.trim();
+
+
+
+const status=document.getElementById("status");
+
+
+
+if(!email){
+
+status.innerHTML="Masukkan email terlebih dahulu";
+status.className="error";
+return;
+
+}
+
+
+
+status.innerHTML="Memeriksa akses...";
+
+
+
+try{
+
+
+const allowed = await checkAdmin(email);
+
+
+
+if(allowed){
+
+
+localStorage.setItem(
+"kenzz_admin",
+email
+);
+
+
+status.innerHTML=
+"Akses diterima. Membuka admin...";
+
+status.className="success";
+
+
+
+setTimeout(()=>{
+
+window.location.href="admin.html";
+
+},800);
+
+
+
+}else{
+
+
+status.innerHTML=
+"Akses ditolak. Email bukan admin.";
+
+status.className="error";
+
+
+}
+
+
+
+}catch(error){
+
+
+status.innerHTML=
+"Terjadi kesalahan koneksi.";
+
+status.className="error";
+
+
+console.error(error);
+
+
+}
+
+
+
+}
+
+
+
+</script>
+
+
+</body>
+</html>
