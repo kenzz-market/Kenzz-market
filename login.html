@@ -4,6 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Login Admin Kenzz Store</title>
@@ -11,15 +12,27 @@
 
 <style>
 
+*{
+box-sizing:border-box;
+}
+
+
 body{
 
 margin:0;
+
 height:100vh;
+
 display:flex;
-justify-content:center;
+
 align-items:center;
+
+justify-content:center;
+
 background:#08080d;
+
 font-family:Arial,sans-serif;
+
 color:white;
 
 }
@@ -29,10 +42,14 @@ color:white;
 .box{
 
 width:350px;
+
 background:#111119;
-padding:30px;
-border-radius:20px;
+
 border:1px solid #333;
+
+border-radius:20px;
+
+padding:30px;
 
 }
 
@@ -49,12 +66,20 @@ text-align:center;
 input{
 
 width:100%;
+
 padding:13px;
+
 margin-top:12px;
+
 background:#08080d;
+
 border:1px solid #333;
-border-radius:10px;
+
+border-radius:12px;
+
 color:white;
+
+outline:none;
 
 }
 
@@ -63,13 +88,25 @@ color:white;
 button{
 
 width:100%;
-padding:13px;
+
 margin-top:20px;
+
+padding:14px;
+
 border:0;
+
 border-radius:12px;
-background:linear-gradient(135deg,#ff316f,#ff9d00);
+
+background:linear-gradient(
+135deg,
+#ff316f,
+#ff9d00
+);
+
 color:white;
+
 font-weight:bold;
+
 cursor:pointer;
 
 }
@@ -79,16 +116,19 @@ cursor:pointer;
 #msg{
 
 text-align:center;
+
 margin-top:15px;
-font-size:14px;
+
+color:#aaa;
 
 }
 
 
+
 </style>
 
-
 </head>
+
 
 
 <body>
@@ -98,20 +138,28 @@ font-size:14px;
 
 
 <h2>
-👑 Kenzz Admin
+👑 Admin Kenzz
 </h2>
 
 
-<input 
+
+<input
+
 id="email"
+
 type="email"
+
 placeholder="Email">
 
 
-<input 
+<input
+
 id="password"
+
 type="password"
+
 placeholder="Password">
+
 
 
 <button onclick="login()">
@@ -121,14 +169,24 @@ Masuk
 </button>
 
 
-<div id="msg"></div>
+
+<div id="msg">
+
+</div>
+
 
 
 </div>
 
 
 
+
+
+<!-- WAJIB URUTAN INI -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="settings.js"></script>
 
 <script src="supabase.js"></script>
 
@@ -141,66 +199,94 @@ async function login(){
 
 
 const email =
-document.getElementById("email").value;
+
+document
+.getElementById("email")
+.value;
+
 
 
 const password =
-document.getElementById("password").value;
+
+document
+.getElementById("password")
+.value;
+
 
 
 const msg =
-document.getElementById("msg");
+
+document
+.getElementById("msg");
 
 
 
 try{
 
 
-msg.innerHTML="Memeriksa akun...";
+msg.innerHTML =
+"Memeriksa akun...";
 
 
 
 await loginUser(
+
 email,
+
 password
+
 );
 
 
 
 const role =
+
 await checkRole();
 
 
 
+
+
 if(
-role === "owner" ||
+role === "owner"
+||
 role === "admin"
 ){
 
 
+
 localStorage.setItem(
+
 "kenzz_role",
+
 role
+
 );
 
 
 
-msg.innerHTML=
+msg.innerHTML =
 "Login berhasil";
+
 
 
 setTimeout(()=>{
 
-location.href="admin.html";
 
-},800);
+location.href =
+"admin.html";
+
+
+
+},700);
 
 
 
 }else{
 
 
-msg.innerHTML=
+msg.innerHTML =
+
 "Akun tidak memiliki akses admin";
 
 
@@ -211,11 +297,20 @@ await logoutUser();
 
 
 
-}catch(error){
+}
 
 
-msg.innerHTML = error.message;
+catch(error){
+
+
+
 console.log(error);
+
+
+
+msg.innerHTML =
+
+error.message;
 
 
 
@@ -228,6 +323,7 @@ console.log(error);
 
 
 </script>
+
 
 
 </body>
