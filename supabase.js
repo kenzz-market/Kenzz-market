@@ -2,7 +2,9 @@
 // KENZZ STORE SUPABASE SYSTEM
 // =====================================
 
+
 // URL & KEY SUPABASE
+
 const SUPABASE_URL =
 "https://uvcmkwwczsrjzsujomjb.supabase.co";
 
@@ -18,6 +20,7 @@ supabase.createClient(
 );
 
 
+
 // =====================================
 // AUTH LOGIN
 // =====================================
@@ -25,10 +28,7 @@ supabase.createClient(
 
 async function loginUser(email,password){
 
-    const {
-        data,
-        error
-    } =
+    const {data,error} =
     await supabaseClient.auth.signInWithPassword({
 
         email,
@@ -59,6 +59,7 @@ async function logoutUser(){
 
     await supabaseClient.auth.signOut();
 
+
     localStorage.removeItem(
         "kenzz_role"
     );
@@ -78,19 +79,42 @@ async function logoutUser(){
 
 async function checkRole(){
 
-const {data:userData}=await supabaseClient.auth.getUser();
 
-console.log("USER LOGIN:",userData);
+    const {data:userData}
+    =
+    await supabaseClient.auth.getUser();
 
-const {data,error}=await supabaseClient
-.from("admins")
-.select("*")
-.eq("user_id",userData.user.id);
 
-console.log("DATA ADMIN:",data);
-console.log("ERROR:",error);
+    if(!userData.user){
 
-return data?.[0]?.role || null;
+        return null;
+
+    }
+
+
+    const {data,error}
+    =
+    await supabaseClient
+
+    .from("admins")
+
+    .select("*")
+
+    .eq(
+        "user_id",
+        userData.user.id
+    );
+
+
+    if(error){
+
+        console.log(error);
+
+    }
+
+
+    return data?.[0]?.role || null;
+
 }
 
 
@@ -103,12 +127,8 @@ return data?.[0]?.role || null;
 async function getProducts(){
 
 
-    const {
-        data,
-        error
-
-    } =
-
+    const {data,error}
+    =
     await supabaseClient
 
     .from("products")
@@ -126,6 +146,11 @@ async function getProducts(){
 
     if(error){
 
+        console.log(
+            "GET PRODUCT ERROR:",
+            error
+        );
+
         throw error;
 
     }
@@ -141,21 +166,26 @@ async function getProducts(){
 async function addProduct(product){
 
 
-    const {
-        data,
-        error
-
-    } =
-
+    const {data,error}
+    =
     await supabaseClient
 
     .from("products")
 
-    .insert(product);
+    .insert([
+        product
+    ])
+
+    .select();
 
 
 
     if(error){
+
+        console.log(
+            "ADD PRODUCT ERROR:",
+            error
+        );
 
         throw error;
 
@@ -169,15 +199,12 @@ async function addProduct(product){
 
 
 
+
 async function updateProduct(id,product){
 
 
-    const {
-        data,
-        error
-
-    } =
-
+    const {data,error}
+    =
     await supabaseClient
 
     .from("products")
@@ -187,7 +214,9 @@ async function updateProduct(id,product){
     .eq(
         "id",
         id
-    );
+    )
+
+    .select();
 
 
 
@@ -205,16 +234,11 @@ async function updateProduct(id,product){
 
 
 
-
 async function deleteProduct(id){
 
 
-    const {
-        data,
-        error
-
-    } =
-
+    const {data,error}
+    =
     await supabaseClient
 
     .from("products")
@@ -260,7 +284,10 @@ function getCart(){
 
 
 
+
+
 function saveCart(cart){
+
 
     localStorage.setItem(
 
@@ -282,19 +309,25 @@ function addToCart(product){
     getCart();
 
 
+
     const exist =
     cart.find(
+
         item =>
         item.id === product.id
+
     );
 
 
 
     if(exist){
 
+
         exist.qty++;
 
+
     }else{
+
 
         cart.push({
 
@@ -304,7 +337,9 @@ function addToCart(product){
 
         });
 
+
     }
+
 
 
     saveCart(cart);
@@ -315,8 +350,8 @@ function addToCart(product){
 
 
 
-
 function clearCart(){
+
 
     localStorage.removeItem(
         "kenzz_cart"
@@ -343,6 +378,7 @@ window.checkRole =
 checkRole;
 
 
+
 window.getProducts =
 getProducts;
 
@@ -357,6 +393,7 @@ updateProduct;
 
 window.deleteProduct =
 deleteProduct;
+
 
 
 window.getCart =
