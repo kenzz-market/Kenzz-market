@@ -4,7 +4,7 @@
 
 const SUPABASE_URL = "https://uvcmkwwczsrjzsujomjb.supabase.co";
 
-const SUPABASE_KEY = "ISI_ANON_KEY_KAMU";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2Y21rd3djenNyanpzdWpvbWpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEwODQ2NTIsImV4cCI6MjEwNjY2MDY1Mn0._nfIRL4z_L4VQPfgANkQkcf01Qos8qvBke1_A4ifwaM";
 
 
 const supabaseClient = supabase.createClient(
