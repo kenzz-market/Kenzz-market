@@ -39,11 +39,11 @@ const STORE_SETTINGS = {
     // =========================
 
     whatsappChannel:
-    "https://whatsapp.com/channel/ISI_LINK_CHANNEL",
+    "https://whatsapp.com/channel/0029VbBgwqRF6smwQktSGi1i",
 
 
     whatsappGroup:
-    "https://chat.whatsapp.com/ISI_LINK_GRUP",
+    "https://chat.whatsapp.com/JYepT5u3BTI33kermw0NED",
 
 
 
@@ -54,16 +54,16 @@ const STORE_SETTINGS = {
     socialMedia: {
 
         tiktok:
-        "https://www.tiktok.com/@kenzzel",
+        "https://www.tiktok.com/@kenzzeln2?_r=1&_t=ZS-9AKQO1w2fvo",
 
         instagram:
-        "https://www.instagram.com/@kenzzeln",
+        "https://www.instagram.com/kenzzeln?stkn=MWNhaWpmNjh5Nnd6NA==",
 
         youtube:
-        "https://www.youtube.com/@rakenn_yt",
+        "https://youtube.com/@rakenn_yt?si=txcgDo7LFpK85Z8v",
 
         telegram:
-        "https://t.me/ryukenntzy"
+        "t.me/Ryukenntzy"
 
     },
 
