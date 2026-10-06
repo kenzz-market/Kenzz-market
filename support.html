@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Support Kenzz Store</title>
+
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+
+body{
+
+margin:0;
+
+padding:20px;
+
+background:#08080d;
+
+color:white;
+
+font-family:Arial,sans-serif;
+
+}
+
+
+
+.container{
+
+max-width:700px;
+
+margin:auto;
+
+}
+
+
+
+.box{
+
+background:#111119;
+
+border:1px solid rgba(255,255,255,.1);
+
+border-radius:20px;
+
+padding:25px;
+
+margin-top:20px;
+
+}
+
+
+
+h1{
+
+text-align:center;
+
+}
+
+
+
+.btn{
+
+display:block;
+
+padding:15px;
+
+margin-top:12px;
+
+border-radius:15px;
+
+text-align:center;
+
+font-weight:bold;
+
+text-decoration:none;
+
+color:white;
+
+}
+
+
+
+.whatsapp{
+
+background:#25d366;
+
+}
+
+
+
+.telegram{
+
+background:#229ed9;
+
+}
+
+
+
+.faq{
+
+padding:15px;
+
+background:#181823;
+
+border-radius:12px;
+
+margin-top:10px;
+
+}
+
+
+
+.small{
+
+color:#aaa;
+
+font-size:14px;
+
+}
+
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<h1>
+🎧 Support
+</h1>
+
+
+
+<div class="box">
+
+
+<h2 id="storeName">
+
+Kenzz Store
+
+</h2>
+
+
+<p class="small">
+
+Pusat bantuan pelanggan
+
+</p>
+
+
+
+
+<a id="wa"
+
+class="btn whatsapp"
+
+target="_blank">
+
+💬 Chat WhatsApp Admin
+
+</a>
+
+
+
+<a id="telegram"
+
+class="btn telegram"
+
+target="_blank">
+
+✈️ Telegram
+
+</a>
+
+
+
+</div>
+
+
+
+
+
+
+<div class="box">
+
+
+<h2>
+❓ FAQ
+</h2>
+
+
+
+<div class="faq">
+
+<b>
+Bagaimana cara membeli produk?
+</b>
+
+<p class="small">
+
+Pilih produk → tekan beli → hubungi admin WhatsApp.
+
+</p>
+
+</div>
+
+
+
+
+<div class="faq">
+
+<b>
+Bagaimana cara pembayaran?
+</b>
+
+<p class="small">
+
+Hubungi admin untuk metode pembayaran yang tersedia.
+
+</p>
+
+</div>
+
+
+
+
+<div class="faq">
+
+<b>
+Produk tidak masuk?
+</b>
+
+<p class="small">
+
+Hubungi support dengan menyertakan bukti transaksi.
+
+</p>
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="box">
+
+
+<h2>
+🕒 Jam Layanan
+</h2>
+
+
+<p>
+
+Senin - Minggu
+
+</p>
+
+
+<p>
+
+09.00 - 22.00 WIB
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+<footer class="box">
+
+
+<center>
+
+© 2026 Kenzz Store
+
+<br>
+
+<span id="owner"></span>
+
+</center>
+
+
+</footer>
+
+
+
+</div>
+
+
+
+
+
+
+<script src="settings.js"></script>
+
+
+<script>
+
+
+document
+.getElementById("storeName")
+.innerHTML =
+STORE_SETTINGS.storeName;
+
+
+
+document
+.getElementById("wa")
+.href =
+
+"https://wa.me/"+
+STORE_SETTINGS.supportWhatsapp;
+
+
+
+document
+.getElementById("telegram")
+.href =
+
+STORE_SETTINGS.socialMedia.telegram;
+
+
+
+document
+.getElementById("owner")
+.innerHTML =
+
+"Owned by: "+
+STORE_SETTINGS.ownerName;
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
