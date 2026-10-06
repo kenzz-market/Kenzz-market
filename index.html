@@ -5,241 +5,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kenzz Store</title>
 <style>
-  body.light{
-    background:#f5f5f5;
-    color:#111;
-}
-
-body.light .card,
-body.light .item,
-body.light .btn-icon{
-    background:#ffffffaa;
-    color:#111;
-    border-color:#0002;
-}
-
-body.light .bottom{
-    background:#ffffffdd;
-}
-
-body.light .bottom a{
-    color:#111;
-}
-
-body.light .hero{
-    filter:brightness(1.2);
-}
-
-body.light .overlay{
-    background:linear-gradient(#ffffff55,#ffffff88);
-}
-*{box-sizing:border-box}
-body{
-margin:0;
-font-family:Inter,Arial,sans-serif;
-color:#fff;
-background:#050509;
-min-height:100vh;
-}
-#bg{
-position:fixed;
-inset:0;
-width:100%;
-height:100%;
-object-fit:cover;
-z-index:-3;
-}
-.overlay{
-position:fixed;
-inset:0;
-background:linear-gradient(#0009,#000c);
-z-index:-2;
-}
-.container{
-max-width:600px;
-margin:auto;
-padding:20px 15px 100px;
-}
-.top{
-display:flex;
-align-items:center;
-gap:10px;
-}
-.logo{
-font-size:24px;
-font-weight:900;
-margin-right:auto;
-}
-.btn-icon{
-border:1px solid #ffffff33;
-background:#ffffff15;
-color:white;
-padding:12px;
-border-radius:50%;
-}
-.hero{
-margin-top:20px;
-padding:30px 20px;
-border-radius:25px;
-background:
-linear-gradient(#0007,#0007),
-url("https://c.termai.cc/i128/WY2mWaT.jpg");
-background-size:cover;
-background-position:center;
-text-align:center;
-border:1px solid #ffffff30;
-}
-.hero h1{font-size:38px;margin:10px 0}
-.hero p{color:#ddd}
-.button{
-display:inline-block;
-padding:13px 20px;
-border-radius:15px;
-background:linear-gradient(135deg,#ff316f,#ff9d00);
-color:#fff;
-text-decoration:none;
-font-weight:bold;
-margin:5px;
-}
-.card{
-margin-top:15px;
-padding:20px;
-border-radius:22px;
-background-size:cover;
-background-position:center;
-border:1px solid #ffffff30;
-overflow:hidden;
-}
-.verified{
-background:
-linear-gradient(#0008,#0008),
-url("https://c.termai.cc/i148/N28g6Y6.jpg");
-}
-
-.statistik{
-background:
-linear-gradient(#0008,#0008),
-url("https://c.termai.cc/i175/rbpqkS.jpg");
-}
-
-.announcement{
-background:
-linear-gradient(#0008,#0008),
-url("https://c.termai.cc/i131/5xG.jpg");
-}
-
-.socialmedia{
-background:
-linear-gradient(#0008,#0008),
-url("https://c.termai.cc/i123/5CfE.jpg");
-}
-.menu{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-}
-.item{
-padding:18px;
-border-radius:18px;
-background:#ffffff12;
-border:1px solid #ffffff20;
-color:white;
-text-decoration:none;
-text-align:center;
-}
-.social{
-display:flex;
-justify-content:center;
-gap:12px;
-}
-.social a{
-padding:12px;
-border-radius:50%;
-background:#ffffff15;
-color:white;
-text-decoration:none;
-}
-.wa{
-position:fixed;
-right:20px;
-bottom:80px;
-background:#25d366;
-padding:16px;
-border-radius:50%;
-color:white;
-text-decoration:none;
-font-size:22px;
-}
-.bottom{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-display:flex;
-justify-content:space-around;
-padding:15px;
-background:#111d;
-backdrop-filter:blur(10px);
-}
-.bottom a{color:white;text-decoration:none}
+body{margin:0;background:#050509;color:#fff;font-family:Arial}
+.container{max-width:600px;margin:auto;padding:20px 15px 100px}
+.card,.hero{margin-top:15px;padding:22px;border-radius:22px;background:#111b;border:1px solid #ffffff30}
+.hero{text-align:center;background:linear-gradient(#0008,#0008),url('https://c.termai.cc/i128/WY2mWaT.jpg');background-size:cover}
+.button{display:inline-block;padding:12px 18px;background:#ff316f;color:#fff;border-radius:12px;text-decoration:none;margin:5px}
+.item{display:block;padding:15px;background:#ffffff15;border-radius:15px;margin:10px 0;color:#fff;text-decoration:none}
+.social a{padding:12px;background:#ffffff20;border-radius:50%;color:white;text-decoration:none}
+.wa{position:fixed;right:20px;bottom:80px;background:#25d366;padding:15px;border-radius:50%;color:#fff;text-decoration:none}
+.bottom{position:fixed;bottom:0;left:0;right:0;padding:15px;background:#111d;display:flex;justify-content:space-around}
+.bottom a{color:white}
 </style>
 </head>
 <body>
-
-<video id="bg" autoplay muted loop playsinline>
-<source src="https://c.termai.cc/v154/apv.mp4" type="video/mp4">
-</video>
-<div class="overlay"></div>
-
 <div class="container">
-
-<div class="top">
-<div class="logo">👑 Kenzz Store</div>
-<button class="btn-icon" onclick="theme()">🌙</button>
-</div>
-
 <div class="hero">
-<h1>𝘒𝘌𝘕𝘡𝘡 𝘚𝘛𝘖𝘙𝘌</h1>
+<h1>KENZZ STORE</h1>
 <p>DIGITAL PREMIUM MARKET</p>
-<a class="button" href="products.html">🛍 List produk</a>
-<a class="button" href="products.html">🔎 Jelajahi</a>
+<a class="button" href="products.html">🛒 List Produk</a>
 </div>
 
-<div class="card verified">
+<div class="card">
 <h2>✅ Verified Official</h2>
-<p>Official Digital Store</p>
-<p>🟢 Online • Trusted Store</p>
+<p>🟢 Online Trusted Store</p>
 </div>
 
-<div class="card menu">
-<a class="item" href="products.html">🛒<br>Store Online</a>
-<a class="item" href="tools.html">⚒️<br>Tools Premium</a>
-<a class="item" href="announcement.html">🔔<br>Update</a>
-<a class="item" href="support.html">🎧<br>Support</a>
+<div class="card">
+<a class="item" href="products.html">🛒 Store Online</a>
+<a class="item" href="tools.html">⚒️ Tools Premium</a>
+<a class="item" href="announcement.html">🔔 Update</a>
+<a class="item" href="support.html">🎧 Support</a>
 </div>
 
-<div class="card statistik">
-<h2>📊 Statistik</h2>
-<p>56 Member</p>
-<p>0 Produk Store</p>
-<p>99% Uptime</p>
-</div>
-
-<div class="card announcement">
-<h2>📢 Announcement</h2>
-<p>Selamat datang di Kenzz Store. Nikmati layanan digital premium.</p>
-</div>
-
-<div class="card socialmedia">
-<h2>🌐 Sosial Media</h2>
+<div class="card">
+<h2>🌐 Community</h2>
 <div class="social">
 <a id="ig">📷</a>
 <a id="tt">🎵</a>
 <a id="yt">▶️</a>
 <a id="tg">✈️</a>
 </div>
+<br>
+<a class="button" id="channel">📢 Saluran WhatsApp</a>
+<a class="button" id="group">👥 Grup WhatsApp</a>
 </div>
-
 </div>
 
 <a id="wa" class="wa">💬</a>
@@ -253,27 +62,14 @@ backdrop-filter:blur(10px);
 
 <script src="settings.js"></script>
 <script>
-function theme(){
-
-document.body.classList.toggle("light");
-
-if(document.body.classList.contains("light")){
-localStorage.setItem("theme","light");
-}else{
-localStorage.setItem("theme","dark");
-}
-
-}
-
-if(localStorage.getItem("theme")==="light"){
-document.body.classList.add("light");
-}
 if(window.STORE_SETTINGS){
 wa.href="https://wa.me/"+STORE_SETTINGS.whatsappOwner;
 ig.href=STORE_SETTINGS.socialMedia.instagram;
 tt.href=STORE_SETTINGS.socialMedia.tiktok;
 yt.href=STORE_SETTINGS.socialMedia.youtube;
 tg.href=STORE_SETTINGS.socialMedia.telegram;
+channel.href=STORE_SETTINGS.whatsappChannel;
+group.href=STORE_SETTINGS.whatsappGroup;
 }
 </script>
 </body>
