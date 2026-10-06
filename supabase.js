@@ -61,50 +61,34 @@ async function logoutUser(){
 
 async function checkRole(){
 
-
-    const {
-        data:{
-            user
-        }
-    } =
+    const { data: { user }, error:userError } =
     await supabaseClient.auth.getUser();
 
 
-
-    if(!user){
-
+    if(userError || !user){
+        console.log("User belum login");
         return null;
-
     }
 
 
-
-    const {data,error}=
-
+    const { data, error } =
     await supabaseClient
-
     .from("admins")
-
     .select("role")
-
-    .eq("user_id",user.id)
-
-    .single();
-
+    .eq("user_id", user.id)
+    .maybeSingle();
 
 
     if(error){
-
+        console.log("Role error:", error);
         return null;
-
     }
 
 
-
-    return data.role;
-
+    return data?.role || null;
 
 }
+
 
 
 
@@ -129,7 +113,6 @@ if(error){
 
 throw error;
 
-}
 
 
 return data;
