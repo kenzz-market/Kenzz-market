@@ -22,13 +22,29 @@ const STORE_SETTINGS = {
     version: "1.0.0",
 
 
+
     // =========================
     // KONTAK WHATSAPP
     // =========================
 
-    whatsappOwner: "6283194748380",
+    whatsappOwner:
+    "6283194748380",
 
-    supportWhatsapp: "6283194748380",
+    supportWhatsapp:
+    "6283194748380",
+
+
+    // =========================
+    // WHATSAPP COMMUNITY
+    // =========================
+
+    whatsappChannel:
+    "https://whatsapp.com/channel/ISI_LINK_CHANNEL",
+
+
+    whatsappGroup:
+    "https://chat.whatsapp.com/ISI_LINK_GRUP",
+
 
 
     // =========================
@@ -52,13 +68,50 @@ const STORE_SETTINGS = {
     },
 
 
+
+    // =========================
+    // MEDIA WEBSITE
+    // =========================
+
+    backgroundVideo:
+    "https://link-video-kamu.mp4",
+
+
+    heroImage:
+    "https://link-foto-kamu.jpg",
+
+
+
+    // =========================
+    // STATISTIK TOKO
+    // =========================
+
+    stats: {
+
+        member:
+        "56+",
+
+        products:
+        "0+",
+
+        uptime:
+        "99%"
+
+    },
+
+
+
     // =========================
     // TOKO
     // =========================
 
-    currency: "IDR",
+    currency:
+    "IDR",
 
-    defaultTheme: "dark",
+
+    defaultTheme:
+    "dark",
+
 
 
     // =========================
@@ -69,8 +122,8 @@ const STORE_SETTINGS = {
 
     "Halo bg kenzz, apakah ini pemilik kenzz store? ."
 
-
 };
+
 
 
 // Jangan dihapus
