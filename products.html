@@ -4,9 +4,10 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Produk Kenzz Store</title>
+<title>Katalog Kenzz Store</title>
 
 
 <style>
@@ -20,16 +21,21 @@ body{
 
 margin:0;
 padding:20px;
-font-family:Arial,sans-serif;
+
 background:#08080d;
+
 color:white;
+
+font-family:Arial,sans-serif;
 
 }
 
 
+
 .container{
 
-max-width:900px;
+max-width:1000px;
+
 margin:auto;
 
 }
@@ -44,12 +50,44 @@ text-align:center;
 
 
 
+.top{
+
+display:flex;
+
+gap:10px;
+
+margin-bottom:20px;
+
+}
+
+
+
+input{
+
+flex:1;
+
+padding:14px;
+
+border-radius:12px;
+
+border:1px solid #333;
+
+background:#111119;
+
+color:white;
+
+}
+
+
+
 .category{
 
 display:flex;
+
 gap:10px;
+
 flex-wrap:wrap;
-justify-content:center;
+
 margin:20px 0;
 
 }
@@ -58,11 +96,16 @@ margin:20px 0;
 
 .category button{
 
-padding:10px 18px;
+padding:10px 15px;
+
 border-radius:20px;
+
 border:1px solid #333;
+
 background:#15151f;
+
 color:white;
+
 cursor:pointer;
 
 }
@@ -80,7 +123,9 @@ background:#ff316f;
 .products{
 
 display:grid;
+
 grid-template-columns:repeat(2,1fr);
+
 gap:15px;
 
 }
@@ -90,8 +135,11 @@ gap:15px;
 .card{
 
 background:#111119;
+
 border:1px solid rgba(255,255,255,.1);
+
 border-radius:18px;
+
 padding:15px;
 
 }
@@ -101,8 +149,11 @@ padding:15px;
 .card img{
 
 width:100%;
-height:180px;
+
+height:200px;
+
 object-fit:cover;
+
 border-radius:12px;
 
 }
@@ -111,7 +162,7 @@ border-radius:12px;
 
 .card h3{
 
-margin:12px 0 5px;
+margin:10px 0;
 
 }
 
@@ -120,7 +171,9 @@ margin:12px 0 5px;
 .price{
 
 color:#00ffd5;
-font-size:18px;
+
+font-size:20px;
+
 font-weight:bold;
 
 }
@@ -130,7 +183,29 @@ font-weight:bold;
 .info{
 
 color:#aaa;
-font-size:14px;
+
+}
+
+
+
+button.buy,
+button.cart{
+
+
+width:100%;
+
+padding:12px;
+
+margin-top:10px;
+
+border:0;
+
+border-radius:12px;
+
+font-weight:bold;
+
+cursor:pointer;
+
 
 }
 
@@ -138,15 +213,19 @@ font-size:14px;
 
 .buy{
 
-display:block;
-margin-top:15px;
-text-align:center;
 background:#25d366;
+
 color:white;
-padding:12px;
-border-radius:12px;
-text-decoration:none;
-font-weight:bold;
+
+}
+
+
+
+.cart{
+
+background:#ff316f;
+
+color:white;
 
 }
 
@@ -155,8 +234,10 @@ font-weight:bold;
 .empty{
 
 text-align:center;
-color:#aaa;
+
 padding:40px;
+
+color:#aaa;
 
 }
 
@@ -173,22 +254,36 @@ grid-template-columns:1fr;
 }
 
 
-
 </style>
 
 
 </head>
 
 
-
 <body>
-
 
 
 <div class="container">
 
 
-<h1>🛒 Kenzz Store</h1>
+<h1>
+🛒 Kenzz Store
+</h1>
+
+
+
+<div class="top">
+
+
+<input
+
+id="search"
+
+placeholder="Cari produk...">
+
+
+</div>
+
 
 
 
@@ -196,52 +291,65 @@ grid-template-columns:1fr;
 
 
 <button class="active"
-onclick="filterProduct('Semua',this)">
+onclick="filterCategory('Semua',this)">
 Semua
 </button>
 
 
-<button onclick="filterProduct('Apk Premium',this)">
+<button onclick="filterCategory('APK Premium',this)">
 APK Premium
 </button>
 
 
-<button onclick="filterProduct('Panel Pterodactyl',this)">
+<button onclick="filterCategory('Panel',this)">
 Panel
 </button>
 
 
-<button onclick="filterProduct('Nokos',this)">
+<button onclick="filterCategory('Nokos',this)">
 Nokos
 </button>
 
 
-<button onclick="filterProduct('Sewa bot',this)">
+<button onclick="filterCategory('Sewa Bot',this)">
 Sewa Bot
 </button>
 
 
+
 </div>
 
 
 
 
-<div id="products" class="products">
+<div id="products"
+class="products">
 
 <div class="empty">
+
 Memuat produk...
-</div>
 
 </div>
 
 
+</div>
+
+
 
 </div>
 
 
+
+
+
+<script src="settings.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
 <script src="supabase.js"></script>
+
 
 
 <script>
@@ -249,15 +357,12 @@ Memuat produk...
 
 let allProducts=[];
 
-let category="Semua";
+let activeCategory="Semua";
 
 
-// GANTI NOMOR WA OWNER DI SINI
-
-const whatsapp =
-"6283194748380";
 
 
+// LOAD PRODUK
 
 
 async function loadProducts(){
@@ -273,26 +378,26 @@ await getProducts();
 render();
 
 
+}
 
-}catch(error){
+
+catch(error){
 
 
-document.getElementById("products")
+console.log(error);
+
+
+document
+.getElementById("products")
 .innerHTML=
+
 `
 <div class="empty">
 Produk gagal dimuat
 </div>
 `;
 
-
-
-console.error(error);
-
-
-
 }
-
 
 
 }
@@ -301,10 +406,13 @@ console.error(error);
 
 
 
-function filterProduct(cat,btn){
+// FILTER
 
 
-category=cat;
+function filterCategory(cat,btn){
+
+
+activeCategory=cat;
 
 
 document
@@ -326,31 +434,69 @@ render();
 
 
 
+// SEARCH
+
+
+document
+.getElementById("search")
+.addEventListener(
+"input",
+render
+);
+
+
+
+
+
 function render(){
 
 
+let keyword =
 
-const box=
-document.getElementById("products");
+document
+.getElementById("search")
+.value
+.toLowerCase();
 
 
 
 let data =
-allProducts;
+allProducts.filter(p=>{
+
+
+let matchText =
+
+(
+p.name+
+p.category
+)
+
+.toLowerCase()
+
+.includes(keyword);
 
 
 
-if(category !== "Semua"){
+let matchCategory =
 
-data =
-allProducts.filter(
-p =>
-p.category.toLowerCase()
-===
-category.toLowerCase()
-);
+activeCategory==="Semua"
 
-}
+||
+
+p.category===activeCategory;
+
+
+
+return matchText && matchCategory;
+
+
+});
+
+
+
+
+let box =
+document.getElementById("products");
 
 
 
@@ -358,39 +504,49 @@ if(!data.length){
 
 
 box.innerHTML=
+
 `
 <div class="empty">
-Belum ada produk
+Produk belum tersedia
 </div>
 `;
 
-
 return;
+
 
 }
 
 
 
 
+
 box.innerHTML =
+
 data.map(p=>{
 
 
-const message =
+let message =
+
 encodeURIComponent(
-`Halo Kenzz Store,
+
+`Halo ${STORE_SETTINGS.storeName},
 
 Saya ingin membeli:
 
-Produk: ${p.name}
-Harga: Rp ${Number(p.price).toLocaleString("id-ID")}
+Produk:
+${p.name}
 
-Mohon diproses.`
+Harga:
+Rp ${Number(p.price).toLocaleString("id-ID")}
+
+Terima kasih.`
+
 );
 
 
 
 return `
+
 
 <div class="card">
 
@@ -404,28 +560,56 @@ ${p.name}
 
 
 <div class="price">
-Rp ${Number(p.price).toLocaleString("id-ID")}
+
+Rp ${Number(p.price)
+.toLocaleString("id-ID")}
+
 </div>
 
 
+
 <p class="info">
-Kategori: ${p.category}
+
+Kategori:
+${p.category}
+
 <br>
-Stok: ${p.stock}
+
+Stok:
+${p.stock}
+
 </p>
 
 
 
-<a class="buy"
-href="https://wa.me/${whatsapp}?text=${message}"
+<button class="cart"
+
+onclick='addProductCart(${JSON.stringify(p)})'>
+
+🛒 Tambah Keranjang
+
+</button>
+
+
+
+<a href="https://wa.me/${STORE_SETTINGS.whatsappOwner}?text=${message}"
+
 target="_blank">
 
-🛒 Beli Sekarang
+
+<button class="buy">
+
+💬 Beli Sekarang
+
+</button>
+
 
 </a>
 
 
+
 </div>
+
 
 `;
 
@@ -439,11 +623,28 @@ target="_blank">
 
 
 
+
+
+function addProductCart(product){
+
+
+addToCart(product);
+
+
+alert(
+"Produk masuk keranjang"
+);
+
+
+}
+
+
+
+
 loadProducts();
 
 
 </script>
-
 
 
 </body>
