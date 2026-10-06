@@ -4,6 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Admin Kenzz Store</title>
@@ -19,50 +20,38 @@ box-sizing:border-box;
 body{
 
 margin:0;
+
 padding:20px;
+
 background:#08080d;
+
 color:white;
+
 font-family:Arial,sans-serif;
 
 }
 
 
+
 .container{
 
-max-width:650px;
+max-width:900px;
+
 margin:auto;
-background:#111119;
-padding:25px;
-border-radius:20px;
-border:1px solid #333;
 
 }
 
 
 
-h1{
-
-text-align:center;
-
-}
-
-
-
-.top{
+.header{
 
 display:flex;
+
 justify-content:space-between;
+
 align-items:center;
+
 margin-bottom:20px;
-
-}
-
-
-
-.role{
-
-color:#55e98e;
-font-size:14px;
 
 }
 
@@ -71,9 +60,13 @@ font-size:14px;
 button{
 
 padding:12px;
+
 border:0;
+
 border-radius:12px;
+
 cursor:pointer;
+
 font-weight:bold;
 
 }
@@ -82,8 +75,25 @@ font-weight:bold;
 
 .logout{
 
-background:#333;
+background:#ff316f;
+
 color:white;
+
+}
+
+
+
+.card{
+
+background:#111119;
+
+border:1px solid #333;
+
+border-radius:18px;
+
+padding:20px;
+
+margin-bottom:20px;
 
 }
 
@@ -92,26 +102,31 @@ color:white;
 input{
 
 width:100%;
-padding:13px;
-margin:7px 0;
+
+padding:12px;
+
+margin-top:10px;
+
 background:#08080d;
+
 border:1px solid #333;
+
 border-radius:12px;
+
 color:white;
 
 }
 
 
 
-.add{
+.save{
 
 width:100%;
-margin-top:10px;
-background:linear-gradient(
-135deg,
-#ff316f,
-#ff9d00
-);
+
+margin-top:15px;
+
+background:#25d366;
+
 color:white;
 
 }
@@ -121,12 +136,18 @@ color:white;
 .product{
 
 display:flex;
-gap:12px;
+
+gap:15px;
+
 align-items:center;
+
 background:#181823;
-padding:12px;
-margin-top:12px;
+
+padding:15px;
+
 border-radius:15px;
+
+margin-top:12px;
 
 }
 
@@ -134,10 +155,13 @@ border-radius:15px;
 
 .product img{
 
-width:70px;
-height:70px;
-border-radius:10px;
+width:80px;
+
+height:80px;
+
 object-fit:cover;
+
+border-radius:12px;
 
 }
 
@@ -151,26 +175,20 @@ flex:1;
 
 
 
-.info h3{
-
-margin:0;
-
-}
-
-
-
-.info p{
-
-color:#aaa;
-margin:5px 0;
-
-}
-
-
-
 .delete{
 
-background:#ff315f;
+background:#ff316f;
+
+color:white;
+
+}
+
+
+
+.edit{
+
+background:#ff9d00;
+
 color:white;
 
 }
@@ -186,20 +204,26 @@ color:white;
 <body>
 
 
-<div class="container" id="panel" style="display:none;">
+<div class="container" id="app" style="display:none;">
 
 
-<div class="top">
+
+<div class="header">
+
 
 <div>
 
+
 <h1>
-👑 Admin
+👑 Admin Panel
 </h1>
 
-<span class="role" id="role"></span>
+
+<p id="role"></p>
+
 
 </div>
+
 
 
 <button class="logout"
@@ -214,49 +238,74 @@ Keluar
 
 
 
-<input 
-id="name"
+
+
+
+
+<div class="card">
+
+
+<h2>
+
+Tambah / Edit Produk
+
+</h2>
+
+
+
+<input id="id"
+type="hidden">
+
+
+
+<input id="name"
 placeholder="Nama produk">
 
 
 
-<input 
-id="price"
-type="number"
-placeholder="Harga">
+<input id="price"
+placeholder="Harga"
+type="number">
 
 
 
-<input 
-id="category"
+<input id="category"
 placeholder="Kategori">
 
 
 
-<input 
-id="image"
+<input id="image"
 placeholder="Link gambar">
 
 
 
-<input 
-id="stock"
-type="number"
-placeholder="Stok">
+<input id="stock"
+placeholder="Stok"
+type="number">
 
 
 
-<button class="add"
-onclick="saveProduct()">
+<button class="save"
+onclick="saveProductData()">
 
-+ Tambah Produk
+Simpan Produk
 
 </button>
 
 
 
+</div>
+
+
+
+
+
+
+<div class="card">
+
+
 <h2>
-📦 Produk
+📦 Daftar Produk
 </h2>
 
 
@@ -267,12 +316,25 @@ Memuat...
 </div>
 
 
+
 </div>
 
 
 
 
+
+
+</div>
+
+
+
+
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="settings.js"></script>
 
 <script src="supabase.js"></script>
 
@@ -281,16 +343,19 @@ Memuat...
 <script>
 
 
-async function checkAccess(){
+async function start(){
+
 
 
 const role =
+
 await checkRole();
 
 
 
 if(
-role !== "owner" &&
+role !== "owner"
+&&
 role !== "admin"
 ){
 
@@ -300,7 +365,8 @@ alert(
 );
 
 
-location.href="login.html";
+location.href =
+"login.html";
 
 
 return;
@@ -309,15 +375,20 @@ return;
 
 
 
+
 document
-.getElementById("panel")
+.getElementById("app")
 .style.display="block";
+
 
 
 document
 .getElementById("role")
-.innerHTML=
-"Role: "+role;
+.innerHTML =
+
+"Role: "
++
+role;
 
 
 
@@ -326,49 +397,6 @@ loadProducts();
 
 }
 
-
-
-async function saveProduct(){
-
-
-
-const data={
-
-name:
-document.getElementById("name").value,
-
-price:
-Number(
-document.getElementById("price").value
-),
-
-category:
-document.getElementById("category").value,
-
-image:
-document.getElementById("image").value,
-
-stock:
-Number(
-document.getElementById("stock").value
-)
-
-};
-
-
-
-await addProduct(data);
-
-
-alert(
-"Produk ditambahkan"
-);
-
-
-loadProducts();
-
-
-}
 
 
 
@@ -376,43 +404,96 @@ loadProducts();
 async function loadProducts(){
 
 
-const list =
-document.getElementById("list");
-
 
 const products =
+
 await getProducts();
 
 
 
-list.innerHTML =
+const box =
+
+document
+.getElementById("list");
+
+
+
+if(!products.length){
+
+
+box.innerHTML =
+"Tidak ada produk";
+
+
+return;
+
+
+}
+
+
+
+
+box.innerHTML =
+
 products.map(p=>`
+
 
 
 <div class="product">
 
 
-<img src="${p.image}">
+<img src="${p.image || 'https://via.placeholder.com/100'}">
+
 
 
 <div class="info">
 
+
 <h3>
+
 ${p.name}
+
 </h3>
 
-<p>
-Rp ${Number(p.price).toLocaleString("id-ID")}
-</p>
+
 
 <p>
-${p.category}
+
+Rp ${Number(p.price)
+.toLocaleString("id-ID")}
+
 </p>
+
+
+<p>
+
+${p.category}
+
+|
+
+Stok:
+${p.stock}
+
+</p>
+
+
 
 </div>
 
 
+
+<button class="edit"
+
+onclick='editProduct(${JSON.stringify(p)})'>
+
+Edit
+
+</button>
+
+
+
 <button class="delete"
+
 onclick="removeProduct('${p.id}')">
 
 Hapus
@@ -420,7 +501,9 @@ Hapus
 </button>
 
 
+
 </div>
+
 
 
 `).join("");
@@ -428,6 +511,164 @@ Hapus
 
 
 }
+
+
+
+
+
+
+
+
+async function saveProductData(){
+
+
+
+const id =
+
+document
+.getElementById("id")
+.value;
+
+
+
+const data = {
+
+
+name:
+
+document
+.getElementById("name")
+.value,
+
+
+price:
+
+Number(
+document
+.getElementById("price")
+.value
+),
+
+
+category:
+
+document
+.getElementById("category")
+.value,
+
+
+image:
+
+document
+.getElementById("image")
+.value,
+
+
+stock:
+
+Number(
+document
+.getElementById("stock")
+.value
+)
+
+
+};
+
+
+
+
+
+if(id){
+
+
+await updateProduct(
+id,
+data
+);
+
+
+}else{
+
+
+await addProduct(
+data
+);
+
+
+}
+
+
+
+alert(
+"Produk tersimpan"
+);
+
+
+
+clearForm();
+
+
+loadProducts();
+
+
+}
+
+
+
+
+
+function editProduct(p){
+
+
+document
+.getElementById("id")
+.value=p.id;
+
+
+document
+.getElementById("name")
+.value=p.name;
+
+
+document
+.getElementById("price")
+.value=p.price;
+
+
+document
+.getElementById("category")
+.value=p.category;
+
+
+document
+.getElementById("image")
+.value=p.image;
+
+
+document
+.getElementById("stock")
+.value=p.stock;
+
+
+}
+
+
+
+
+
+function clearForm(){
+
+
+document
+.querySelectorAll("input")
+.forEach(
+x=>x.value=""
+);
+
+
+}
+
 
 
 
@@ -453,7 +694,9 @@ loadProducts();
 
 
 
-checkAccess();
+
+
+start();
 
 
 </script>
