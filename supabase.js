@@ -17,14 +17,12 @@ const supabaseClient = supabase.createClient(
 // LOGIN EMAIL + PASSWORD
 // ===============================
 
-async function loginUser(email,password){
+async function loginUser(email, password){
 
-    const {data,error} =
+    const { data, error } =
     await supabaseClient.auth.signInWithPassword({
-
         email: email,
         password: password
-
     });
 
 
@@ -32,10 +30,12 @@ async function loginUser(email,password){
         throw error;
     }
 
-
     return data;
-
 }
+
+
+// supaya bisa dipanggil dari HTML
+window.loginUser = loginUser;
 
 
 
