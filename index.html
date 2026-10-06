@@ -212,9 +212,9 @@ text-decoration:none;
 
 <div class="card statistik">
 <h2>📊 Statistik</h2>
-<p id="memberCount">56 Member</p>
-<p id="productCount">0 Produk Store</p>
-<p id="uptimeCount">99% Uptime</p>
+<p id="memberCount">Memuat...</p>
+<p id="productCount">Memuat...</p>
+<p id="uptimeCount">Memuat...</p>
 </div>
 
 <div class="card announcement">
@@ -291,6 +291,48 @@ async function loadStats(){
     if(member) member.innerHTML = stats.member + " Member";
     if(uptime) uptime.innerHTML = stats.uptime + " Uptime";
 }
+
+loadStats();
+</script>
+
+
+<script>
+async function loadStats(){
+
+    try{
+
+        const { count, error } =
+        await supabaseClient
+        .from("products")
+        .select("*", {
+            count:"exact",
+            head:true
+        });
+
+
+        if(error) throw error;
+
+
+        document.getElementById("productCount").innerHTML =
+        (count || 0) + " Produk Store";
+
+
+        document.getElementById("memberCount").innerHTML =
+        "56 Member";
+
+
+        document.getElementById("uptimeCount").innerHTML =
+        "99% Uptime";
+
+
+    }catch(error){
+
+        console.log("STAT ERROR:", error);
+
+    }
+
+}
+
 
 loadStats();
 </script>
