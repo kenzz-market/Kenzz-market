@@ -4,138 +4,203 @@
 
 const SUPABASE_URL = "https://uvcmkwwczsrjzsujomjb.supabase.co";
 
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2Y21rd3djenNyanpzdWpvbWpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEwODQ2NTIsImV4cCI6MjEwNjY2MDY1Mn0._nfIRL4z_L4VQPfgANkQkcf01Qos8qvBke1_A4ifwaM";
+const SUPABASE_KEY = "ISI_ANON_KEY_KAMU";
+
+
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 
 // ===============================
-// AMBIL SEMUA PRODUK
+// LOGIN EMAIL + PASSWORD
 // ===============================
+
+async function loginUser(email,password){
+
+    const {data,error} =
+    await supabaseClient.auth.signInWithPassword({
+
+        email: email,
+        password: password
+
+    });
+
+
+    if(error){
+        throw error;
+    }
+
+
+    return data;
+
+}
+
+
+
+// ===============================
+// LOGOUT
+// ===============================
+
+async function logoutUser(){
+
+    await supabaseClient.auth.signOut();
+
+    localStorage.removeItem("kenzz_role");
+
+    window.location.href="login.html";
+
+}
+
+
+
+// ===============================
+// CEK ROLE ADMIN / OWNER
+// ===============================
+
+async function checkRole(){
+
+
+    const {
+        data:{
+            user
+        }
+    } =
+    await supabaseClient.auth.getUser();
+
+
+
+    if(!user){
+
+        return null;
+
+    }
+
+
+
+    const {data,error}=
+
+    await supabaseClient
+
+    .from("admins")
+
+    .select("role")
+
+    .eq("user_id",user.id)
+
+    .single();
+
+
+
+    if(error){
+
+        return null;
+
+    }
+
+
+
+    return data.role;
+
+
+}
+
+
+
+// ===============================
+// PRODUK
+// ===============================
+
 
 async function getProducts(){
 
-    const response = await fetch(
-        `${SUPABASE_URL}/rest/v1/products?select=*`,
-        {
-            method:"GET",
-            headers:{
-                apikey:SUPABASE_KEY,
-                Authorization:`Bearer ${SUPABASE_KEY}`
-            }
-        }
-    );
+
+const {data,error}=
+
+await supabaseClient
+
+.from("products")
+
+.select("*");
 
 
-    if(!response.ok){
-        throw new Error(await response.text());
-    }
+if(error){
 
+throw error;
 
-    return await response.json();
 }
 
 
-
-// ===============================
-// TAMBAH PRODUK (ADMIN)
-// ===============================
-
-async function addProduct(data){
-
-    const response = await fetch(
-        `${SUPABASE_URL}/rest/v1/products`,
-        {
-            method:"POST",
-
-            headers:{
-                apikey:SUPABASE_KEY,
-                Authorization:`Bearer ${SUPABASE_KEY}`,
-                "Content-Type":"application/json",
-                Prefer:"return=representation"
-            },
-
-            body:JSON.stringify(data)
-        }
-    );
+return data;
 
 
-    if(!response.ok){
-        throw new Error(await response.text());
-    }
-
-
-    return await response.json();
 }
 
 
 
 
-// ===============================
-// HAPUS PRODUK (ADMIN)
-// ===============================
+async function addProduct(product){
+
+
+const {data,error}=
+
+await supabaseClient
+
+.from("products")
+
+.insert(product);
+
+
+if(error){
+
+throw error;
+
+}
+
+
+return data;
+
+
+}
+
+
+
 
 async function deleteProduct(id){
 
-    const response = await fetch(
-        `${SUPABASE_URL}/rest/v1/products?id=eq.${id}`,
-        {
-            method:"DELETE",
 
-            headers:{
-                apikey:SUPABASE_KEY,
-                Authorization:`Bearer ${SUPABASE_KEY}`
-            }
-        }
-    );
+const {data,error}=
 
+await supabaseClient
 
-    if(!response.ok){
-        throw new Error(await response.text());
-    }
+.from("products")
+
+.delete()
+
+.eq("id",id);
 
 
-    return true;
+
+if(error){
+
+throw error;
+
+}
+
+
+return data;
+
+
 }
 
 
 
 
-// ===============================
-// CEK ADMIN / OWNER
-// ===============================
+window.loginUser=loginUser;
+window.logoutUser=logoutUser;
+window.checkRole=checkRole;
 
-async function checkAdmin(email){
-
-    const response = await fetch(
-        `${SUPABASE_URL}/rest/v1/admins?email=eq.${email}`,
-        {
-            method:"GET",
-
-            headers:{
-                apikey:SUPABASE_KEY,
-                Authorization:`Bearer ${SUPABASE_KEY}`
-            }
-        }
-    );
-
-
-    if(!response.ok){
-        return false;
-    }
-
-
-    const data = await response.json();
-
-
-    return data.length > 0;
-}
-
-
-
-// ===============================
-// EXPORT GLOBAL
-// ===============================
-
-window.getProducts = getProducts;
-window.addProduct = addProduct;
-window.deleteProduct = deleteProduct;
-window.checkAdmin = checkAdmin;
+window.getProducts=getProducts;
+window.addProduct=addProduct;
+window.deleteProduct=deleteProduct;
