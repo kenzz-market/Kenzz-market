@@ -214,11 +214,9 @@ await logoutUser();
 }catch(error){
 
 
-msg.innerHTML=
-"Email atau password salah";
-
-
+msg.innerHTML = error.message;
 console.log(error);
+
 
 
 }
