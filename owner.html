@@ -113,22 +113,54 @@ html{scroll-behavior:smooth}body{margin:0;padding:22px;min-height:100vh;color:#f
       <div class="section-title"><h2 style="margin:0">🎨 Visual Halaman Utama</h2><span class="badge">OWNER ONLY</span></div>
       <p class="hint">Upload dari galeri akan disimpan ke Supabase Storage, jadi tampil di perangkat pengunjung juga. Link bisa berupa gambar atau video yang dapat diakses publik.</p>
       <div id="visualSettingsGrid" class="visual-settings-grid">
-        ${[
-          ['background','🌌 Background Halaman Utama'],
-          ['hero','✨ Hero'],
-          ['verified','✅ Verified Official'],
-          ['statistik','📊 Statistik'],
-          ['announcement','📢 Announcement'],
-          ['social','🌐 Sosial Media & Community']
-        ].map(([key,label])=>`
-          <div class="visual-box" data-visual="${key}">
-            <div class="visual-head"><strong>${label}</strong><span class="badge">Foto / Video</span></div>
-            <input id="${key}ImageUrl" placeholder="URL foto (https://...)" autocomplete="off">
-            <input id="${key}ImageFile" type="file" accept="image/*">
-            <input id="${key}VideoUrl" placeholder="URL video (opsional)" autocomplete="off">
-            <input id="${key}VideoFile" type="file" accept="video/mp4,video/webm,video/*">
-            <div id="${key}Preview" class="visual-preview"><span>Belum ada visual</span></div>
-          </div>`).join('')}
+        <div class="visual-box" data-visual="background">
+          <div class="visual-head"><strong>🌌 Background Halaman Utama</strong><span class="badge">Foto / Video</span></div>
+          <input id="backgroundImageUrl" placeholder="URL foto (https://...)" autocomplete="off">
+          <input id="backgroundImageFile" type="file" accept="image/*">
+          <input id="backgroundVideoUrl" placeholder="URL video (opsional)" autocomplete="off">
+          <input id="backgroundVideoFile" type="file" accept="video/mp4,video/webm,video/*">
+          <div id="backgroundPreview" class="visual-preview"><span>Belum ada visual</span></div>
+        </div>
+        <div class="visual-box" data-visual="hero">
+          <div class="visual-head"><strong>✨ Hero KENZZ STORE</strong><span class="badge">Foto / Video</span></div>
+          <input id="heroImageUrl" placeholder="URL foto (https://...)" autocomplete="off">
+          <input id="heroImageFile" type="file" accept="image/*">
+          <input id="heroVideoUrl" placeholder="URL video (opsional)" autocomplete="off">
+          <input id="heroVideoFile" type="file" accept="video/mp4,video/webm,video/*">
+          <div id="heroPreview" class="visual-preview"><span>Belum ada visual</span></div>
+        </div>
+        <div class="visual-box" data-visual="verified">
+          <div class="visual-head"><strong>✅ Verified Official</strong><span class="badge">Foto / Video</span></div>
+          <input id="verifiedImageUrl" placeholder="URL foto (https://...)" autocomplete="off">
+          <input id="verifiedImageFile" type="file" accept="image/*">
+          <input id="verifiedVideoUrl" placeholder="URL video (opsional)" autocomplete="off">
+          <input id="verifiedVideoFile" type="file" accept="video/mp4,video/webm,video/*">
+          <div id="verifiedPreview" class="visual-preview"><span>Belum ada visual</span></div>
+        </div>
+        <div class="visual-box" data-visual="statistik">
+          <div class="visual-head"><strong>📊 Statistik</strong><span class="badge">Foto / Video</span></div>
+          <input id="statistikImageUrl" placeholder="URL foto (https://...)" autocomplete="off">
+          <input id="statistikImageFile" type="file" accept="image/*">
+          <input id="statistikVideoUrl" placeholder="URL video (opsional)" autocomplete="off">
+          <input id="statistikVideoFile" type="file" accept="video/mp4,video/webm,video/*">
+          <div id="statistikPreview" class="visual-preview"><span>Belum ada visual</span></div>
+        </div>
+        <div class="visual-box" data-visual="announcement">
+          <div class="visual-head"><strong>📢 Announcement</strong><span class="badge">Foto / Video</span></div>
+          <input id="announcementImageUrl" placeholder="URL foto (https://...)" autocomplete="off">
+          <input id="announcementImageFile" type="file" accept="image/*">
+          <input id="announcementVideoUrl" placeholder="URL video (opsional)" autocomplete="off">
+          <input id="announcementVideoFile" type="file" accept="video/mp4,video/webm,video/*">
+          <div id="announcementPreview" class="visual-preview"><span>Belum ada visual</span></div>
+        </div>
+        <div class="visual-box" data-visual="social">
+          <div class="visual-head"><strong>🌐 Sosial Media &amp; Community</strong><span class="badge">Foto / Video</span></div>
+          <input id="socialImageUrl" placeholder="URL foto (https://...)" autocomplete="off">
+          <input id="socialImageFile" type="file" accept="image/*">
+          <input id="socialVideoUrl" placeholder="URL video (opsional)" autocomplete="off">
+          <input id="socialVideoFile" type="file" accept="video/mp4,video/webm,video/*">
+          <div id="socialPreview" class="visual-preview"><span>Belum ada visual</span></div>
+        </div>
       </div>
       <button class="save" id="saveVisualsBtn" onclick="saveOwnerSettings()">💾 Simpan Semua Pengaturan & Visual</button>
       <button class="secondary" style="width:100%;margin-top:10px" onclick="resetOwnerVisuals()">↺ Reset Semua Visual Halaman Utama</button>
