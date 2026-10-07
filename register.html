@@ -27,10 +27,9 @@
 <a class="back" href="index.html">← Kembali ke toko</a>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="settings.js"></script><script src="supabase.js"></script>
+<script src="mega-features.js"></script>
 <script>
-const returnMode = new URLSearchParams(location.search).get('return') || '';
-const isPurchase = returnMode === 'purchase';
-const isFavoriteReturn = returnMode === 'favorite';
+const isPurchase = new URLSearchParams(location.search).get('return') === 'purchase';
 if(isPurchase) document.getElementById('purchaseNotice').classList.remove('hidden');
 function setMode(mode){
  document.getElementById('emailMode').classList.toggle('hidden',mode!=='email');
@@ -40,23 +39,36 @@ function setMode(mode){
 }
 async function finishMember(){
  const pending=getPendingPurchase();
- const pendingFavorite = (()=>{ try{ const raw=localStorage.getItem('kenzz_pending_favorite'); return raw?JSON.parse(raw):null; }catch(e){ return null; }})();
- if(!pending && !pendingFavorite){ location.href='profile.html'; return; }
- const msg=document.getElementById('msg');
- try{
-   msg.textContent='Menyelesaikan pembelian dengan aman...';
-   if(pending){
-     await completePendingPurchase();
+ if(pending){
+   try{
+     const updated = pending.type==='cart'
+       ? await decrementProductStocks(pending.items || [])
+       : pending.type==='promo'
+         ? await decrementPromoStock(pending.id, pending.qty || 1)
+         : await decrementProductStock(pending.id, pending.qty || 1);
+     if(!updated){
+       clearPendingPurchase();
+       document.getElementById('msg').textContent='Pendaftaran berhasil, tetapi stok produk sudah habis atau tidak mencukupi. Silakan kembali ke katalog.';
+       return;
+     }
+   }catch(e){
+     console.error(e);
+     document.getElementById('msg').textContent='Pendaftaran berhasil, tetapi stok belum dapat diperbarui. Silakan kembali ke katalog dan coba lagi.';
+     return;
    }
-   if(pendingFavorite){
-     await toggleFavorite(pendingFavorite);
-     localStorage.removeItem('kenzz_pending_favorite');
-     if(!pending){ location.href='profile.html'; return; }
+
+   if(pending.type==='cart'){
+      let text=`Halo ${STORE_SETTINGS.storeName},\n\nSaya ingin membeli:\n\n`;
+      (pending.items||[]).forEach(p=>{text+=`${p.name}\nJumlah: ${p.qty}\nHarga: Rp ${(Number(p.price)*Number(p.qty)).toLocaleString('id-ID')}\n\n`;});
+      text+='Mohon bantu cek ketersediaan dan pilihkan produk yang tersedia.\n\nTerima kasih.';
+      clearPendingPurchase();
+      location.href='https://wa.me/'+STORE_SETTINGS.whatsappOwner+'?text='+encodeURIComponent(text);
+   }else{
+      openWhatsAppPurchase(pending);
    }
- }catch(e){
-   console.error(e);
-   msg.textContent='Akun berhasil dibuat, tetapi checkout belum selesai: '+e.message;
+   return;
  }
+ location.href='profile.html';
 }
 async function registerEmail(){
  const msg=document.getElementById('msg');
@@ -64,13 +76,14 @@ async function registerEmail(){
   msg.textContent='Mendaftarkan akun...';
   const data=await signUpMember(document.getElementById('email').value.trim(),document.getElementById('password').value,document.getElementById('name').value.trim(),'');
   if(data?.session){ await finishMember(); }
-  else if(getPendingPurchase() || localStorage.getItem('kenzz_pending_favorite')){
-    msg.textContent='Akun berhasil dibuat. Jika konfirmasi email aktif, konfirmasi email lalu login sebagai member untuk melanjutkan pembelian.';
+  else if(getPendingPurchase()){
+    msg.textContent='Akun berhasil dibuat. Mengarahkan ke WhatsApp Owner...';
+    setTimeout(()=>finishMember(),500);
   }
   else { msg.textContent='Akun dibuat. Jika konfirmasi email aktif, cek email lalu login sebagai member.'; setTimeout(()=>location.href='member-login.html',1200); }
  }catch(e){msg.textContent=e.message;}
 }
-async function google(){try{document.getElementById('msg').textContent='Menghubungkan ke Google...';await signInGoogle();}catch(e){document.getElementById('msg').textContent=e.message;}}
+async function google(){try{await signInGoogle();}catch(e){document.getElementById('msg').textContent=e.message;}}
 async function sendOtp(){
  try{await sendPhoneOtp(document.getElementById('phone').value.trim());document.getElementById('msg').textContent='OTP dikirim ke nomor tersebut.';}
  catch(e){document.getElementById('msg').textContent=e.message;}
@@ -79,13 +92,4 @@ async function verifyOtp(){
  try{await verifyPhoneOtp(document.getElementById('phone').value.trim(),document.getElementById('otp').value.trim());await finishMember();}
  catch(e){document.getElementById('msg').textContent=e.message;}
 }
-const bootPurchase=async()=>{
- try{
-  const pending=getPendingPurchase();
-  const pendingFavorite=localStorage.getItem('kenzz_pending_favorite');
-  const user=await getCurrentUser();
-  if((pending || pendingFavorite) && user) await finishMember();
- }catch(e){console.error(e);document.getElementById('msg').textContent=e.message;}
-};
-bootPurchase();
 </script></body></html>

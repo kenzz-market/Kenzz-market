@@ -4,6 +4,7 @@
 *{box-sizing:border-box}body{margin:0;background:#08080d;color:#fff;font-family:Arial,sans-serif;padding:20px}.container{max-width:900px;margin:auto}.card{background:#111119;border:1px solid #333;border-radius:18px;padding:18px;margin-bottom:15px}.member{display:grid;grid-template-columns:1fr auto;gap:8px;border-top:1px solid #333;padding:14px 0}.muted{color:#aaa;font-size:13px}button{padding:11px 15px;border:0;border-radius:11px;background:#ff316f;color:#fff;font-weight:bold}@media(max-width:600px){.member{grid-template-columns:1fr}}</style></head>
 <body><div class="container"><div class="card"><h1>👥 Daftar Member</h1><p id="status" class="muted">Memeriksa akses owner...</p><button onclick="location.href='admin.html'">← Admin</button></div><div id="list" class="card">Memuat...</div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase.js"></script>
+<script src="mega-features.js"></script>
 <script>
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
 async function start(){

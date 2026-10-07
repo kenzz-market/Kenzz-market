@@ -534,12 +534,10 @@ async function signUpMember(email, password, name, phone){
 }
 
 async function signInGoogle(){
-    const pending = getPendingPurchase();
-    const redirectPath = pending ? "/register.html?return=purchase" : "/profile.html";
     const { data, error } = await supabaseClient.auth.signInWithOAuth({
         provider: "google",
         options: {
-            redirectTo: window.location.origin + redirectPath
+            redirectTo: window.location.origin + "/index.html"
         }
     });
     if(error) throw error;
@@ -762,71 +760,6 @@ function openWhatsAppPurchase(purchaseData){
     window.location.href = buildWhatsAppPurchaseUrl(purchaseData);
 }
 
-// =====================================
-// ATOMIC CHECKOUT / PENDING PURCHASE
-// =====================================
-async function createPurchaseOrder(items=[], voucherCode=null){
-    const user=await getCurrentUser();
-    if(!user) throw new Error('Login member diperlukan.');
-    const clean=(items||[]).map(p=>({
-        id:String(p.id||''),
-        qty:Math.max(1,Number(p.qty||1)),
-        type:p.type==='promo'?'promo':'product'
-    })).filter(p=>p.id);
-    if(!clean.length) throw new Error('Produk pembelian tidak valid.');
-    const {data,error}=await supabaseClient.rpc('create_purchase_order',{
-        p_items:clean,
-        p_voucher_code:voucherCode ? String(voucherCode) : null
-    });
-    if(error) throw error;
-    if(!data?.success) throw new Error(data?.message||'Checkout gagal.');
-    return data;
-}
-
-function buildOrderWhatsAppUrl(order){
-    const lines=[`Halo ${STORE_SETTINGS.storeName},`,'','Saya ingin membeli:',''];
-    (order.items||[]).forEach(p=>{
-        lines.push(`${p.name}\nJumlah: ${p.qty}\nHarga: Rp ${(Number(p.price)*Number(p.qty)).toLocaleString('id-ID')}`,'');
-    });
-    if(order.subtotal!=null) lines.push(`Subtotal: Rp ${Number(order.subtotal).toLocaleString('id-ID')}`);
-    if(Number(order.discount||0)>0) lines.push(`Diskon: Rp ${Number(order.discount).toLocaleString('id-ID')}${order.voucher_code?' ('+order.voucher_code+')':''}`);
-    lines.push(`Total: Rp ${Number(order.total||0).toLocaleString('id-ID')}`,'','Mohon bantu cek ketersediaan.','','Terima kasih.');
-    return 'https://wa.me/'+STORE_SETTINGS.whatsappOwner+'?text='+encodeURIComponent(lines.join('\n'));
-}
-
-async function completePendingPurchase(){
-    const pending=getPendingPurchase();
-    if(!pending) return null;
-    const items=pending.type==='cart'
-      ? (pending.items||[]).map(p=>({id:p.id,qty:p.qty,type:'product'}))
-      : [{id:pending.id,qty:pending.qty||1,type:pending.type==='promo'?'promo':'product'}];
-    const voucherCode=pending.voucher_code||pending.voucherCode||null;
-    const order=await createPurchaseOrder(items,voucherCode);
-    clearPendingPurchase();
-    if(pending.type==='cart'){
-        try{
-            const cart=JSON.parse(localStorage.getItem('kenzz_cart')||'[]');
-            const ids=new Set((pending.items||[]).map(p=>String(p.id)));
-            localStorage.setItem('kenzz_cart',JSON.stringify(cart.filter(p=>!ids.has(String(p.id)))));
-        }catch(e){}
-    }
-    window.location.href=buildOrderWhatsAppUrl(order);
-    return order;
-}
-
-function subscribeMemberRealtime(userId,onChange){
-    if(!userId) return null;
-    return supabaseClient.channel('kenzz-member-'+userId)
-      .on('postgres_changes',{event:'*',schema:'public',table:'notifications',filter:`user_id=eq.${userId}`},payload=>onChange?.(payload))
-      .on('postgres_changes',{event:'*',schema:'public',table:'purchase_history',filter:`user_id=eq.${userId}`},payload=>onChange?.(payload))
-      .subscribe();
-}
-
-window.createPurchaseOrder=createPurchaseOrder;
-window.buildOrderWhatsAppUrl=buildOrderWhatsAppUrl;
-window.completePendingPurchase=completePendingPurchase;
-window.subscribeMemberRealtime=subscribeMemberRealtime;
-
 window.requireMemberForPurchase = requireMemberForPurchase;
 window.getPendingPurchase = getPendingPurchase;
 window.clearPendingPurchase = clearPendingPurchase;
@@ -925,66 +858,6 @@ async function updatePurchaseStatus(id,status){const role=await checkRole();if(r
 async function getMemberNotifications(){const user=await getCurrentUser();if(!user)return [];const {data,error}=await supabaseClient.from('notifications').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(50);if(error)throw error;return data||[];}
 async function markMemberNotificationsRead(){const user=await getCurrentUser();if(!user)return;const {error}=await supabaseClient.from('notifications').update({is_read:true}).eq('user_id',user.id).eq('is_read',false);if(error)throw error;}
 window.getActiveVouchers=getActiveVouchers;window.validateVoucher=validateVoucher;window.incrementVoucherUsage=incrementVoucherUsage;window.getOwnerVouchers=getOwnerVouchers;window.addVoucher=addVoucher;window.updateVoucher=updateVoucher;window.deleteVoucher=deleteVoucher;window.updatePurchaseStatus=updatePurchaseStatus;window.getMemberNotifications=getMemberNotifications;window.markMemberNotificationsRead=markMemberNotificationsRead;
-
-
-// =====================================
-// KENZZ STORE: HOMEPAGE VISUAL SETTINGS
-// Owner-only write, public read.
-// =====================================
-async function getStoreVisualSettings(){
-    const {data,error}=await supabaseClient
-        .from('store_visual_settings')
-        .select('*')
-        .eq('id',1)
-        .maybeSingle();
-    if(error) throw error;
-    return data || {};
-}
-
-async function saveStoreVisualSettings(settings){
-    const role=await checkRole();
-    if(role!=='owner') throw new Error('Akses hanya untuk owner.');
-    const payload={...settings,id:1,updated_at:new Date().toISOString()};
-    const {data,error}=await supabaseClient
-        .from('store_visual_settings')
-        .upsert(payload,{onConflict:'id'})
-        .select()
-        .single();
-    if(error) throw error;
-    return data;
-}
-
-async function uploadStoreVisual(file,slot){
-    const role=await checkRole();
-    if(role!=='owner') throw new Error('Akses hanya untuk owner.');
-    if(!file) throw new Error('File tidak dipilih.');
-
-    const isImage=file.type.startsWith('image/');
-    const isVideo=file.type.startsWith('video/');
-    if(!isImage && !isVideo) throw new Error('File harus berupa foto atau video.');
-
-    const maxSize=isVideo ? 60*1024*1024 : 12*1024*1024;
-    if(file.size>maxSize){
-        const limit=isVideo?'60 MB':'12 MB';
-        throw new Error(`Ukuran file terlalu besar. Maksimal ${limit}.`);
-    }
-
-    const ext=(file.name.split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'');
-    const path=`homepage/${slot}-${Date.now()}-${Math.random().toString(36).slice(2,10)}.${ext}`;
-    const {error}=await supabaseClient.storage
-        .from('store-backgrounds')
-        .upload(path,file,{contentType:file.type,upsert:false,cacheControl:'31536000'});
-    if(error) throw error;
-
-    const {data}=supabaseClient.storage
-        .from('store-backgrounds')
-        .getPublicUrl(path);
-    return data.publicUrl;
-}
-
-window.getStoreVisualSettings=getStoreVisualSettings;
-window.saveStoreVisualSettings=saveStoreVisualSettings;
-window.uploadStoreVisual=uploadStoreVisual;
 
 
 

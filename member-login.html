@@ -21,6 +21,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="settings.js"></script>
 <script src="supabase.js"></script>
+<script src="mega-features.js"></script>
 <script>
 async function login(){
  const msg=document.getElementById('msg');
@@ -28,7 +29,7 @@ async function login(){
   msg.textContent='Memeriksa akun...';
   await loginMember(document.getElementById('email').value.trim(),document.getElementById('password').value);
   const pending=getPendingPurchase();
-  if(pending){ await completePendingPurchase(); return; }
+  if(pending){ openWhatsAppPurchase(pending); return; }
   location.href='profile.html';
  }catch(e){msg.textContent=e.message;}
 }
