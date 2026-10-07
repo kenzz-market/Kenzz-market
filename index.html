@@ -2,311 +2,437 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kenzz Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Kenzz Market</title>
 <style>
-body.light{
-background:#f5f5f5;
-color:#111;
+:root{
+  --bg:#08080d;--panel:rgba(17,16,23,.88);--panel2:rgba(25,23,33,.78);
+  --text:#f5f5f7;--muted:#a8a4b1;--line:rgba(255,255,255,.10);
+  --cyan:#27f4d2;--pink:#ff2f68;--purple:#8b5cf6;--yellow:#ffd43b;
 }
-body.light .card,
-body.light .item,
-body.light .btn-icon{
-background:#ffffffaa;
-color:#111;
-border-color:#0002;
-}
-body.light .bottom{background:#ffffffdd}
-body.light .bottom a{color:#111}
-
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
-margin:0;
-font-family:Inter,Arial,sans-serif;
-color:#fff;
-background:#050509;
-min-height:100vh;
+  margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);background:#050509;min-height:100vh;overflow-x:hidden;
 }
-
-#bg{
-position:fixed;
-inset:0;
-width:100%;
-height:100%;
-object-fit:cover;
-z-index:-3;
+body:before{
+  content:"";position:fixed;inset:0;background:rgba(0,0,0,.50);z-index:-4;
 }
-
-.overlay{
-position:fixed;
-inset:0;
-background:linear-gradient(#0009,#000c);
-z-index:-2;
+body:after{
+  content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.70));
 }
-
-.container{
-max-width:600px;
-margin:auto;
-padding:20px 15px 100px;
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+#bg-video{
+  position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-5;
 }
+.app{width:min(100%,760px);margin:auto;padding-bottom:100px}
 
 .top{
-display:flex;
-align-items:center;
+  position:sticky;top:0;z-index:20;padding:16px 18px 10px;
+  backdrop-filter:blur(18px);background:rgba(6,6,10,.72);
+  border-bottom:1px solid rgba(255,255,255,.06)
 }
-
-.logo{
-font-size:24px;
-font-weight:900;
-margin-right:auto;
+.nav{display:flex;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:900;font-size:20px;letter-spacing:2px;margin-right:auto}
+.crown{font-size:22px}
+.icon-btn{
+  width:42px;height:42px;border:1px solid var(--line);border-radius:50%;
+  color:#fff;background:rgba(255,255,255,.05);display:grid;place-items:center;cursor:pointer
 }
-
-.btn-icon{
-border:1px solid #ffffff33;
-background:#ffffff15;
-color:white;
-padding:12px;
-border-radius:50%;
+.search{
+  margin-top:12px;display:flex;align-items:center;gap:10px;padding:12px 15px;
+  background:rgba(20,18,27,.92);border:1px solid var(--line);border-radius:14px
 }
+.search input{border:0;outline:0;background:none;color:#fff;width:100%;font-size:15px}
+.search input::placeholder{color:#8d8996}
+.clock-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.clock{padding:10px 8px;text-align:center;background:rgba(16,15,22,.88);border:1px solid var(--line);border-radius:13px}
+.clock small{display:block;color:#aaa5b1;font-size:11px;letter-spacing:2px}
+.clock strong{display:block;margin-top:4px;color:var(--cyan);font:800 20px/1 monospace}
 
 .hero{
-margin-top:20px;
-padding:30px 20px;
-border-radius:25px;
-background:
-linear-gradient(#0007,#0007),
-url("https://c.termai.cc/i128/WY2mWaT.jpg");
-background-size:cover;
-background-position:center;
-text-align:center;
+  margin:18px 12px 0;min-height:330px;border:1px solid var(--line);
+  border-radius:22px;position:relative;overflow:hidden;
+  background:
+    linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.65)),
+    url("https://c.termai.cc/i148/N28g6Y6.jpg");
+  background-size:cover;background-position:center;
 }
+.hero:before{
+  content:"";position:absolute;inset:0;opacity:.5;
+  background:
+    repeating-linear-gradient(115deg,transparent 0 28px,rgba(255,255,255,.025) 29px 30px),
+    radial-gradient(ellipse at 75% 15%,rgba(255,255,255,.18),transparent 22%);
+}
+.hero-content{position:relative;z-index:1;padding:42px 30px 30px;max-width:650px}
+.jp{font-family:serif;color:#ddd;letter-spacing:5px;font-size:13px}
+.hero h1{font-size:48px;line-height:.98;margin:10px 0 15px;letter-spacing:-2px}
+.hero h1 span{display:block;letter-spacing:9px;font-size:16px;margin-top:13px;color:#ddd}
+.hero p{color:#c7c3cb;line-height:1.7;max-width:560px;margin:0}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.btn{
+  border:1px solid var(--line);border-radius:12px;padding:13px 18px;font-weight:800;cursor:pointer;
+  background:rgba(255,255,255,.08);color:#fff;transition:.2s
+}
+.btn.primary{border:0;background:linear-gradient(135deg,#ff315f,#ff9f1c);box-shadow:0 10px 35px rgba(255,65,72,.23)}
+.btn:hover{transform:translateY(-1px)}
 
-.button{
-display:inline-block;
-padding:13px 20px;
-border-radius:15px;
-background:linear-gradient(135deg,#ff316f,#ff9d00);
-color:white;
-text-decoration:none;
-font-weight:bold;
-margin:5px;
+.section,.explore{margin:12px}
+.panel{
+  background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px;
+  box-shadow:0 15px 50px rgba(0,0,0,.18);backdrop-filter:blur(15px)
 }
+.verified{display:flex;align-items:center;gap:12px}
+.verified-badge{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#168cff}
+.verified h2{font-size:16px;margin:0}.verified p{font-size:12px;color:#8e8995;margin:5px 0 0}
+.online{margin-left:auto;color:#55e98e;font-size:12px}.online:before{content:"•";font-size:22px;vertical-align:-2px}
+.socials{display:flex;gap:8px;margin:16px 0}
+.social{width:38px;height:38px;display:grid;place-items:center;background:#14131b;border:1px solid var(--line);border-radius:10px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;margin-top:10px}
+.stat strong{font-size:21px}.stat small{display:block;color:#85808d;margin-top:5px}
+.quote{
+  padding:36px 25px;text-align:center;font-weight:800;font-size:18px;line-height:1.5;
+  background:linear-gradient(rgba(15,8,18,.58),rgba(15,8,18,.78)),radial-gradient(circle at 50% 30%,#74345b,#17111d 58%);
+}
+.quote span{color:#ff8bb0}
+.features{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.feature{display:flex;gap:12px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:17px}
+.feature-icon{width:38px;height:38px;flex:0 0 38px;border-radius:11px;background:#16151d;display:grid;place-items:center;font-size:18px}
+.feature h3{font-size:14px;margin:0 0 5px}.feature p{font-size:12px;color:#898592;line-height:1.45;margin:0}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin:24px 4px 12px}
+.section-head h2{font-size:19px;margin:0}.section-head a{font-size:12px;color:#ff557b}
+.updates{display:grid;gap:10px}
+.update{display:flex;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:13px}
+.avatar{width:43px;height:43px;border-radius:12px;background:linear-gradient(135deg,#ff3d69,#6b39ff);display:grid;place-items:center;font-weight:900}
+.update b{font-size:13px}.update small{display:block;color:#8f8a96;margin-top:4px}
+.tag{margin-left:auto;background:#ff285d;color:#fff;border-radius:999px;padding:5px 8px;font-size:10px;font-weight:800}
 
-.card{
-margin-top:15px;
-padding:20px;
-border-radius:22px;
-background-size:cover;
-background-position:center;
-border:1px solid #ffffff30;
+.category-list{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.category-list button{
+  background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.15);
+  padding:12px 18px;border-radius:20px;cursor:pointer;transition:.2s
 }
+.category-list button:hover,.category-list button.active{background:#ff2f68;border-color:#ff2f68}
 
-.verified{
-background:linear-gradient(#0008,#0008),url("https://c.termai.cc/i148/N28g6Y6.jpg");
+#product-list{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-top:20px;
 }
-
-.statistik{
-background:linear-gradient(#0008,#0008),url("https://c.termai.cc/i175/rbpqkS.jpg");
+.product-card{
+  background:rgba(20,20,30,.86);border:1px solid #333;border-radius:15px;padding:15px;
+  overflow:hidden;transition:.2s
 }
-
-.announcement{
-background:linear-gradient(#0008,#0008),url("https://c.termai.cc/i131/5xG.jpg");
-}
-
-.socialmedia{
-background:linear-gradient(#0008,#0008),url("https://c.termai.cc/i123/5CfE.jpg");
-}
+.product-card:hover{transform:translateY(-2px);border-color:rgba(255,47,104,.45)}
+.product-card img{width:100%;height:180px;object-fit:cover;border-radius:12px;display:block}
+.product-card h3{margin:10px 0;color:white}
+.product-card p{color:#aaa;margin:5px 0}
+.price{color:#00ffd5!important;font-weight:bold;font-size:18px!important}
+.empty-products{grid-column:1/-1;text-align:center;color:#aaa;padding:30px 10px}
 
 .menu{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
+  position:fixed;top:0;left:-320px;width:300px;height:100vh;background:#0b0b12;
+  padding:30px 20px;z-index:99999;transition:.3s ease;box-shadow:10px 0 30px rgba(0,0,0,.5)
 }
-
-.item{
-padding:18px;
-border-radius:18px;
-background:#ffffff12;
-border:1px solid #ffffff20;
-color:white;
-text-decoration:none;
-text-align:center;
+.menu.show{left:0}
+.menu h2{margin-top:40px;margin-bottom:25px}
+.menu a{
+  display:block;color:white;text-decoration:none;font-size:18px;padding:15px 0;
+  border-bottom:1px solid rgba(255,255,255,.15)
 }
-
-.social{
-display:flex;
-gap:12px;
+.menu button{background:none;color:white;border:0;font-size:22px;cursor:pointer}
+#overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99998;display:none
 }
-
-.social a{
-padding:12px;
-border-radius:50%;
-background:#ffffff15;
-color:white;
-text-decoration:none;
-}
-
-.wa{
-position:fixed;
-right:20px;
-bottom:80px;
-background:#25d366;
-padding:16px;
-border-radius:50%;
-color:white;
-text-decoration:none;
-}
+#overlay.show{display:block}
 
 .bottom{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-display:flex;
-justify-content:space-around;
-padding:15px;
-background:#111d;
+  position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:50;width:min(480px,92%);
+  display:flex;align-items:center;justify-content:space-around;padding:8px;
+  background:rgba(17,16,24,.94);border:1px solid rgba(255,255,255,.1);border-radius:20px;
+  box-shadow:0 15px 50px rgba(0,0,0,.5);backdrop-filter:blur(20px)
 }
-
-.bottom a{
-color:white;
-text-decoration:none;
+.bottom a,.bottom button{
+  width:52px;height:44px;border:0;background:transparent;color:#77727e;display:grid;
+  place-items:center;border-radius:12px;cursor:pointer
 }
+.bottom a.active{color:#fff;background:rgba(255,255,255,.06)}
+.bottom .plus{
+  width:56px;height:56px;border-radius:50%;margin-top:-28px;background:#111019;
+  border:2px solid #ff315f;color:#ff557b;font-size:25px;box-shadow:0 0 25px rgba(255,49,95,.25)
+}
+.toast{
+  position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);background:#fff;color:#111;
+  padding:11px 15px;border-radius:12px;font-size:13px;font-weight:700;opacity:0;
+  pointer-events:none;transition:.25s;z-index:100000
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
 
-body{font-family:'Poppins',sans-serif;}
-.logo,.hero h1{font-family:'Orbitron',sans-serif;font-weight:900;letter-spacing:2px;}
-.button,.item{font-family:'Poppins',sans-serif;font-weight:700;}
-
+@media(max-width:600px){
+  .hero{min-height:360px;margin:14px 10px 0}.hero-content{padding:35px 22px}
+  .hero h1{font-size:42px}.hero h1 span{letter-spacing:5px}
+  .features{grid-template-columns:1fr 1fr}.feature{padding:14px}.feature p{font-size:11px}
+  #product-list{grid-template-columns:1fr}
+}
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-
 <body>
 
-<video id="bg" autoplay muted loop playsinline>
-<source src="https://c.termai.cc/v154/apv.mp4" type="video/mp4">
+<video autoplay muted loop playsinline id="bg-video">
+  <source src="https://c.termai.cc/v154/apv.mp4" type="video/mp4">
 </video>
 
-<div class="overlay"></div>
+<div id="overlay" onclick="closeMenu()"></div>
 
-<div class="container">
+<div class="app">
+  <aside id="menu" class="menu" aria-label="Menu utama">
+    <button type="button" onclick="closeMenu()" aria-label="Tutup menu">✕</button>
+    <h2>👑 Kenzz Menu</h2>
+    <a href="index.html" onclick="closeMenu()">🏠 Home</a>
+    <a href="#store" onclick="closeMenu()">🛒 Store</a>
+    <a href="#updates" onclick="closeMenu()">🔔 Update</a>
+    <a href="register.html">👤 Daftar Member</a>
+    <a href="profile.html">🪪 Profil Member</a>
+    <a href="login.html">👑 Admin</a>
+  </aside>
 
-<div class="top">
-<div class="logo">👑 Kenzz Store</div>
-<button class="btn-icon" onclick="theme()">🌙</button>
+  <header class="top">
+    <nav class="nav">
+      <div class="brand"><span class="crown">🛒</span> KENZZ STORE</div>
+      <button class="icon-btn" type="button" onclick="toast('Mode malam aktif 🌙')" aria-label="Mode malam">☾</button>
+      <button class="icon-btn" type="button" onclick="openMenu()" aria-label="Buka menu">☰</button>
+    </nav>
+
+    <div class="search">
+      🔎
+      <input id="search" type="search" autocomplete="off" placeholder="Cari produk, kategori, atau informasi...">
+    </div>
+
+    <div class="clock-row">
+      <div class="clock"><small>WIB</small><strong id="wib">--:--</strong></div>
+      <div class="clock"><small>WITA</small><strong id="wita">--:--</strong></div>
+      <div class="clock"><small>WIT</small><strong id="wit">--:--</strong></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <div class="jp">ようこそ</div>
+        <h1>KENZZ STORE.<span>MURAH • AMAN • TERPERCAYA</span></h1>
+        <p>Selamat datang di Kenzz Store. Temukan produk yang anda inginkan disini.</p>
+        <div class="actions">
+          <a class="btn primary" href="#store">🛍️ List Produk →</a>
+          <a class="btn" href="#updates">📣 Announcement</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="store" class="explore">
+      <h2>🔎 Jelajahi Produk</h2>
+      <div class="category-list" role="group" aria-label="Filter kategori">
+        <button type="button" class="active" data-category="Semua">Semua</button>
+        <button type="button" data-category="Apk Premium">Apk Premium</button>
+        <button type="button" data-category="Panel Pterodactyl">Panel Pterodactyl</button>
+        <button type="button" data-category="Nokos">Nokos</button>
+        <button type="button" data-category="Sewa bot">Sewa bot</button>
+      </div>
+      <div id="product-list">
+        <div class="empty-products">Memuat produk...</div>
+      </div>
+    </section>
+
+    <section class="section panel">
+      <div class="verified">
+        <div class="verified-badge">✓</div>
+        <div><h2>Verified Official</h2><p>Toko resmi Kenzz Store</p></div>
+        <div class="online">online</div>
+      </div>
+      <div class="socials">
+        <div class="social">🎵</div><div class="social">▶️</div><div class="social">💬</div>
+        <div class="social">📷</div><div class="social">✈️</div><div class="social">𝕏</div>
+      </div>
+      <div class="stats">
+        <div class="stat"><strong id="member-count">0</strong><small>Member</small></div>
+        <div class="stat"><strong id="product-count">0</strong><small>Produk Store</small></div>
+        <div class="stat"><strong>0%</strong><small>Kepuasan</small></div>
+      </div>
+    </section>
+
+    <section class="section panel quote">
+      “Yang Asli Ada <span>Badaknya.</span>”
+    </section>
+
+    <section class="section">
+      <div class="features">
+        <div class="feature"><div class="feature-icon">🛒</div><div><h3>Store Online</h3><p>Belanja produk Kenzz dengan mudah dan cepat.</p></div></div>
+        <div class="feature"><div class="feature-icon">⚒️</div><div><h3>Tools Premium</h3><p>Fitur digital untuk membantu aktivitas kamu.</p></div></div>
+        <div class="feature"><div class="feature-icon">🔔</div><div><h3>Update Terbaru</h3><p>Dapatkan informasi dan promo terbaru.</p></div></div>
+        <div class="feature"><div class="feature-icon">🎧</div><div><h3>Support</h3><p>Tim siap membantu saat kamu membutuhkan.</p></div></div>
+      </div>
+    </section>
+
+    <section id="updates" class="section panel">
+      <div class="section-head">
+        <h2>🔔 Update</h2>
+        <a href="#updates">Lihat semua</a>
+      </div>
+      <div class="updates">
+        <div class="update"><div class="avatar">K</div><div><b>Kenzz Store</b><small>Selamat datang di website resmi Kenzz Store.</small></div><span class="tag">INFO</span></div>
+      </div>
+    </section>
+  </main>
 </div>
 
-<div class="hero">
-<h1>𝘒𝘌𝘕𝘡𝘡 𝘚𝘛𝘖𝘙𝘌</h1>
-<p>DIGITAL PREMIUM MARKET</p>
-<a class="button" href="products.html">🛍 List produk</a>
-<a class="button" href="products.html">🔎 Jelajahi</a>
-</div>
-
-<div class="card verified">
-<h2>✅ Verified Official</h2>
-<p>Official Digital Store</p>
-<p>🟢 Online • Trusted Store</p>
-</div>
-
-<div class="card menu">
-<a class="item" href="products.html">🛒<br>Store Online</a>
-<a class="item" href="tools.html">⚒️<br>Tools Premium</a>
-<a class="item" href="announcement.html">🔔<br>Update</a>
-<a class="item" href="support.html">🎧<br>Support</a>
-</div>
-
-<div class="card statistik">
-<h2>📊 Statistik</h2>
-<p id="memberCount">Memuat...</p>
-<p id="productCount">Memuat...</p>
-<p id="uptimeCount">Memuat...</p>
-</div>
-
-<div class="card announcement">
-<h2>📢 Announcement</h2>
-<p>Selamat datang di Kenzz Store. Nikmati layanan digital premium.</p>
-</div>
-
-<div class="card socialmedia">
-<h2>🌐 Sosial Media & Community</h2>
-<div class="social">
-<a id="ig"><i class="fa-brands fa-instagram"></i></a>
-<a id="tt"><i class="fa-brands fa-tiktok"></i></a>
-<a id="yt"><i class="fa-brands fa-youtube"></i></a>
-<a id="tg"><i class="fa-brands fa-telegram"></i></a>
-</div>
-
-<br>
-
-<a class="button" id="waChannel">📢 Saluran WhatsApp</a>
-<a class="button" id="waGroup">👥 Grup WhatsApp</a>
-
-</div>
-
-</div>
-
-<a id="wa" class="wa"><i class="fa-brands fa-whatsapp"></i></a>
-
-<nav class="bottom">
-<a href="index.html">🏠</a>
-<a href="announcement.html">🔔</a>
-<a href="cart.html">🛒</a>
-<a href="login.html">👑</a>
+<nav class="bottom" aria-label="Navigasi bawah">
+  <a class="active" href="#" aria-label="Home">⌂</a>
+  <a href="#updates" aria-label="Update">▦</a>
+  <button class="plus" type="button" onclick="toast('Menu cepat Kenzz')" aria-label="Menu cepat">+</button>
+  <a href="#store" aria-label="Store">🛒</a>
+  <a href="admin.html" aria-label="Admin">👑</a>
 </nav>
 
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="settings.js"></script>
 <script src="supabase.js"></script>
-<script src="getStats_kenzz.js"></script>
-
 <script>
-function theme(){
-document.body.classList.toggle("light");
-localStorage.setItem(
-"theme",
-document.body.classList.contains("light")?"light":"dark"
-);
-}
+(function () {
+  "use strict";
 
-if(localStorage.getItem("theme")==="light"){
-document.body.classList.add("light");
-}
+  let allProducts = [];
+  let activeCategory = "Semua";
 
-if(window.STORE_SETTINGS){
-wa.href="https://wa.me/"+STORE_SETTINGS.whatsappOwner;
+  const $ = (selector) => document.querySelector(selector);
 
-ig.href=STORE_SETTINGS.socialMedia.instagram;
-tt.href=STORE_SETTINGS.socialMedia.tiktok;
-yt.href=STORE_SETTINGS.socialMedia.youtube;
-tg.href=STORE_SETTINGS.socialMedia.telegram;
+  window.openMenu = function () {
+    $("#menu").classList.add("show");
+    $("#overlay").classList.add("show");
+  };
 
-waChannel.href=STORE_SETTINGS.whatsappChannel;
-waGroup.href=STORE_SETTINGS.whatsappGroup;
-}
+  window.closeMenu = function () {
+    $("#menu").classList.remove("show");
+    $("#overlay").classList.remove("show");
+  };
+
+  window.toast = function (msg) {
+    const el = $("#toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(window.__toastTimer);
+    window.__toastTimer = setTimeout(() => el.classList.remove("show"), 1800);
+  };
+
+  function clock() {
+    const now = new Date();
+    const format = (tz) => new Intl.DateTimeFormat("id-ID", {
+      timeZone: tz, hour: "2-digit", minute: "2-digit", hour12: false
+    }).format(now);
+
+    $("#wib").textContent = format("Asia/Jakarta");
+    $("#wita").textContent = format("Asia/Makassar");
+    $("#wit").textContent = format("Asia/Jayapura");
+  }
+
+  function normalize(value) {
+    return String(value ?? "").toLowerCase().trim();
+  }
+
+  function renderProducts() {
+    const list = $("#product-list");
+    const query = normalize($("#search").value);
+
+    const filtered = allProducts.filter((p) => {
+      const category = String(p.category ?? "");
+      const matchesCategory = activeCategory === "Semua" ||
+        normalize(category) === normalize(activeCategory);
+      const haystack = [
+        p.name, p.category, p.description, p.price, p.stock
+      ].map(normalize).join(" ");
+      return matchesCategory && (!query || haystack.includes(query));
+    });
+
+    $("#product-count").textContent = allProducts.length;
+
+    if (!filtered.length) {
+      list.innerHTML = '<div class="empty-products">Produk tidak ditemukan.</div>';
+      return;
+    }
+
+    list.innerHTML = filtered.map((p) => {
+      const image = p.image || "https://via.placeholder.com/300";
+      const price = Number(p.price || 0).toLocaleString("id-ID");
+      const stock = p.stock ?? 0;
+
+      return `
+        <article class="product-card">
+          <img src="${image}" alt="${escapeHtml(p.name || "Produk")}" loading="lazy"
+               onerror="this.src='https://via.placeholder.com/300'">
+          <h3>${escapeHtml(p.name || "Produk")}</h3>
+          <p class="price">Rp ${price}</p>
+          <p>${escapeHtml(p.category || "Tanpa kategori")}</p>
+          <p>Stok: ${escapeHtml(stock)}</p>
+        </article>
+      `;
+    }).join("");
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;"
+    }[char]));
+  }
+
+  async function loadMemberCount() {
+    try {
+      const count = await window.getMemberCount();
+      $("#member-count").textContent = Number(count || 0);
+    } catch (error) {
+      console.error("Gagal memuat jumlah member:", error);
+      $("#member-count").textContent = "0";
+    }
+  }
+
+  async function loadProducts() {
+    const list = $("#product-list");
+
+    try {
+      if (typeof window.getProducts !== "function") {
+        throw new Error("getProducts() belum tersedia.");
+      }
+
+      const products = await window.getProducts();
+      allProducts = Array.isArray(products) ? products : [];
+      renderProducts();
+    } catch (error) {
+      console.error("Gagal memuat produk:", error);
+      allProducts = [];
+      list.innerHTML =
+        '<div class="empty-products">Produk belum dapat dimuat. Pastikan koneksi database/API tersedia.</div>';
+      $("#product-count").textContent = "0";
+    }
+  }
+
+  $("#search").addEventListener("input", renderProducts);
+
+  document.querySelectorAll(".category-list button").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeCategory = button.dataset.category;
+      document.querySelectorAll(".category-list button").forEach((btn) => {
+        btn.classList.toggle("active", btn === button);
+      });
+      renderProducts();
+    });
+  });
+
+  clock();
+  setInterval(clock, 1000);
+  loadProducts();
+  loadMemberCount();
+})();
 </script>
-
-
-<script>
-async function loadStats(){
-
-    const stats = await getStats();
-
-    const product = document.getElementById("productCount");
-    const member = document.getElementById("memberCount");
-    const uptime = document.getElementById("uptimeCount");
-
-    if(product) product.innerHTML = stats.products + " Produk Store";
-    if(member) member.innerHTML = stats.member + " Member";
-    if(uptime) uptime.innerHTML = stats.uptime + " Uptime";
-}
-
-loadStats();
-</script>
-
-
-
 
 </body>
 </html>

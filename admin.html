@@ -1,707 +1,287 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Admin Kenzz Store</title>
-
-
-<style>
-
-*{
-box-sizing:border-box;
-}
-
-
-body{
-
-margin:0;
-
-padding:20px;
-
-background:#08080d;
-
-color:white;
-
-font-family:Arial,sans-serif;
-
-}
-
-
-
-.container{
-
-max-width:900px;
-
-margin:auto;
-
-}
-
-
-
-.header{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-margin-bottom:20px;
-
-}
-
-
-
-button{
-
-padding:12px;
-
-border:0;
-
-border-radius:12px;
-
-cursor:pointer;
-
-font-weight:bold;
-
-}
-
-
-
-.logout{
-
-background:#ff316f;
-
-color:white;
-
-}
-
-
-
-.card{
-
-background:#111119;
-
-border:1px solid #333;
-
-border-radius:18px;
-
-padding:20px;
-
-margin-bottom:20px;
-
-}
-
-
-
-input{
-
-width:100%;
-
-padding:12px;
-
-margin-top:10px;
-
-background:#08080d;
-
-border:1px solid #333;
-
-border-radius:12px;
-
-color:white;
-
-}
-
-
-
-.save{
-
-width:100%;
-
-margin-top:15px;
-
-background:#25d366;
-
-color:white;
-
-}
-
-
-
-.product{
-
-display:flex;
-
-gap:15px;
-
-align-items:center;
-
-background:#181823;
-
-padding:15px;
-
-border-radius:15px;
-
-margin-top:12px;
-
-}
-
-
-
-.product img{
-
-width:80px;
-
-height:80px;
-
-object-fit:cover;
-
-border-radius:12px;
-
-}
-
-
-
-.info{
-
-flex:1;
-
-}
-
-
-
-.delete{
-
-background:#ff316f;
-
-color:white;
-
-}
-
-
-
-.edit{
-
-background:#ff9d00;
-
-color:white;
-
-}
-
-
-
-</style>
-
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#08080d">
+  <title>Admin Kenzz Market</title>
+
+  <style>
+    :root {
+      --bg:#08080d;--panel:rgba(20,20,30,.92);--panel2:#111119;
+      --line:rgba(255,255,255,.10);--text:#fff;--muted:#aaa;
+      --pink:#ff316f;--orange:#ff9d00;--green:#55e98e;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;min-height:100vh;padding:20px 12px 50px;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+      background:radial-gradient(circle at top,rgba(255,49,111,.12),transparent 35%),var(--bg);
+      color:var(--text)
+    }
+    button,input{font:inherit}
+    .admin-box{
+      width:min(100%,620px);margin:auto;padding:24px;background:var(--panel);
+      border:1px solid var(--line);border-radius:22px;box-shadow:0 20px 60px rgba(0,0,0,.35)
+    }
+    h1{margin:0;text-align:center;font-size:25px}
+    .subtitle{margin:8px 0 22px;color:var(--muted);text-align:center;font-size:13px}
+    .form-grid{display:grid;gap:12px}
+    label{display:grid;gap:6px;color:#d8d5dc;font-size:13px;font-weight:700}
+    input{
+      width:100%;padding:13px 14px;border:1px solid #333;border-radius:12px;
+      outline:0;background:#111;color:#fff
+    }
+    input:focus{border-color:rgba(255,49,111,.7);box-shadow:0 0 0 3px rgba(255,49,111,.10)}
+    input::placeholder{color:#777}
+    .preview-box{
+      display:none;margin-top:4px;padding:10px;text-align:center;
+      border:1px solid var(--line);border-radius:14px;background:#0d0d13
+    }
+    .preview-box.show{display:block}
+    #preview{display:block;width:min(100%,220px);max-height:220px;margin:auto;border-radius:14px;object-fit:cover}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+    button{
+      width:100%;padding:13px 14px;border:0;border-radius:14px;cursor:pointer;
+      font-weight:800;transition:.2s ease
+    }
+    button:hover:not(:disabled){transform:translateY(-1px)}
+    button:disabled{opacity:.6;cursor:wait}
+    .primary{color:#fff;background:linear-gradient(135deg,var(--pink),var(--orange))}
+    .secondary{color:#fff;background:#24232d;border:1px solid var(--line)}
+    .status{min-height:20px;margin:14px 0 0;text-align:center;font-size:13px;color:var(--muted)}
+    .status.success{color:var(--green)}.status.error{color:#ff8092}
+    .products-head{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+      margin-top:26px;padding-top:22px;border-top:1px solid var(--line)
+    }
+    .products-head h2{margin:0;font-size:18px}.products-head span{color:var(--muted);font-size:12px}
+    #list{display:grid;gap:12px;margin-top:12px}
+    .product{
+      display:grid;grid-template-columns:70px 1fr auto;gap:12px;align-items:center;
+      padding:12px;background:var(--panel2);border:1px solid var(--line);border-radius:15px
+    }
+    .product img{width:70px;height:70px;border-radius:11px;object-fit:cover;background:#08080d}
+    .product-info{min-width:0}.product-info h3{margin:0 0 5px;font-size:14px;overflow-wrap:anywhere}
+    .product-info p{margin:3px 0;color:var(--muted);font-size:12px}
+    .product-price{color:#00ffd5!important;font-weight:800}
+    .delete-btn{
+      width:auto;padding:9px 11px;color:#fff;background:rgba(255,77,103,.14);
+      border:1px solid rgba(255,77,103,.35);font-size:12px
+    }
+    .empty{padding:25px 10px;color:var(--muted);text-align:center;border:1px dashed #333;border-radius:14px}
+    @media(max-width:520px){
+      .admin-box{padding:18px}.actions{grid-template-columns:1fr}
+      .product{grid-template-columns:55px 1fr}.product img{width:55px;height:55px}
+      .delete-btn{grid-column:1/-1;width:100%}
+    }
+  </style>
 </head>
 
-
 <body>
-
-
-<div class="container" id="app" style="display:none;">
-
-
-
-<div class="header">
-
-
-<div>
-
-
-<h1>
-👑 Admin Panel
-</h1>
-
-
-<p id="role"></p>
-
-
-</div>
-
-
-
-<button class="logout"
-onclick="logoutUser()">
-
-Keluar
-
-</button>
-
-
-</div>
-
-
-
-
-
-
-
-<div class="card">
-
-
-<h2>
-
-Tambah / Edit Produk
-
-</h2>
-
-
-
-<input id="id"
-type="hidden">
-
-
-
-<input id="name"
-placeholder="Nama produk">
-
-
-
-<input id="price"
-placeholder="Harga"
-type="number">
-
-
-
-<input id="category"
-placeholder="Kategori">
-
-
-
-<input id="image"
-placeholder="Link gambar">
-
-
-
-<input id="stock"
-placeholder="Stok"
-type="number">
-
-
-
-<button class="save"
-onclick="saveProductData()">
-
-Simpan Produk
-
-</button>
-
-
-
-</div>
-
-
-
-
-
-
-<div class="card">
-
-
-<h2>
-📦 Daftar Produk
-</h2>
-
-
-<div id="list">
-
-Memuat...
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-</div>
-
-
-
-
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="settings.js"></script>
-
-<script src="supabase.js"></script>
-
-
-
-<script>
-
-
-async function start(){
-
-
-
-const role =
-
-await checkRole();
-
-
-
-if(
-role !== "owner"
-&&
-role !== "admin"
-){
-
-
-alert(
-"Akses ditolak"
-);
-
-
-location.href =
-"login.html";
-
-
-return;
-
-}
-
-
-
-
-document
-.getElementById("app")
-.style.display="block";
-
-
-
-document
-.getElementById("role")
-.innerHTML =
-
-"Role: "
-+
-role;
-
-
-
-loadProducts();
-
-
-}
-
-
-
-
-
-async function loadProducts(){
-
-
-
-const products =
-
-await getProducts();
-
-
-
-const box =
-
-document
-.getElementById("list");
-
-
-
-if(!products.length){
-
-
-box.innerHTML =
-"Tidak ada produk";
-
-
-return;
-
-
-}
-
-
-
-
-box.innerHTML =
-
-products.map(p=>`
-
-
-
-<div class="product">
-
-
-<img src="${p.image || 'https://via.placeholder.com/100'}">
-
-
-
-<div class="info">
-
-
-<h3>
-
-${p.name}
-
-</h3>
-
-
-
-<p>
-
-Rp ${Number(p.price)
-.toLocaleString("id-ID")}
-
-</p>
-
-
-<p>
-
-${p.category}
-
-|
-
-Stok:
-${p.stock}
-
-</p>
-
-
-
-</div>
-
-
-
-<button class="edit"
-
-onclick='editProduct(${JSON.stringify(p)})'>
-
-Edit
-
-</button>
-
-
-
-<button class="delete"
-
-onclick="removeProduct('${p.id}')">
-
-Hapus
-
-</button>
-
-
-
-</div>
-
-
-
-`).join("");
-
-
-
-}
-
-
-
-
-
-
-
-
-async function saveProductData(){
-
-
-
-const id =
-
-document
-.getElementById("id")
-.value;
-
-
-
-const data = {
-
-
-name:
-
-document
-.getElementById("name")
-.value,
-
-
-price:
-
-Number(
-document
-.getElementById("price")
-.value
-),
-
-
-category:
-
-document
-.getElementById("category")
-.value,
-
-
-image:
-
-document
-.getElementById("image")
-.value,
-
-
-stock:
-
-Number(
-document
-.getElementById("stock")
-.value
-)
-
-
-};
-
-
-
-
-
-if(id){
-
-
-await updateProduct(
-id,
-data
-);
-
-
-}else{
-
-
-await addProduct(
-data
-);
-
-
-}
-
-
-
-alert(
-"Produk tersimpan"
-);
-
-
-
-clearForm();
-
-
-loadProducts();
-
-
-}
-
-
-
-
-
-function editProduct(p){
-
-
-document
-.getElementById("id")
-.value=p.id;
-
-
-document
-.getElementById("name")
-.value=p.name;
-
-
-document
-.getElementById("price")
-.value=p.price;
-
-
-document
-.getElementById("category")
-.value=p.category;
-
-
-document
-.getElementById("image")
-.value=p.image;
-
-
-document
-.getElementById("stock")
-.value=p.stock;
-
-
-}
-
-
-
-
-
-function clearForm(){
-
-
-document
-.querySelectorAll("input")
-.forEach(
-x=>x.value=""
-);
-
-
-}
-
-
-
-
-
-async function removeProduct(id){
-
-
-if(
-confirm("Hapus produk?")
-){
-
-
-await deleteProduct(id);
-
-
-loadProducts();
-
-
-}
-
-
-}
-
-
-
-
-
-start();
-
-
-</script>
-
-
+  <main class="admin-box">
+    <h1>👑 Admin Kenzz Market</h1>
+    <p class="subtitle">Kelola produk, member, dan notifikasi Kenzz Store.</p><div class="actions" style="margin:16px 0"><button class="secondary" type="button" onclick="location.href='members.html'">👥 Lihat Member</button><button class="secondary" type="button" onclick="loadNotifications()">🔔 Notifikasi</button></div><div id="notifications" class="empty" style="display:none;margin-bottom:18px"></div>
+
+    <form id="product-form" class="form-grid">
+      <label>Nama produk
+        <input id="name" type="text" placeholder="Contoh: APK Premium" required>
+      </label>
+
+      <label>Harga
+        <input id="price" type="number" min="0" step="1" placeholder="Contoh: 15000" required>
+      </label>
+
+      <label>Kategori
+        <input id="category" type="text" placeholder="Contoh: Apk Premium" required>
+      </label>
+
+      <label>Link gambar
+        <input id="image" type="url" placeholder="https://contoh.com/gambar.jpg">
+      </label>
+
+      <div id="preview-box" class="preview-box">
+        <img id="preview" alt="Preview gambar produk">
+      </div>
+
+      <label>Stok
+        <input id="stock" type="number" min="0" step="1" placeholder="Contoh: 10" required>
+      </label>
+
+      <div class="actions">
+        <button id="save-btn" class="primary" type="submit">+ Tambah Produk</button>
+        <button class="secondary" type="button" onclick="resetForm()">Reset</button>
+      </div>
+    </form>
+
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+
+    <div class="products-head">
+      <h2>📦 Produk Saat Ini</h2>
+      <span id="product-total">0 produk</span>
+    </div>
+
+    <div id="list"><div class="empty">Memuat produk...</div></div>
+  </main>
+
+  <script src="supabase.js"></script>
+  <script>
+  (async()=>{const role=await checkRole();if(role!=="owner"&&role!=="admin"){location.href="login.html";return}})();
+  async function loadNotifications(){const box=document.getElementById("notifications");box.style.display="block";try{const data=await getOwnerNotifications();box.innerHTML=data.length?data.map(n=>`<div style="padding:10px;border-bottom:1px solid #333"><b>${n.title||"Notifikasi"}</b><div>${n.message||""}</div><small style="color:#888">${new Date(n.created_at).toLocaleString("id-ID")}</small></div>`).join("")+`<button class="secondary" style="margin-top:10px" onclick="markAllNotificationsAsRead();loadNotifications()">Tandai semua dibaca</button>`:"Tidak ada notifikasi baru."}catch(e){box.textContent=e.message}}
+  </script>
+  <script>
+    (() => {
+      "use strict";
+
+      const form=document.getElementById("product-form");
+      const nameInput=document.getElementById("name");
+      const priceInput=document.getElementById("price");
+      const categoryInput=document.getElementById("category");
+      const imageInput=document.getElementById("image");
+      const stockInput=document.getElementById("stock");
+      const preview=document.getElementById("preview");
+      const previewBox=document.getElementById("preview-box");
+      const list=document.getElementById("list");
+      const status=document.getElementById("status");
+      const saveBtn=document.getElementById("save-btn");
+      const productTotal=document.getElementById("product-total");
+
+      function setStatus(message,type=""){
+        status.textContent=message;
+        status.className=`status ${type}`.trim();
+      }
+
+      function escapeHtml(value){
+        return String(value??"").replace(/[&<>"']/g,char=>({
+          "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+        }[char]));
+      }
+
+      function updatePreview(){
+        const url=imageInput.value.trim();
+        if(!url){
+          preview.removeAttribute("src");
+          previewBox.classList.remove("show");
+          return;
+        }
+        preview.src=url;
+        previewBox.classList.add("show");
+      }
+
+      preview.addEventListener("error",()=>{
+        previewBox.classList.remove("show");
+        setStatus("Gambar tidak dapat dimuat. Periksa link gambar.","error");
+      });
+      preview.addEventListener("load",()=>previewBox.classList.add("show"));
+      imageInput.addEventListener("input",updatePreview);
+
+      window.resetForm=function(){
+        form.reset();
+        preview.removeAttribute("src");
+        previewBox.classList.remove("show");
+        setStatus("");
+        nameInput.focus();
+      };
+
+      function renderProducts(products){
+        productTotal.textContent=`${products.length} produk`;
+        if(!products.length){
+          list.innerHTML='<div class="empty">Belum ada produk.</div>';
+          return;
+        }
+
+        list.innerHTML=products.map(product=>{
+          const image=product.image||"https://via.placeholder.com/150";
+          const price=Number(product.price||0).toLocaleString("id-ID");
+          return `
+            <article class="product">
+              <img src="${escapeHtml(image)}" alt="${escapeHtml(product.name||"Produk")}" loading="lazy"
+                   onerror="this.src='https://via.placeholder.com/150'">
+              <div class="product-info">
+                <h3>${escapeHtml(product.name||"Produk")}</h3>
+                <p class="product-price">Rp ${price}</p>
+                <p>${escapeHtml(product.category||"Tanpa kategori")} · Stok: ${escapeHtml(product.stock??0)}</p>
+              </div>
+              <button class="delete-btn" type="button" data-id="${escapeHtml(product.id)}">Hapus</button>
+            </article>`;
+        }).join("");
+      }
+
+      async function loadProducts(){
+        try{
+          const products=await getProducts();
+          renderProducts(Array.isArray(products)?products:[]);
+        }catch(error){
+          console.error(error);
+          list.innerHTML='<div class="empty">Gagal memuat produk.</div>';
+          productTotal.textContent="0 produk";
+          setStatus(`Gagal memuat produk: ${error.message}`,"error");
+        }
+      }
+
+      form.addEventListener("submit",async event=>{
+        event.preventDefault();
+
+        const data={
+          name:nameInput.value.trim(),
+          price:Number(priceInput.value),
+          category:categoryInput.value.trim(),
+          image:imageInput.value.trim(),
+          stock:Number(stockInput.value)
+        };
+
+        if(!data.name||!data.category||!Number.isFinite(data.price)||data.price<0||
+           !Number.isFinite(data.stock)||data.stock<0){
+          setStatus("Lengkapi data produk dengan benar.","error");
+          return;
+        }
+
+        saveBtn.disabled=true;
+        saveBtn.textContent="Menyimpan...";
+        setStatus("Menyimpan produk...");
+
+        try{
+          await addProduct(data);
+          setStatus("Produk berhasil ditambahkan.","success");
+          form.reset();
+          preview.removeAttribute("src");
+          previewBox.classList.remove("show");
+          await loadProducts();
+        }catch(error){
+          console.error(error);
+          setStatus(`Gagal menambahkan produk: ${error.message}`,"error");
+        }finally{
+          saveBtn.disabled=false;
+          saveBtn.textContent="+ Tambah Produk";
+        }
+      });
+
+      list.addEventListener("click",async event=>{
+        const button=event.target.closest("[data-id]");
+        if(!button)return;
+
+        const id=button.dataset.id;
+        if(!id)return;
+        if(!confirm("Hapus produk ini?"))return;
+
+        button.disabled=true;
+        button.textContent="Menghapus...";
+
+        try{
+          await deleteProduct(id);
+          setStatus("Produk berhasil dihapus.","success");
+          await loadProducts();
+        }catch(error){
+          console.error(error);
+          button.disabled=false;
+          button.textContent="Hapus";
+          setStatus(`Gagal menghapus produk: ${error.message}`,"error");
+        }
+      });
+
+      loadProducts();
+    })();
+  </script>
 </body>
-
 </html>

@@ -22,6 +22,7 @@ supabase.createClient(
 // AUTH LOGIN
 // =====================================
 
+
 async function loginUser(email,password){
 
     const {
@@ -48,9 +49,11 @@ async function loginUser(email,password){
 }
 
 
+
 // =====================================
 // LOGOUT
 // =====================================
+
 
 async function logoutUser(){
 
@@ -67,21 +70,17 @@ async function logoutUser(){
 }
 
 
+
 // =====================================
 // CEK ROLE OWNER / ADMIN
 // =====================================
+
 
 async function checkRole(){
 
 const {data:userData}=await supabaseClient.auth.getUser();
 
 console.log("USER LOGIN:",userData);
-
-if(!userData || !userData.user){
-
-    return null;
-
-}
 
 const {data,error}=await supabaseClient
 .from("admins")
@@ -92,21 +91,24 @@ console.log("DATA ADMIN:",data);
 console.log("ERROR:",error);
 
 return data?.[0]?.role || null;
-
 }
+
 
 
 // =====================================
 // PRODUK
 // =====================================
 
+
 async function getProducts(){
+
 
     const {
         data,
         error
 
     } =
+
     await supabaseClient
 
     .from("products")
@@ -121,6 +123,7 @@ async function getProducts(){
     );
 
 
+
     if(error){
 
         throw error;
@@ -133,18 +136,23 @@ async function getProducts(){
 }
 
 
+
+
 async function addProduct(product){
+
 
     const {
         data,
         error
 
     } =
+
     await supabaseClient
 
     .from("products")
 
     .insert(product);
+
 
 
     if(error){
@@ -159,13 +167,17 @@ async function addProduct(product){
 }
 
 
+
+
 async function updateProduct(id,product){
+
 
     const {
         data,
         error
 
     } =
+
     await supabaseClient
 
     .from("products")
@@ -178,6 +190,7 @@ async function updateProduct(id,product){
     );
 
 
+
     if(error){
 
         throw error;
@@ -190,13 +203,18 @@ async function updateProduct(id,product){
 }
 
 
+
+
+
 async function deleteProduct(id){
+
 
     const {
         data,
         error
 
     } =
+
     await supabaseClient
 
     .from("products")
@@ -209,6 +227,7 @@ async function deleteProduct(id){
     );
 
 
+
     if(error){
 
         throw error;
@@ -221,9 +240,11 @@ async function deleteProduct(id){
 }
 
 
+
 // =====================================
 // KERANJANG LOCAL STORAGE
 // =====================================
+
 
 function getCart(){
 
@@ -236,6 +257,7 @@ function getCart(){
     ) || [];
 
 }
+
 
 
 function saveCart(cart){
@@ -251,7 +273,10 @@ function saveCart(cart){
 }
 
 
+
+
 function addToCart(product){
+
 
     let cart =
     getCart();
@@ -262,6 +287,7 @@ function addToCart(product){
         item =>
         item.id === product.id
     );
+
 
 
     if(exist){
@@ -283,7 +309,11 @@ function addToCart(product){
 
     saveCart(cart);
 
+
 }
+
+
+
 
 
 function clearCart(){
@@ -295,6 +325,8 @@ function clearCart(){
 }
 
 
+
+
 // =====================================
 // MEMBER SYSTEM
 // =====================================
@@ -304,79 +336,42 @@ async function getMemberCount(){
     const {
         data,
         error
-    } =
-    await supabaseClient.rpc(
-        "get_member_count"
-    );
-
+    } = await supabaseClient.rpc("get_member_count");
 
     if(error){
-
-        console.error(
-            "Gagal mengambil jumlah member:",
-            error
-        );
-
+        console.error("Gagal mengambil jumlah member:", error);
         return 0;
-
     }
 
-
-    return Number(
-        data || 0
-    );
-
+    return Number(data || 0);
 }
 
 
 async function getMemberProfile(){
 
     const {
-        data: {
-            user
-        },
-        error:userError
-    } =
-    await supabaseClient.auth.getUser();
+        data: { user },
+        error: userError
+    } = await supabaseClient.auth.getUser();
 
-
-    if(
-        userError ||
-        !user
-    ){
-
+    if(userError || !user){
         return null;
-
     }
-
 
     const {
         data,
         error
-    } =
-    await supabaseClient
-
-    .from("members")
-
-    .select("*")
-
-    .eq(
-        "user_id",
-        user.id
-    )
-
-    .maybeSingle();
-
+    } = await supabaseClient
+        .from("members")
+        .select("*")
+        .eq("user_id", user.id)
+        .maybeSingle();
 
     if(error){
-
         throw error;
-
     }
 
-
     return data || null;
-
 }
 
 
@@ -385,64 +380,37 @@ async function createMember(member){
     const {
         data,
         error
-    } =
-    await supabaseClient
-
-    .from("members")
-
-    .insert(member)
-
-    .select()
-
-    .single();
-
+    } = await supabaseClient
+        .from("members")
+        .insert(member)
+        .select()
+        .single();
 
     if(error){
-
         throw error;
-
     }
 
-
     return data;
-
 }
 
 
-async function updateMember(
-    userId,
-    member
-){
+async function updateMember(userId, member){
 
     const {
         data,
         error
-    } =
-    await supabaseClient
-
-    .from("members")
-
-    .update(member)
-
-    .eq(
-        "user_id",
-        userId
-    )
-
-    .select()
-
-    .single();
-
+    } = await supabaseClient
+        .from("members")
+        .update(member)
+        .eq("user_id", userId)
+        .select()
+        .single();
 
     if(error){
-
         throw error;
-
     }
 
-
     return data;
-
 }
 
 
@@ -455,40 +423,18 @@ async function getOwnerNotifications(){
     const {
         data,
         error
-    } =
-    await supabaseClient
-
-    .from("notifications")
-
-    .select("*")
-
-    .eq(
-        "is_read",
-        false
-    )
-
-    .order(
-        "created_at",
-        {
-            ascending:false
-        }
-    );
-
+    } = await supabaseClient
+        .from("notifications")
+        .select("*")
+        .eq("is_read", false)
+        .order("created_at", { ascending:false });
 
     if(error){
-
-        console.error(
-            "Gagal mengambil notifikasi:",
-            error
-        );
-
+        console.error("Gagal mengambil notifikasi:", error);
         return [];
-
     }
 
-
     return data || [];
-
 }
 
 
@@ -497,35 +443,17 @@ async function getAllOwnerNotifications(){
     const {
         data,
         error
-    } =
-    await supabaseClient
-
-    .from("notifications")
-
-    .select("*")
-
-    .order(
-        "created_at",
-        {
-            ascending:false
-        }
-    );
-
+    } = await supabaseClient
+        .from("notifications")
+        .select("*")
+        .order("created_at", { ascending:false });
 
     if(error){
-
-        console.error(
-            "Gagal mengambil semua notifikasi:",
-            error
-        );
-
+        console.error("Gagal mengambil semua notifikasi:", error);
         return [];
-
     }
 
-
     return data || [];
-
 }
 
 
@@ -533,30 +461,16 @@ async function markNotificationAsRead(id){
 
     const {
         error
-    } =
-    await supabaseClient
-
-    .from("notifications")
-
-    .update({
-        is_read:true
-    })
-
-    .eq(
-        "id",
-        id
-    );
-
+    } = await supabaseClient
+        .from("notifications")
+        .update({ is_read:true })
+        .eq("id", id);
 
     if(error){
-
         throw error;
-
     }
 
-
     return true;
-
 }
 
 
@@ -564,30 +478,16 @@ async function markAllNotificationsAsRead(){
 
     const {
         error
-    } =
-    await supabaseClient
-
-    .from("notifications")
-
-    .update({
-        is_read:true
-    })
-
-    .eq(
-        "is_read",
-        false
-    );
-
+    } = await supabaseClient
+        .from("notifications")
+        .update({ is_read:true })
+        .eq("is_read", false);
 
     if(error){
-
         throw error;
-
     }
 
-
     return true;
-
 }
 
 
@@ -600,36 +500,39 @@ async function getMembers(){
     const {
         data,
         error
-    } =
-    await supabaseClient
-
-    .from("members")
-
-    .select("*")
-
-    .order(
-        "created_at",
-        {
-            ascending:false
-        }
-    );
-
+    } = await supabaseClient
+        .from("members")
+        .select("*")
+        .order("created_at", { ascending:false });
 
     if(error){
-
         throw error;
-
     }
 
-
     return data || [];
-
 }
 
 
 // =====================================
+// EXPORT MEMBER SYSTEM
+// =====================================
+
+window.getMemberCount = getMemberCount;
+window.getMemberProfile = getMemberProfile;
+window.createMember = createMember;
+window.updateMember = updateMember;
+
+window.getOwnerNotifications = getOwnerNotifications;
+window.getAllOwnerNotifications = getAllOwnerNotifications;
+window.markNotificationAsRead = markNotificationAsRead;
+window.markAllNotificationsAsRead = markAllNotificationsAsRead;
+
+window.getMembers = getMembers;
+
+// =====================================
 // EXPORT GLOBAL
 // =====================================
+
 
 window.loginUser =
 loginUser;
@@ -673,45 +576,3 @@ addToCart;
 
 window.clearCart =
 clearCart;
-
-
-// MEMBER
-
-window.getMemberCount =
-getMemberCount;
-
-
-window.getMemberProfile =
-getMemberProfile;
-
-
-window.createMember =
-createMember;
-
-
-window.updateMember =
-updateMember;
-
-
-// NOTIFICATIONS
-
-window.getOwnerNotifications =
-getOwnerNotifications;
-
-
-window.getAllOwnerNotifications =
-getAllOwnerNotifications;
-
-
-window.markNotificationAsRead =
-markNotificationAsRead;
-
-
-window.markAllNotificationsAsRead =
-markAllNotificationsAsRead;
-
-
-// MEMBERS OWNER
-
-window.getMembers =
-getMembers;
