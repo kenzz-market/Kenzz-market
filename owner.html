@@ -15,7 +15,7 @@
 
 <style>
 *{box-sizing:border-box}:root{--pink:#ff316f;--cyan:#00ffd5;--green:#25d366;--gold:#ffd36a;--panel:rgba(9,10,18,.72);--panel2:rgba(20,21,33,.76);--line:rgba(255,255,255,.11)}
-html{scroll-behavior:smooth}body{margin:0;padding:22px;min-height:100vh;color:#fff;font-family:Poppins,sans-serif;background:#07070c center/cover fixed no-repeat;position:relative;overflow-x:hidden}body:before{content:"";position:fixed;inset:0;background:linear-gradient(135deg,rgba(3,4,10,.88),rgba(7,7,14,.58));z-index:-2}body:after{content:"";position:fixed;width:420px;height:420px;right:-150px;top:-140px;background:radial-gradient(circle,rgba(255,49,111,.18),transparent 65%);z-index:-1;pointer-events:none}.container{max-width:1240px;margin:auto}.header{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:18px;flex-wrap:wrap;padding:4px}.brand h1{margin:0;font-family:Orbitron,sans-serif;letter-spacing:2px;font-size:25px}.brand p{margin:6px 0 0;color:#a9abb8;font-size:12px}.header-actions{display:flex;gap:8px;flex-wrap:wrap}button{padding:11px 14px;border:0;border-radius:12px;cursor:pointer;font-weight:700;color:#fff;font-family:inherit;transition:.18s ease}button:hover{transform:translateY(-1px)}.logout,.danger{background:linear-gradient(135deg,#ff316f,#ff5e8d);box-shadow:0 8px 22px rgba(255,49,111,.18)}.secondary{background:rgba(22,23,34,.78);border:1px solid var(--line)}.primary{background:linear-gradient(135deg,var(--pink),#ff6b9a)}.success{background:linear-gradient(135deg,#25d366,#18b957)}.card{background:var(--panel);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:22px;padding:21px;margin-bottom:18px;box-shadow:0 18px 55px rgba(0,0,0,.23)}.card h2{margin-top:0;font-size:18px}.dashboard-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:13px;margin-bottom:18px}.stat{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));border:1px solid var(--line);padding:18px;border-radius:19px;box-shadow:0 12px 35px rgba(0,0,0,.16)}.stat:after{content:"";position:absolute;right:-30px;bottom:-30px;width:90px;height:90px;background:radial-gradient(circle,rgba(0,255,213,.13),transparent 68%)}.stat b{display:block;font-size:27px;color:var(--cyan);font-weight:800}.stat span{color:#a5a7b2;font-size:12px}.owner-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:18px}.nav-btn{background:rgba(14,15,24,.72);border:1px solid var(--line);min-height:74px;line-height:1.55}.nav-btn.active{border-color:rgba(255,49,111,.65);background:linear-gradient(145deg,rgba(255,49,111,.17),rgba(255,49,111,.05));box-shadow:0 10px 28px rgba(255,49,111,.10)}.owner-section{display:none}.owner-section.active{display:block;animation:fade .22s ease}@keyframes fade{from{opacity:.3;transform:translateY(4px)}to{opacity:1;transform:none}}input,select,textarea{width:100%;padding:12px 13px;margin-top:9px;background:rgba(4,5,10,.74);border:1px solid #333746;border-radius:12px;color:#fff;font-family:inherit;outline:none}input:focus,select:focus,textarea:focus{border-color:rgba(0,255,213,.55);box-shadow:0 0 0 3px rgba(0,255,213,.06)}textarea{min-height:90px;resize:vertical}.save{width:100%;margin-top:14px;background:linear-gradient(135deg,#25d366,#19b957)}.product,.member-row,.admin-row,.note-row{display:flex;gap:14px;align-items:center;background:rgba(255,255,255,.045);padding:14px;border-radius:16px;margin-top:10px;border:1px solid rgba(255,255,255,.07)}.product img{width:72px;height:72px;object-fit:cover;border-radius:13px}.info{flex:1;min-width:0}.info h3{margin:0 0 5px}.info p{margin:4px 0;color:#a5a7b2}.delete{background:linear-gradient(135deg,#ff316f,#ff557f)}.edit{background:#ff9d00;color:#111}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.tab-btn{background:#15151f;color:#fff;border:1px solid #333}.tab-btn.active{background:linear-gradient(135deg,var(--pink),#ff5c8c);border-color:transparent}.section{display:none}.section.active{display:block}.promo-badge{display:inline-block;padding:4px 8px;border-radius:999px;background:rgba(255,49,111,.16);border:1px solid rgba(255,49,111,.28);color:#ff7da2;font-size:11px;font-weight:700}.countdown{color:var(--gold);font-weight:700}.hint{color:#888;font-size:12px;line-height:1.5}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.toolbar input{flex:1;min-width:180px;margin-top:0}.empty{text-align:center;color:#888;padding:25px}.background-preview{height:180px;border-radius:18px;margin-top:12px;background:#111 center/cover no-repeat;border:1px solid var(--line);box-shadow:inset 0 0 60px rgba(0,0,0,.25)}.badge{display:inline-block;padding:5px 8px;border-radius:999px;background:rgba(0,255,213,.1);border:1px solid rgba(0,255,213,.18);color:var(--cyan);font-size:11px}.mobile-stack{display:flex;gap:8px;flex-wrap:wrap}.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.glass-note{color:#b4b6c1;font-size:12px}@media(max-width:980px){.dashboard-grid{grid-template-columns:repeat(3,1fr)}.owner-nav{grid-template-columns:repeat(3,1fr)}}@media(max-width:600px){body{padding:13px}.dashboard-grid{grid-template-columns:1fr 1fr}.owner-nav{grid-template-columns:1fr 1fr}.product,.member-row,.admin-row,.note-row{align-items:flex-start;flex-wrap:wrap}.product img{width:58px;height:58px}.product .info{min-width:calc(100% - 75px)}.brand h1{font-size:19px}.card{padding:16px}}
+html{scroll-behavior:smooth}body{margin:0;padding:22px;min-height:100vh;color:#fff;font-family:Poppins,sans-serif;background:#07070c center/cover fixed no-repeat;position:relative;overflow-x:hidden}body:before{content:"";position:fixed;inset:0;background:linear-gradient(135deg,rgba(3,4,10,.88),rgba(7,7,14,.58));z-index:-2}body:after{content:"";position:fixed;width:420px;height:420px;right:-150px;top:-140px;background:radial-gradient(circle,rgba(255,49,111,.18),transparent 65%);z-index:-1;pointer-events:none}.container{max-width:1240px;margin:auto}.header{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:18px;flex-wrap:wrap;padding:4px}.brand h1{margin:0;font-family:Orbitron,sans-serif;letter-spacing:2px;font-size:25px}.brand p{margin:6px 0 0;color:#a9abb8;font-size:12px}.header-actions{display:flex;gap:8px;flex-wrap:wrap}button{padding:11px 14px;border:0;border-radius:12px;cursor:pointer;font-weight:700;color:#fff;font-family:inherit;transition:.18s ease}button:hover{transform:translateY(-1px)}.logout,.danger{background:linear-gradient(135deg,#ff316f,#ff5e8d);box-shadow:0 8px 22px rgba(255,49,111,.18)}.secondary{background:rgba(22,23,34,.78);border:1px solid var(--line)}.primary{background:linear-gradient(135deg,var(--pink),#ff6b9a)}.success{background:linear-gradient(135deg,#25d366,#18b957)}.card{background:var(--panel);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:22px;padding:21px;margin-bottom:18px;box-shadow:0 18px 55px rgba(0,0,0,.23)}.card h2{margin-top:0;font-size:18px}.dashboard-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:13px;margin-bottom:18px}.stat{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));border:1px solid var(--line);padding:18px;border-radius:19px;box-shadow:0 12px 35px rgba(0,0,0,.16)}.stat:after{content:"";position:absolute;right:-30px;bottom:-30px;width:90px;height:90px;background:radial-gradient(circle,rgba(0,255,213,.13),transparent 68%)}.stat b{display:block;font-size:27px;color:var(--cyan);font-weight:800}.stat span{color:#a5a7b2;font-size:12px}.owner-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:18px}.nav-btn{background:rgba(14,15,24,.72);border:1px solid var(--line);min-height:74px;line-height:1.55}.nav-btn.active{border-color:rgba(255,49,111,.65);background:linear-gradient(145deg,rgba(255,49,111,.17),rgba(255,49,111,.05));box-shadow:0 10px 28px rgba(255,49,111,.10)}.owner-section{display:none}.owner-section.active{display:block;animation:fade .22s ease}@keyframes fade{from{opacity:.3;transform:translateY(4px)}to{opacity:1;transform:none}}input,select,textarea{width:100%;padding:12px 13px;margin-top:9px;background:rgba(4,5,10,.74);border:1px solid #333746;border-radius:12px;color:#fff;font-family:inherit;outline:none}input:focus,select:focus,textarea:focus{border-color:rgba(0,255,213,.55);box-shadow:0 0 0 3px rgba(0,255,213,.06)}textarea{min-height:90px;resize:vertical}.save{width:100%;margin-top:14px;background:linear-gradient(135deg,#25d366,#19b957)}.product,.member-row,.admin-row,.note-row{display:flex;gap:14px;align-items:center;background:rgba(255,255,255,.045);padding:14px;border-radius:16px;margin-top:10px;border:1px solid rgba(255,255,255,.07)}.product img{width:72px;height:72px;object-fit:cover;border-radius:13px}.info{flex:1;min-width:0}.info h3{margin:0 0 5px}.info p{margin:4px 0;color:#a5a7b2}.delete{background:linear-gradient(135deg,#ff316f,#ff557f)}.edit{background:#ff9d00;color:#111}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.tab-btn{background:#15151f;color:#fff;border:1px solid #333}.tab-btn.active{background:linear-gradient(135deg,var(--pink),#ff5c8c);border-color:transparent}.section{display:none}.section.active{display:block}.promo-badge{display:inline-block;padding:4px 8px;border-radius:999px;background:rgba(255,49,111,.16);border:1px solid rgba(255,49,111,.28);color:#ff7da2;font-size:11px;font-weight:700}.countdown{color:var(--gold);font-weight:700}.hint{color:#888;font-size:12px;line-height:1.5}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.toolbar input{flex:1;min-width:180px;margin-top:0}.empty{text-align:center;color:#888;padding:25px}.background-preview{height:180px;border-radius:18px;margin-top:12px;background:#111 center/cover no-repeat;border:1px solid var(--line);box-shadow:inset 0 0 60px rgba(0,0,0,.25)}.visual-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}.visual-card{padding:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.035);border-radius:18px}.visual-card h3{margin:0 0 5px;font-size:14px}.visual-card input{margin-top:8px}.visual-preview{height:150px;border-radius:14px;margin-top:10px;background:#090a10 center/cover no-repeat;border:1px solid var(--line);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#777}.visual-preview video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.visual-preview:after{content:"Preview";position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(#0002,#0004);color:#fff8;font-size:12px;pointer-events:none}@media(max-width:700px){.visual-grid{grid-template-columns:1fr}}.badge{display:inline-block;padding:5px 8px;border-radius:999px;background:rgba(0,255,213,.1);border:1px solid rgba(0,255,213,.18);color:var(--cyan);font-size:11px}.mobile-stack{display:flex;gap:8px;flex-wrap:wrap}.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.glass-note{color:#b4b6c1;font-size:12px}@media(max-width:980px){.dashboard-grid{grid-template-columns:repeat(3,1fr)}.owner-nav{grid-template-columns:repeat(3,1fr)}}@media(max-width:600px){body{padding:13px}.dashboard-grid{grid-template-columns:1fr 1fr}.owner-nav{grid-template-columns:1fr 1fr}.product,.member-row,.admin-row,.note-row{align-items:flex-start;flex-wrap:wrap}.product img{width:58px;height:58px}.product .info{min-width:calc(100% - 75px)}.brand h1{font-size:19px}.card{padding:16px}}
 </style>
 
 
@@ -93,7 +93,93 @@ html{scroll-behavior:smooth}body{margin:0;padding:22px;min-height:100vh;color:#f
   <section id="ordersSection" class="owner-section"><div class="card"><div class="section-title"><h2 style="margin:0">🧾 Pesanan & Status</h2><button class="secondary" onclick="loadOrders()">Refresh</button></div><div id="ordersList"><div class="empty">Memuat pesanan...</div></div></div></section>
 <section id="vouchersSection" class="owner-section"><div class="card"><h2>🏷️ Buat Voucher</h2><input id="voucherId" type="hidden"><input id="voucherCodeOwner" placeholder="Kode, contoh KENZZ10"><select id="voucherType"><option value="percent">Diskon persen (%)</option><option value="fixed">Potongan nominal (Rp)</option></select><input id="voucherValue" type="number" placeholder="Nilai diskon"><input id="voucherMin" type="number" placeholder="Minimal pembelian"><input id="voucherMax" type="number" placeholder="Maksimal diskon, opsional"><input id="voucherLimit" type="number" placeholder="Batas penggunaan, opsional"><input id="voucherExpiry" type="datetime-local"><button class="save" onclick="saveVoucherData()">Simpan Voucher</button></div><div class="card"><h2>Daftar Voucher</h2><div id="voucherList"><div class="empty">Memuat...</div></div></div></section>
 <section id="settingsSection" class="owner-section">
-    <div class="card"><h2>⚙️ Pengaturan Owner</h2><p class="hint">Atur identitas toko dan tampilan halaman owner. Latar belakang dapat memakai link foto atau file gambar dari perangkat.</p><input id="storeNameSetting" placeholder="Nama toko"><input id="ownerNameSetting" placeholder="Nama owner"><input id="whatsappSetting" placeholder="Nomor WhatsApp owner"><input id="backgroundUrl" placeholder="URL foto latar belakang"><input id="backgroundFile" type="file" accept="image/*"><div id="backgroundPreview" class="background-preview"></div><button class="save" onclick="saveOwnerSettings()">Simpan Pengaturan</button><button class="secondary" style="width:100%;margin-top:10px" onclick="resetOwnerBackground()">Reset Latar Belakang</button></div>
+    <div class="card">
+      <h2>⚙️ Pengaturan Owner</h2>
+      <p class="hint">Pengaturan ini khusus Owner. Identitas toko dan latar halaman Owner tetap terpisah dari tampilan halaman utama toko.</p>
+      <input id="storeNameSetting" placeholder="Nama toko">
+      <input id="ownerNameSetting" placeholder="Nama owner">
+      <input id="whatsappSetting" placeholder="Nomor WhatsApp owner">
+      <input id="backgroundUrl" placeholder="URL foto latar belakang Owner">
+      <input id="backgroundFile" type="file" accept="image/*">
+      <div id="backgroundPreview" class="background-preview"></div>
+      <button class="save" onclick="saveOwnerSettings()">Simpan Pengaturan Owner</button>
+      <button class="secondary" style="width:100%;margin-top:10px" onclick="resetOwnerBackground()">Reset Latar Belakang Owner</button>
+    </div>
+
+    <div class="card">
+      <div class="section-title">
+        <div>
+          <h2 style="margin:0">🎨 Tampilan Halaman Utama Toko</h2>
+          <p class="hint" style="margin:6px 0 0">Atur foto atau video background untuk halaman utama, Hero, Verified/Keterangan, Statistik, Announcement, dan Sosial Media. Hanya Owner yang dapat mengubahnya.</p>
+        </div>
+        <span class="badge">OWNER ONLY</span>
+      </div>
+
+      <div class="visual-grid">
+        <div class="visual-card">
+          <h3>🌌 Background Halaman Utama</h3>
+          <p class="hint">Latar seluruh halaman. Video akan diprioritaskan daripada foto.</p>
+          <input id="visualBackgroundImageUrl" placeholder="URL foto background utama">
+          <input id="visualBackgroundVideoUrl" placeholder="URL video background utama (.mp4/.webm)">
+          <input id="visualBackgroundImageFile" type="file" accept="image/*">
+          <input id="visualBackgroundVideoFile" type="file" accept="video/*">
+          <div id="visualBackgroundPreview" class="visual-preview"></div>
+        </div>
+
+        <div class="visual-card">
+          <h3>✨ Hero</h3>
+          <p class="hint">Bagian KENZZ STORE / DIGITAL PREMIUM MARKET.</p>
+          <input id="visualHeroImageUrl" placeholder="URL foto Hero">
+          <input id="visualHeroVideoUrl" placeholder="URL video Hero">
+          <input id="visualHeroImageFile" type="file" accept="image/*">
+          <input id="visualHeroVideoFile" type="file" accept="video/*">
+          <div id="visualHeroPreview" class="visual-preview"></div>
+        </div>
+
+        <div class="visual-card">
+          <h3>✅ Verified / Keterangan</h3>
+          <p class="hint">Background kartu Verified Official.</p>
+          <input id="visualVerifiedImageUrl" placeholder="URL foto Verified">
+          <input id="visualVerifiedVideoUrl" placeholder="URL video Verified">
+          <input id="visualVerifiedImageFile" type="file" accept="image/*">
+          <input id="visualVerifiedVideoFile" type="file" accept="video/*">
+          <div id="visualVerifiedPreview" class="visual-preview"></div>
+        </div>
+
+        <div class="visual-card">
+          <h3>📊 Statistik</h3>
+          <p class="hint">Background kartu statistik Member, Produk, dan Uptime.</p>
+          <input id="visualStatistikImageUrl" placeholder="URL foto Statistik">
+          <input id="visualStatistikVideoUrl" placeholder="URL video Statistik">
+          <input id="visualStatistikImageFile" type="file" accept="image/*">
+          <input id="visualStatistikVideoFile" type="file" accept="video/*">
+          <div id="visualStatistikPreview" class="visual-preview"></div>
+        </div>
+
+        <div class="visual-card">
+          <h3>📢 Announcement</h3>
+          <p class="hint">Background kartu pengumuman toko.</p>
+          <input id="visualAnnouncementImageUrl" placeholder="URL foto Announcement">
+          <input id="visualAnnouncementVideoUrl" placeholder="URL video Announcement">
+          <input id="visualAnnouncementImageFile" type="file" accept="image/*">
+          <input id="visualAnnouncementVideoFile" type="file" accept="video/*">
+          <div id="visualAnnouncementPreview" class="visual-preview"></div>
+        </div>
+
+        <div class="visual-card">
+          <h3>🌐 Sosial Media</h3>
+          <p class="hint">Background kartu Sosial Media & Community.</p>
+          <input id="visualSocialImageUrl" placeholder="URL foto Sosial Media">
+          <input id="visualSocialVideoUrl" placeholder="URL video Sosial Media">
+          <input id="visualSocialImageFile" type="file" accept="image/*">
+          <input id="visualSocialVideoFile" type="file" accept="video/*">
+          <div id="visualSocialPreview" class="visual-preview"></div>
+        </div>
+      </div>
+
+      <button class="save" onclick="saveHomepageVisualSettings(event)">💾 Simpan Tampilan Halaman Utama</button>
+      <button class="secondary" style="width:100%;margin-top:10px" onclick="resetHomepageVisualSettings()">♻️ Reset Semua Background Halaman Utama</button>
+    </div>
   </section>
 </div>
 
@@ -129,10 +215,101 @@ async function loadAdmins(){try{ownerAdmins=await getAdmins();document.getElemen
 function renderAdmins(){const box=document.getElementById('adminList');box.innerHTML=ownerAdmins.length?ownerAdmins.map(a=>`<div class="admin-row"><div class="info"><h3>${a.email||a.user_id}</h3><p><span class="badge">${a.role}</span></p></div>${a.role==='admin'?`<button class="delete" onclick="removeAdmin('${a.user_id}')">Hapus Admin</button>`:'<span class="badge">OWNER</span>'}</div>`).join(''):'<div class="empty">Belum ada admin.</div>';}
 async function addAdminFromForm(){const email=document.getElementById('newAdminEmail').value.trim();if(!email)return alert('Email wajib diisi');try{await addAdminByEmail(email);document.getElementById('newAdminEmail').value='';await loadOwnerData();alert('Admin berhasil ditambahkan.')}catch(e){alert('Gagal menambahkan admin: '+e.message)}}
 async function removeAdmin(id){if(!confirm('Hapus akses admin ini?'))return;try{await deleteAdmin(id);await loadOwnerData();alert('Admin dihapus.')}catch(e){alert('Gagal menghapus admin: '+e.message)}}
-function applyOwnerBackground(url){document.body.style.backgroundImage=url?`url("${url.replace(/"/g,'\"')}")`:'';document.getElementById('backgroundPreview').style.backgroundImage=url?`url("${url.replace(/"/g,'\"')}")`:'';}
-function loadOwnerSettings(){const s=JSON.parse(localStorage.getItem('kenzz_owner_settings')||'{}');document.getElementById('storeNameSetting').value=s.storeName||STORE_SETTINGS.storeName||'Kenzz Store';document.getElementById('ownerNameSetting').value=s.ownerName||STORE_SETTINGS.ownerName||'';document.getElementById('whatsappSetting').value=s.whatsappOwner||STORE_SETTINGS.whatsappOwner||'';document.getElementById('backgroundUrl').value=s.backgroundUrl||'';applyOwnerBackground(s.backgroundUrl||'');}
-function saveOwnerSettings(){const url=document.getElementById('backgroundUrl').value.trim();const s={storeName:document.getElementById('storeNameSetting').value.trim(),ownerName:document.getElementById('ownerNameSetting').value.trim(),whatsappOwner:document.getElementById('whatsappSetting').value.trim(),backgroundUrl:url};const f=document.getElementById('backgroundFile').files[0];if(f){const reader=new FileReader();reader.onload=()=>{s.backgroundUrl=reader.result;localStorage.setItem('kenzz_owner_settings',JSON.stringify(s));applyOwnerBackground(s.backgroundUrl);alert('Pengaturan dan latar belakang tersimpan di perangkat ini.');};reader.readAsDataURL(f);}else{localStorage.setItem('kenzz_owner_settings',JSON.stringify(s));applyOwnerBackground(url);alert('Pengaturan tersimpan.');}}
-function resetOwnerBackground(){const s=JSON.parse(localStorage.getItem('kenzz_owner_settings')||'{}');delete s.backgroundUrl;localStorage.setItem('kenzz_owner_settings',JSON.stringify(s));document.getElementById('backgroundUrl').value='';applyOwnerBackground('');}
+function applyOwnerBackground(url){document.body.style.backgroundImage=url?`url("${String(url).replace(/"/g,'\\"')}")`:'';document.getElementById('backgroundPreview').style.backgroundImage=url?`url("${String(url).replace(/"/g,'\\"')}")`:'';}
+async function loadOwnerSettings(){
+  const s=JSON.parse(localStorage.getItem('kenzz_owner_settings')||'{}');
+  document.getElementById('storeNameSetting').value=s.storeName||STORE_SETTINGS.storeName||'Kenzz Store';
+  document.getElementById('ownerNameSetting').value=s.ownerName||STORE_SETTINGS.ownerName||'';
+  document.getElementById('whatsappSetting').value=s.whatsappOwner||STORE_SETTINGS.whatsappOwner||'';
+  document.getElementById('backgroundUrl').value=s.backgroundUrl||'';
+  applyOwnerBackground(s.backgroundUrl||'');
+  await loadHomepageVisualSettings();
+}
+function saveOwnerSettings(){
+  const url=document.getElementById('backgroundUrl').value.trim();
+  const s={storeName:document.getElementById('storeNameSetting').value.trim(),ownerName:document.getElementById('ownerNameSetting').value.trim(),whatsappOwner:document.getElementById('whatsappSetting').value.trim(),backgroundUrl:url};
+  const f=document.getElementById('backgroundFile').files[0];
+  if(f){
+    const reader=new FileReader();
+    reader.onload=()=>{s.backgroundUrl=reader.result;localStorage.setItem('kenzz_owner_settings',JSON.stringify(s));applyOwnerBackground(s.backgroundUrl);alert('Pengaturan Owner dan latar belakang tersimpan di perangkat ini.');};
+    reader.readAsDataURL(f);
+  }else{
+    localStorage.setItem('kenzz_owner_settings',JSON.stringify(s));
+    applyOwnerBackground(url);
+    alert('Pengaturan Owner tersimpan.');
+  }
+}
+function resetOwnerBackground(){
+  const s=JSON.parse(localStorage.getItem('kenzz_owner_settings')||'{}');
+  delete s.backgroundUrl;
+  localStorage.setItem('kenzz_owner_settings',JSON.stringify(s));
+  document.getElementById('backgroundUrl').value='';
+  applyOwnerBackground('');
+}
+
+const HOMEPAGE_VISUALS={
+  background:{image:'visualBackgroundImageUrl',video:'visualBackgroundVideoUrl',imageFile:'visualBackgroundImageFile',videoFile:'visualBackgroundVideoFile',preview:'visualBackgroundPreview'},
+  hero:{image:'visualHeroImageUrl',video:'visualHeroVideoUrl',imageFile:'visualHeroImageFile',videoFile:'visualHeroVideoFile',preview:'visualHeroPreview'},
+  verified:{image:'visualVerifiedImageUrl',video:'visualVerifiedVideoUrl',imageFile:'visualVerifiedImageFile',videoFile:'visualVerifiedVideoFile',preview:'visualVerifiedPreview'},
+  statistik:{image:'visualStatistikImageUrl',video:'visualStatistikVideoUrl',imageFile:'visualStatistikImageFile',videoFile:'visualStatistikVideoFile',preview:'visualStatistikPreview'},
+  announcement:{image:'visualAnnouncementImageUrl',video:'visualAnnouncementVideoUrl',imageFile:'visualAnnouncementImageFile',videoFile:'visualAnnouncementVideoFile',preview:'visualAnnouncementPreview'},
+  social:{image:'visualSocialImageUrl',video:'visualSocialVideoUrl',imageFile:'visualSocialImageFile',videoFile:'visualSocialVideoFile',preview:'visualSocialPreview'}
+};
+function visualPreview(slot,image,video){
+  const cfg=HOMEPAGE_VISUALS[slot], box=document.getElementById(cfg.preview);
+  if(!box)return;
+  box.innerHTML='';
+  if(image) box.style.backgroundImage=`url("${String(image).replace(/"/g,'\\"')}")`; else box.style.backgroundImage='';
+  if(video){const v=document.createElement('video');v.src=video;v.autoplay=true;v.muted=true;v.loop=true;v.playsInline=true;box.appendChild(v);}
+}
+function readVisualInputs(slot){const c=HOMEPAGE_VISUALS[slot];return {image:document.getElementById(c.image).value.trim(),video:document.getElementById(c.video).value.trim()};}
+function bindVisualFilePreviews(){Object.keys(HOMEPAGE_VISUALS).forEach(slot=>{const c=HOMEPAGE_VISUALS[slot];const img=document.getElementById(c.imageFile),vid=document.getElementById(c.videoFile);if(img)img.onchange=()=>{if(img.files[0]){document.getElementById(c.image).value='';visualPreview(slot,URL.createObjectURL(img.files[0]),'');}};if(vid)vid.onchange=()=>{if(vid.files[0]){document.getElementById(c.video).value='';visualPreview(slot,'',URL.createObjectURL(vid.files[0]));}};});}
+async function loadHomepageVisualSettings(){
+  try{
+    const v=await getStoreVisualSettings();
+    const map={
+      background:['background_image_url','background_video_url'],
+      hero:['hero_image_url','hero_video_url'],
+      verified:['verified_image_url','verified_video_url'],
+      statistik:['statistik_image_url','statistik_video_url'],
+      announcement:['announcement_image_url','announcement_video_url'],
+      social:['social_image_url','social_video_url']
+    };
+    Object.entries(map).forEach(([slot,fields])=>{const c=HOMEPAGE_VISUALS[slot];document.getElementById(c.image).value=v[fields[0]]||'';document.getElementById(c.video).value=v[fields[1]]||'';visualPreview(slot,v[fields[0]]||'',v[fields[1]]||'');});
+    bindVisualFilePreviews();
+  }catch(e){console.error('VISUAL SETTINGS:',e);}
+}
+async function saveHomepageVisualSettings(evt){
+  const btn=evt?.currentTarget; if(btn)btn.disabled=true;
+  try{
+    const payload={};
+    for(const slot of Object.keys(HOMEPAGE_VISUALS)){
+      const c=HOMEPAGE_VISUALS[slot];
+      let image=document.getElementById(c.image).value.trim();
+      let video=document.getElementById(c.video).value.trim();
+      const imageFile=document.getElementById(c.imageFile).files[0];
+      const videoFile=document.getElementById(c.videoFile).files[0];
+      if(imageFile) image=await uploadStoreVisual(imageFile,`${slot}-image`);
+      if(videoFile) video=await uploadStoreVisual(videoFile,`${slot}-video`);
+      payload[`${slot}_image_url`]=image||null;
+      payload[`${slot}_video_url`]=video||null;
+    }
+    await saveStoreVisualSettings(payload);
+    await loadHomepageVisualSettings();
+    alert('Tampilan halaman utama berhasil disimpan.');
+  }catch(e){alert('Gagal menyimpan tampilan halaman utama: '+e.message);}
+  finally{if(btn)btn.disabled=false;}
+}
+async function resetHomepageVisualSettings(){
+  if(!confirm('Reset semua foto/video background halaman utama?'))return;
+  try{
+    const payload={};
+    Object.keys(HOMEPAGE_VISUALS).forEach(slot=>{payload[`${slot}_image_url`]=null;payload[`${slot}_video_url`]=null;});
+    await saveStoreVisualSettings(payload);
+    await loadHomepageVisualSettings();
+    alert('Semua background halaman utama direset.');
+  }catch(e){alert('Gagal mereset tampilan halaman utama: '+e.message);}
+}
 setInterval(()=>document.querySelectorAll('[data-expires]').forEach(e=>e.textContent='⏱ '+promoRemaining(e.dataset.expires)),1000);
 
 async function loadOrders(){try{const rows=await getOwnerPurchaseHistory();const box=document.getElementById('ordersList');box.innerHTML=rows.length?rows.map(h=>`<div class="note-row"><div class="info"><h3>${(h.items||[]).map(i=>`${i.name} ×${i.qty}`).join(', ')}</h3><p>Rp ${Number(h.total||0).toLocaleString('id-ID')} · ${new Date(h.created_at).toLocaleString('id-ID')}</p></div><select style="max-width:190px;margin:0" onchange="changeOrderStatus('${h.id}',this.value)">${['Menunggu konfirmasi','Diproses','Siap dikirim','Selesai','Dibatalkan'].map(x=>`<option ${x===(h.status||'Menunggu konfirmasi')?'selected':''}>${x}</option>`).join('')}</select></div>`).join(''):'<div class="empty">Belum ada pesanan.</div>'}catch(e){document.getElementById('ordersList').textContent=e.message}}

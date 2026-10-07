@@ -30,6 +30,16 @@ background:#050509;
 min-height:100vh;
 }
 
+#bgImage{
+position:fixed;
+inset:0;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:-4;
+display:none;
+}
+
 #bg{
 position:fixed;
 inset:0;
@@ -106,6 +116,11 @@ background-size:cover;
 background-position:center;
 border:1px solid #ffffff30;
 }
+.visual-host{position:relative;overflow:hidden}
+.visual-host>*:not(.section-bg-video){position:relative;z-index:1}
+.visual-host:has(.section-bg-video)::after{content:"";position:absolute;inset:0;background:linear-gradient(#0006,#0008);z-index:0;pointer-events:none}
+.section-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;border:0;pointer-events:none}
+
 
 .verified{
 background:linear-gradient(#0008,#0008),url("https://c.termai.cc/i148/N28g6Y6.jpg");
@@ -220,6 +235,8 @@ body.light .member-menu a{color:#111}
 
 <body>
 
+<img id="bgImage" alt="" aria-hidden="true">
+
 <video id="bg" autoplay muted loop playsinline>
 <source src="https://c.termai.cc/v154/apv.mp4" type="video/mp4">
 </video>
@@ -242,14 +259,14 @@ body.light .member-menu a{color:#111}
 <button class="menu-toggle" onclick="toggleMemberMenu()" aria-label="Menu">☰</button>
 </div>
 
-<div class="hero">
+<div class="hero visual-host" id="homeHero">
 <h1>𝘒𝘌𝘕𝘡𝘡 𝘚𝘛𝘖𝘙𝘌</h1>
 <p>DIGITAL PREMIUM MARKET</p>
 <a class="button" href="products.html">🛍 List produk</a>
 <a class="button" href="products.html">🔎 Jelajahi</a>
 </div>
 
-<div class="card verified">
+<div class="card verified visual-host" id="homeVerified">
 <h2>✅ Verified Official</h2>
 <p>Official Digital Store</p>
 <p>🟢 Online • Trusted Store</p>
@@ -262,19 +279,19 @@ body.light .member-menu a{color:#111}
 <a class="item" href="support.html">🎧<br>Support</a>
 </div>
 
-<div class="card statistik">
+<div class="card statistik visual-host" id="homeStatistik">
 <h2>📊 Statistik</h2>
 <p id="memberCount">Memuat...</p>
 <p id="productCount">Memuat...</p>
 <p id="uptimeCount">Memuat...</p>
 </div>
 
-<div class="card announcement">
+<div class="card announcement visual-host" id="homeAnnouncement">
 <h2>📢 Announcement</h2>
 <p>Selamat datang di Kenzz Store. Nikmati layanan digital premium.</p>
 </div>
 
-<div class="card socialmedia">
+<div class="card socialmedia visual-host" id="homeSocial">
 <h2>🌐 Sosial Media & Community</h2>
 <div class="social">
 <a id="ig" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
@@ -334,6 +351,56 @@ waGroup.href=STORE_SETTINGS.whatsappGroup;
 
 
 
+
+<script>
+async function loadHomepageVisuals(){
+    try{
+        const v=await getStoreVisualSettings();
+        const bg=document.getElementById('bg');
+        const bgImage=document.getElementById('bgImage');
+        const source=bg?.querySelector('source');
+
+        if(v.background_video_url){
+            if(source){source.src=v.background_video_url;bg.load();}
+            bg.style.display='block';
+        }else if(v.background_image_url){
+            if(bg) bg.style.display='none';
+            if(bgImage){bgImage.src=v.background_image_url;bgImage.style.display='block';}
+        }
+
+        const sections={
+            hero:['homeHero','hero_image_url','hero_video_url'],
+            verified:['homeVerified','verified_image_url','verified_video_url'],
+            statistik:['homeStatistik','statistik_image_url','statistik_video_url'],
+            announcement:['homeAnnouncement','announcement_image_url','announcement_video_url'],
+            social:['homeSocial','social_image_url','social_video_url']
+        };
+
+        Object.values(sections).forEach(([id,imageKey,videoKey])=>{
+            const el=document.getElementById(id);
+            if(!el)return;
+            const image=v[imageKey]||'';
+            const video=v[videoKey]||'';
+            if(image) el.style.backgroundImage=`linear-gradient(#0007,#0007),url("${String(image).replace(/"/g,'\\"')}")`;
+            if(video){
+                const old=el.querySelector('.section-bg-video');
+                if(old)old.remove();
+                const vid=document.createElement('video');
+                vid.className='section-bg-video';
+                vid.src=video;
+                vid.autoplay=true;
+                vid.muted=true;
+                vid.loop=true;
+                vid.playsInline=true;
+                el.prepend(vid);
+            }
+        });
+    }catch(e){
+        console.log('VISUAL SETTINGS:',e);
+    }
+}
+loadHomepageVisuals();
+</script>
 
 <script>
 async function loadStats(){

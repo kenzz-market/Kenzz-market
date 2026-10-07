@@ -927,6 +927,66 @@ async function markMemberNotificationsRead(){const user=await getCurrentUser();i
 window.getActiveVouchers=getActiveVouchers;window.validateVoucher=validateVoucher;window.incrementVoucherUsage=incrementVoucherUsage;window.getOwnerVouchers=getOwnerVouchers;window.addVoucher=addVoucher;window.updateVoucher=updateVoucher;window.deleteVoucher=deleteVoucher;window.updatePurchaseStatus=updatePurchaseStatus;window.getMemberNotifications=getMemberNotifications;window.markMemberNotificationsRead=markMemberNotificationsRead;
 
 
+// =====================================
+// KENZZ STORE: HOMEPAGE VISUAL SETTINGS
+// Owner-only write, public read.
+// =====================================
+async function getStoreVisualSettings(){
+    const {data,error}=await supabaseClient
+        .from('store_visual_settings')
+        .select('*')
+        .eq('id',1)
+        .maybeSingle();
+    if(error) throw error;
+    return data || {};
+}
+
+async function saveStoreVisualSettings(settings){
+    const role=await checkRole();
+    if(role!=='owner') throw new Error('Akses hanya untuk owner.');
+    const payload={...settings,id:1,updated_at:new Date().toISOString()};
+    const {data,error}=await supabaseClient
+        .from('store_visual_settings')
+        .upsert(payload,{onConflict:'id'})
+        .select()
+        .single();
+    if(error) throw error;
+    return data;
+}
+
+async function uploadStoreVisual(file,slot){
+    const role=await checkRole();
+    if(role!=='owner') throw new Error('Akses hanya untuk owner.');
+    if(!file) throw new Error('File tidak dipilih.');
+
+    const isImage=file.type.startsWith('image/');
+    const isVideo=file.type.startsWith('video/');
+    if(!isImage && !isVideo) throw new Error('File harus berupa foto atau video.');
+
+    const maxSize=isVideo ? 60*1024*1024 : 12*1024*1024;
+    if(file.size>maxSize){
+        const limit=isVideo?'60 MB':'12 MB';
+        throw new Error(`Ukuran file terlalu besar. Maksimal ${limit}.`);
+    }
+
+    const ext=(file.name.split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'');
+    const path=`homepage/${slot}-${Date.now()}-${Math.random().toString(36).slice(2,10)}.${ext}`;
+    const {error}=await supabaseClient.storage
+        .from('store-backgrounds')
+        .upload(path,file,{contentType:file.type,upsert:false,cacheControl:'31536000'});
+    if(error) throw error;
+
+    const {data}=supabaseClient.storage
+        .from('store-backgrounds')
+        .getPublicUrl(path);
+    return data.publicUrl;
+}
+
+window.getStoreVisualSettings=getStoreVisualSettings;
+window.saveStoreVisualSettings=saveStoreVisualSettings;
+window.uploadStoreVisual=uploadStoreVisual;
+
+
 
 // SESSION SAFETY: logout after 30 minutes of inactivity.
 (function(){
