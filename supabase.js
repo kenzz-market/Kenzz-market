@@ -56,15 +56,18 @@ async function loginUser(email,password){
 
 
 async function logoutUser(){
-    await supabaseClient.auth.signOut();
-    localStorage.removeItem("kenzz_role");
-    location.href = "login.html";
-}
 
-async function logoutMember(){
     await supabaseClient.auth.signOut();
-    localStorage.removeItem("kenzz_role");
-    location.href = "member-login.html";
+
+
+    localStorage.removeItem(
+        "kenzz_role"
+    );
+
+
+    location.href =
+    "login.html";
+
 }
 
 
@@ -369,8 +372,6 @@ loginUser;
 
 window.logoutUser =
 logoutUser;
-window.logoutMember =
-logoutMember;
 
 
 window.checkRole =
@@ -415,18 +416,6 @@ clearCart;
 // KENZZ STORE MEMBER SYSTEM
 // =====================================
 
-function normalizePhone(phone){
-    let value = String(phone || "").trim().replace(/[\s()-]/g, "");
-    if(value.startsWith("08")) value = "+62" + value.slice(1);
-    else if(value.startsWith("62")) value = "+" + value;
-    return value;
-}
-
-function isPhoneIdentifier(value){
-    const v = String(value || "").trim();
-    return !v.includes("@");
-}
-
 async function getMemberCount(){
     const { data, error } = await supabaseClient.rpc("get_member_count");
     if(error){
@@ -456,33 +445,6 @@ async function getMemberProfile(){
     return data || null;
 }
 
-async function ensureMemberProfile(){
-    const user = await getCurrentUser();
-    if(!user) return null;
-
-    const existing = await getMemberProfile();
-    if(existing) return existing;
-
-    const meta = user.user_metadata || {};
-    const provider = user.app_metadata?.provider || (user.phone ? "phone" : "email");
-    const payload = {
-        user_id: user.id,
-        name: meta.name || meta.full_name || meta.display_name || "",
-        email: user.email || null,
-        phone: user.phone || meta.phone || null,
-        provider
-    };
-
-    const { data, error } = await supabaseClient
-        .from("members")
-        .upsert(payload, { onConflict:"user_id" })
-        .select()
-        .single();
-
-    if(error) throw error;
-    return data;
-}
-
 async function updateMember(userId, member){
     const { data, error } = await supabaseClient
         .from("members")
@@ -495,56 +457,19 @@ async function updateMember(userId, member){
     return data;
 }
 
-async function signUpMember({ email="", phone="", password, name="" }){
-    const normalizedPhone = normalizePhone(phone);
-    const options = {
-        data: {
-            name: name || "",
-            phone: normalizedPhone || ""
+async function signUpMember(email, password, name, phone){
+    const { data, error } = await supabaseClient.auth.signUp({
+        email,
+        password,
+        options: {
+            data: {
+                name: name || "",
+                phone: phone || ""
+            }
         }
-    };
-
-    let data, error;
-
-    if(email){
-        ({ data, error } = await supabaseClient.auth.signUp({
-            email,
-            password,
-            options
-        }));
-    }else if(normalizedPhone){
-        ({ data, error } = await supabaseClient.auth.signUp({
-            phone: normalizedPhone,
-            password,
-            options
-        }));
-    }else{
-        throw new Error("Masukkan email atau nomor telepon.");
-    }
+    });
 
     if(error) throw error;
-    return data;
-}
-
-async function loginMember(identifier, password){
-    const value = String(identifier || "").trim();
-    if(!value || !password) throw new Error("Email/nomor telepon dan password wajib diisi.");
-
-    let data, error;
-    if(isPhoneIdentifier(value)){
-        ({ data, error } = await supabaseClient.auth.signInWithPassword({
-            phone: normalizePhone(value),
-            password
-        }));
-    }else{
-        ({ data, error } = await supabaseClient.auth.signInWithPassword({
-            email: value,
-            password
-        }));
-    }
-
-    if(error) throw error;
-    await ensureMemberProfile();
     return data;
 }
 
@@ -560,22 +485,20 @@ async function signInGoogle(){
 }
 
 async function sendPhoneOtp(phone){
-    const normalizedPhone = normalizePhone(phone);
-    if(!normalizedPhone) throw new Error("Nomor telepon wajib diisi.");
-    const { data, error } = await supabaseClient.auth.signInWithOtp({ phone: normalizedPhone });
+    const { data, error } = await supabaseClient.auth.signInWithOtp({
+        phone
+    });
     if(error) throw error;
     return data;
 }
 
 async function verifyPhoneOtp(phone, token){
-    const normalizedPhone = normalizePhone(phone);
     const { data, error } = await supabaseClient.auth.verifyOtp({
-        phone: normalizedPhone,
+        phone,
         token,
         type: "sms"
     });
     if(error) throw error;
-    await ensureMemberProfile();
     return data;
 }
 
@@ -608,10 +531,6 @@ async function getOwnerNotifications(unreadOnly=true){
     return data || [];
 }
 
-async function getAllOwnerNotifications(){
-    return getOwnerNotifications(false);
-}
-
 async function markNotificationAsRead(id){
     const { error } = await supabaseClient
         .from("notifications")
@@ -633,15 +552,114 @@ async function markAllNotificationsAsRead(){
 window.getMemberCount = getMemberCount;
 window.getCurrentUser = getCurrentUser;
 window.getMemberProfile = getMemberProfile;
-window.ensureMemberProfile = ensureMemberProfile;
 window.updateMember = updateMember;
 window.signUpMember = signUpMember;
-window.loginMember = loginMember;
 window.signInGoogle = signInGoogle;
 window.sendPhoneOtp = sendPhoneOtp;
 window.verifyPhoneOtp = verifyPhoneOtp;
+
+async function loginMember(email,password){
+    const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+    if(error) throw error;
+    return data;
+}
+window.loginMember=loginMember;
 window.getMembers = getMembers;
 window.getOwnerNotifications = getOwnerNotifications;
-window.getAllOwnerNotifications = getAllOwnerNotifications;
 window.markNotificationAsRead = markNotificationAsRead;
 window.markAllNotificationsAsRead = markAllNotificationsAsRead;
+
+
+
+async function logoutMember(){
+    await supabaseClient.auth.signOut();
+    localStorage.removeItem('kenzz_role');
+    location.href='index.html';
+}
+window.logoutMember=logoutMember;
+
+// =====================================
+// MEMBER PURCHASE GATE
+// =====================================
+
+async function requireMemberForPurchase(purchaseData){
+    const user = await getCurrentUser();
+    if(user){
+        return true;
+    }
+
+    localStorage.setItem('kenzz_pending_purchase', JSON.stringify({
+        ...purchaseData,
+        created_at: Date.now()
+    }));
+
+    location.href = 'register.html?return=purchase';
+    return false;
+}
+
+function getPendingPurchase(){
+    try{
+        const raw = localStorage.getItem('kenzz_pending_purchase');
+        return raw ? JSON.parse(raw) : null;
+    }catch(e){
+        return null;
+    }
+}
+
+function clearPendingPurchase(){
+    localStorage.removeItem('kenzz_pending_purchase');
+}
+
+async function decrementProductStock(productId, qty=1){
+    const { data, error } = await supabaseClient.rpc('decrement_product_stock', {
+        p_product_id: String(productId),
+        p_qty: Math.max(1, Number(qty || 1))
+    });
+    if(error) throw error;
+    return data === true;
+}
+
+async function decrementProductStocks(items=[]){
+    const clean = (items || []).map(p => ({
+        id: String(p.id),
+        qty: Math.max(1, Number(p.qty || 1))
+    })).filter(p => p.id && p.qty > 0);
+    if(!clean.length) return true;
+    const { data, error } = await supabaseClient.rpc('decrement_product_stocks', {
+        p_items: clean
+    });
+    if(error) throw error;
+    return data === true;
+}
+
+window.decrementProductStock = decrementProductStock;
+window.decrementProductStocks = decrementProductStocks;
+
+function buildWhatsAppPurchaseUrl(purchaseData){
+    const lines = [
+        `Halo ${STORE_SETTINGS.storeName},`,
+        '',
+        'Saya ingin membeli produk berikut:',
+        '',
+        `Produk: ${purchaseData.name || '-'}`,
+        `Harga: Rp ${Number(purchaseData.price || 0).toLocaleString('id-ID')}`,
+        purchaseData.qty ? `Jumlah: ${purchaseData.qty}` : '',
+        '',
+        'Mohon bantu cek ketersediaan dan pilihkan produk yang tersedia.',
+        '',
+        'Terima kasih.'
+    ].filter(Boolean).join('\n');
+
+    return 'https://wa.me/' + STORE_SETTINGS.whatsappOwner + '?text=' + encodeURIComponent(lines);
+}
+
+function openWhatsAppPurchase(purchaseData){
+    clearPendingPurchase();
+    window.location.href = buildWhatsAppPurchaseUrl(purchaseData);
+}
+
+window.requireMemberForPurchase = requireMemberForPurchase;
+window.getPendingPurchase = getPendingPurchase;
+window.clearPendingPurchase = clearPendingPurchase;
+window.buildWhatsAppPurchaseUrl = buildWhatsAppPurchaseUrl;
+window.openWhatsAppPurchase = openWhatsAppPurchase;

@@ -26,7 +26,7 @@ background:#08080d;
 
 color:white;
 
-font-family:'Poppins',Arial,sans-serif;
+font-family:Arial,sans-serif;
 
 }
 
@@ -150,7 +150,7 @@ padding:15px;
 
 width:100%;
 
-height:125px;
+height:200px;
 
 object-fit:cover;
 
@@ -173,7 +173,7 @@ font-size:14px;
 
 color:#00ffd5;
 
-font-size:15px;
+font-size:20px;
 
 font-weight:bold;
 
@@ -195,9 +195,9 @@ button.cart{
 
 width:100%;
 
-padding:8px;
+padding:12px;
 
-margin-top:6px;
+margin-top:10px;
 
 border:0;
 
@@ -266,22 +266,19 @@ color:#aaa;
 
 
 @media(max-width:600px){
-.products{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.card{border-radius:14px;padding:8px}
-.card img{height:105px}
-.card h3{font-size:12px;line-height:1.35}
-.price{font-size:14px}
-.info{font-size:10px;line-height:1.45}
-button.buy,button.cart{font-size:10px;padding:8px 5px}
-.category{gap:6px}
-.category button{padding:8px 10px;font-size:11px}
+
+.products{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
 }
 
 
 </style>
 
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 
@@ -555,27 +552,6 @@ let availability = stock > 0
   ? '<span class="availability available">● Tersedia</span>'
   : '<span class="availability check">● Cek Ketersediaan</span>';
 
-let message =
-
-encodeURIComponent(
-
-`Halo ${STORE_SETTINGS.storeName},
-
-Saya ingin membeli:
-
-Produk:
-${p.name}
-
-Harga:
-Rp ${Number(p.price).toLocaleString("id-ID")}
-
-Mohon cek ketersediaan produk terlebih dahulu.
-
-Terima kasih.`
-
-);
-
-
 
 return `
 
@@ -623,19 +599,9 @@ onclick='addProductCart(${JSON.stringify(p)})'>
 
 
 
-<a href="https://wa.me/${STORE_SETTINGS.whatsappOwner}?text=${message}"
-
-target="_blank">
-
-
-<button class="buy">
-
+<button class="buy" onclick='buyProduct(${JSON.stringify(p)})'>
 💬 Beli Sekarang
-
 </button>
-
-
-</a>
 
 
 
@@ -667,6 +633,35 @@ alert(
 );
 
 
+}
+
+
+async function buyProduct(product){
+    const ok = await requireMemberForPurchase({
+        type: "product",
+        name: product.name,
+        price: Number(product.price || 0),
+        qty: 1
+    });
+    if(ok){
+        try{
+            const updated = await decrementProductStock(product.id, 1);
+            if(!updated){
+                alert('Stok produk sudah habis atau tidak mencukupi. Silakan cek produk lain.');
+                await loadProducts();
+                return;
+            }
+            openWhatsAppPurchase({
+                id: product.id,
+                name: product.name,
+                price: Number(product.price || 0),
+                qty: 1
+            });
+        }catch(e){
+            console.error(e);
+            alert('Stok belum dapat dikurangi. Silakan coba lagi.');
+        }
+    }
 }
 
 
