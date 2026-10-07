@@ -135,9 +135,119 @@ grid-template-columns:1fr;
 
 
 
+
+
+.app-launcher{
+margin-top:28px;
+padding:22px;
+border:1px solid rgba(255,255,255,.09);
+border-radius:24px;
+background:linear-gradient(145deg,rgba(18,18,27,.98),rgba(10,10,16,.98));
+box-shadow:0 15px 45px rgba(0,0,0,.28);
+}
+
+.launcher-kicker{
+font-size:11px;
+letter-spacing:2px;
+font-weight:800;
+color:#00ffd5;
+}
+
+.launcher-head h2{
+margin:6px 0 4px;
+}
+
+.launcher-head p,
+.launcher-note{
+color:#aaa;
+font-size:13px;
+line-height:1.6;
+}
+
+.app-grid{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:12px;
+margin-top:18px;
+}
+
+.app-card{
+width:100%;
+min-height:145px;
+margin:0;
+padding:16px 10px;
+border:1px solid rgba(255,255,255,.08);
+border-radius:18px;
+background:#15151e;
+color:#fff;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:8px;
+transition:transform .2s ease,border-color .2s ease,background .2s ease;
+}
+
+.app-card:hover{
+transform:translateY(-3px);
+border-color:rgba(0,255,213,.5);
+background:#191923;
+}
+
+.app-card:active{
+transform:scale(.97);
+}
+
+.app-logo{
+width:58px;
+height:58px;
+border-radius:16px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:28px;
+font-weight:900;
+box-shadow:0 8px 25px rgba(0,0,0,.25);
+}
+
+.tiktok-logo{background:#111;color:#fff;text-shadow:2px 2px #25f4ee,-2px -2px #fe2c55;}
+.instagram-logo{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);}
+.youtube-logo{background:#f00;}
+.telegram-logo{background:#229ed9;}
+.whatsapp-logo{background:#25d366;}
+
+.app-name{font-size:15px;font-weight:800;}
+.app-action{font-size:11px;color:#00ffd5;font-weight:700;}
+
+.launcher-note{margin:16px 0 0;}
+
+@media(max-width:800px){
+.app-grid{grid-template-columns:repeat(3,1fr);}
+}
+
+@media(max-width:520px){
+.app-launcher{padding:16px;}
+.app-grid{grid-template-columns:repeat(2,1fr);}
+}
+
+
+.app-search{display:flex;gap:10px;margin-top:18px}
+.app-search input{flex:1;min-width:0;padding:15px 16px;border-radius:15px;border:1px solid rgba(255,255,255,.1);background:#0b0b12;color:#fff;outline:none;font-size:14px}
+.app-search input:focus{border-color:rgba(0,255,213,.55);box-shadow:0 0 0 3px rgba(0,255,213,.08)}
+.app-search button,.search-result button{width:auto;margin:0;padding:13px 18px;border-radius:14px;background:#00d9a8;color:#06120f;font-weight:900;white-space:nowrap}
+.search-hint{margin-top:9px;color:#777;font-size:12px}
+.launcher-label{margin-top:22px;color:#00ffd5;font-size:12px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}
+.app-generic{background:linear-gradient(145deg,#171722,#252535);color:#fff}
+.search-result{display:flex;align-items:center;gap:13px;margin-top:16px;padding:14px;border:1px solid rgba(0,255,213,.25);border-radius:18px;background:rgba(0,255,213,.05)}
+.search-result[hidden]{display:none}
+.result-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:#00d9a8;color:#06120f;font-weight:900;font-size:22px}
+.result-copy{flex:1;display:flex;flex-direction:column;gap:3px}.result-copy span{font-size:11px;color:#888}
+@media(max-width:520px){.app-search{flex-direction:column}.app-search button{width:100%}.search-result{align-items:flex-start;flex-wrap:wrap}.search-result button{width:100%}}
+
 </style>
 
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 
@@ -161,6 +271,38 @@ Layanan digital premium Kenzz Store
 
 
 
+
+
+
+<!-- KENZZ UNIVERSAL APP LAUNCHER -->
+<section class="app-launcher" aria-label="Universal App Launcher">
+  <div class="launcher-head">
+    <span class="launcher-kicker">KENZZ UNIVERSAL LAUNCHER</span>
+    <h2>📲 Buka Aplikasi</h2>
+    <p>Cari aplikasi apa pun di Google Play atau buka aplikasi populer langsung dari perangkat.</p>
+  </div>
+
+  <div class="app-search">
+    <input id="appSearch" type="search" placeholder="🔎 Cari aplikasi, misalnya CapCut, Spotify, Gojek..." autocomplete="off">
+    <button type="button" onclick="searchPlayStore()">Cari Aplikasi</button>
+  </div>
+
+  <div id="appSearchHint" class="search-hint">Ketik nama aplikasi lalu tekan Cari Aplikasi.</div>
+
+  <div class="launcher-label">🔥 Aplikasi populer</div>
+  <div class="app-grid" id="popularApps"></div>
+
+  <div id="appSearchResult" class="search-result" hidden>
+    <div class="result-icon">▶</div>
+    <div class="result-copy">
+      <strong id="resultName">Aplikasi</strong>
+      <span>Google Play Store</span>
+    </div>
+    <button type="button" onclick="openPlaySearch()">Buka / Cari →</button>
+  </div>
+
+  <p class="launcher-note">Untuk aplikasi yang terpasang, Kenzz mencoba membuka aplikasi native. Jika perangkat/browser tidak mengizinkan deep link, pengguna diarahkan ke Google Play atau situs resminya.</p>
+</section>
 
 <div class="grid">
 
@@ -331,6 +473,102 @@ Custom
 
 
 <script src="settings.js"></script>
+<script>
+const APP_LINKS = {
+  tiktok:{name:'TikTok',deep:'snssdk1233://',web:'https://www.tiktok.com/',package:'com.zhiliaoapp.musically'},
+  instagram:{name:'Instagram',deep:'instagram://app',web:'https://www.instagram.com/',package:'com.instagram.android'},
+  youtube:{name:'YouTube',deep:'youtube://',web:'https://www.youtube.com/',package:'com.google.android.youtube'},
+  telegram:{name:'Telegram',deep:'tg://resolve',web:'https://telegram.org/',package:'org.telegram.messenger'},
+  whatsapp:{name:'WhatsApp',deep:'whatsapp://send',web:'https://www.whatsapp.com/',package:'com.whatsapp'},
+  facebook:{name:'Facebook',deep:'fb://',web:'https://www.facebook.com/',package:'com.facebook.katana'},
+  spotify:{name:'Spotify',deep:'spotify://',web:'https://open.spotify.com/',package:'com.spotify.music'},
+  netflix:{name:'Netflix',deep:'nflx://',web:'https://www.netflix.com/',package:'com.netflix.mediaclient'},
+  discord:{name:'Discord',deep:'discord://',web:'https://discord.com/',package:'com.discord'},
+  capcut:{name:'CapCut',deep:'capcut://',web:'https://www.capcut.com/',package:'com.lemon.lvoverseas'},
+  canva:{name:'Canva',deep:'canva://',web:'https://www.canva.com/',package:'com.canva.editor'},
+  shopee:{name:'Shopee',deep:'shopee://',web:'https://shopee.co.id/',package:'com.shopee.id'},
+  tokopedia:{name:'Tokopedia',deep:'tokopedia://',web:'https://www.tokopedia.com/',package:'com.tokopedia.tkpd'},
+  gojek:{name:'Gojek',deep:'gojek://',web:'https://www.gojek.com/',package:'com.gojek.app'},
+  grab:{name:'Grab',deep:'grab://',web:'https://www.grab.com/',package:'com.grabtaxi.passenger'},
+  roblox:{name:'Roblox',deep:'roblox://',web:'https://www.roblox.com/',package:'com.roblox.client'},
+  zoom:{name:'Zoom',deep:'zoomus://',web:'https://zoom.us/',package:'us.zoom.videomeetings'},
+  gmail:{name:'Gmail',deep:'googlegmail://',web:'https://mail.google.com/',package:'com.google.android.gm'},
+  maps:{name:'Google Maps',deep:'geo:0,0?q=',web:'https://maps.google.com/',package:'com.google.android.apps.maps'},
+  chrome:{name:'Chrome',deep:'googlechrome://',web:'https://www.google.com/chrome/',package:'com.android.chrome'}
+};
+
+const POPULAR = [
+  ['tiktok','🎵'],['instagram','📸'],['youtube','▶️'],['whatsapp','💬'],
+  ['telegram','✈️'],['facebook','f'],['spotify','🎧'],['netflix','N'],
+  ['discord','☯'],['capcut','✂️'],['canva','C'],['shopee','🛍️'],
+  ['tokopedia','🟢'],['gojek','🛵'],['grab','🚕'],['roblox','🎮'],
+  ['zoom','📹'],['gmail','✉️'],['maps','📍'],['chrome','🌐']
+];
+
+function esc(v){return String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+
+function renderPopular(){
+  const el=document.getElementById('popularApps');
+  el.innerHTML=POPULAR.map(([key,icon])=>{
+    const app=APP_LINKS[key];
+    return `<button class="app-card" type="button" onclick="openApp('${key}')">
+      <span class="app-logo app-generic">${icon}</span>
+      <span class="app-name">${esc(app.name)}</span>
+      <span class="app-action">Buka →</span>
+    </button>`;
+  }).join('');
+}
+
+function openApp(name){
+  const app=APP_LINKS[name];
+  if(!app)return;
+  let hidden=false;
+  const mark=()=>{hidden=true;};
+  document.addEventListener('visibilitychange',mark,{once:true});
+  try{window.location.href=app.deep;}catch(e){}
+  setTimeout(()=>{
+    document.removeEventListener('visibilitychange',mark);
+    if(!hidden) window.location.href=app.web;
+  },1100);
+}
+
+let currentPlayQuery='';
+function searchPlayStore(){
+  const input=document.getElementById('appSearch');
+  const q=input.value.trim();
+  const hint=document.getElementById('appSearchHint');
+  const result=document.getElementById('appSearchResult');
+  if(!q){
+    hint.textContent='Masukkan nama aplikasi terlebih dahulu.';
+    input.focus();
+    return;
+  }
+  currentPlayQuery=q;
+  document.getElementById('resultName').textContent=q;
+  result.hidden=false;
+  hint.textContent='Hasil siap dibuka di Google Play Store.';
+}
+
+function openPlaySearch(){
+  if(!currentPlayQuery)return;
+  const q=encodeURIComponent(currentPlayQuery);
+  const market='market://search?q='+q;
+  const web='https://play.google.com/store/search?q='+q+'&c=apps';
+  let hidden=false;
+  const mark=()=>{hidden=true;};
+  document.addEventListener('visibilitychange',mark,{once:true});
+  try{window.location.href=market;}catch(e){}
+  setTimeout(()=>{
+    document.removeEventListener('visibilitychange',mark);
+    if(!hidden)window.location.href=web;
+  },900);
+}
+
+document.getElementById('appSearch').addEventListener('keydown',e=>{
+  if(e.key==='Enter')searchPlayStore();
+});
+renderPopular();
+</script>
 
 
 <script>

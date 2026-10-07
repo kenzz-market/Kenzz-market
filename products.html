@@ -381,7 +381,6 @@ Memuat produk...
 
 
 <script src="supabase.js"></script>
-<script src="mega-features.js"></script>
 
 
 
@@ -712,10 +711,6 @@ async function buyProduct(product){
 
 
 
-
-async function loadMegaFlash(){try{const sales=await KenzzMega.flashSales();if(!sales.length)return;const products=await getProducts();const rows=sales.map(s=>({...s,p:products.find(p=>String(p.id)===String(s.product_id))})).filter(x=>x.p);if(!rows.length)return;const wrap=document.getElementById('flashSaleWrap');wrap.style.display='block';document.getElementById('flashSaleProducts').innerHTML=rows.map(x=>`<div class="promo-card"><img src="${x.p.image||'https://via.placeholder.com/500'}"><span class="promo-badge">⚡ FLASH SALE</span><h3>${x.p.name}</h3><div class="price">Rp ${Number(x.sale_price).toLocaleString('id-ID')}</div><div class="info">Stok Flash Sale: ${x.stock}</div><p class="countdown" data-expires="${x.expires_at}">⏱ ${new Date(x.expires_at).toLocaleString('id-ID')}</p><button class="buy" onclick="buyFlash('${x.id}')">Beli Flash Sale</button></div>`).join('')}catch(e){console.warn(e)}}
-async function buyFlash(id){try{await requireMemberForPurchase({type:'flash',flashId:id,qty:1});const {data,error}=await supabaseClient.rpc('create_flash_order',{p_flash_id:id,p_qty:1});if(error)throw error;openWhatsAppPurchase({name:data.items?.[0]?.name||'Flash Sale',price:Number(data.total||0),qty:1});}catch(e){alert(e.message)}}
-loadMegaFlash();
 
 loadPromos();
 loadProducts();
