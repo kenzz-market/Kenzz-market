@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Login Member Kenzz Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#08080d;color:#fff;font-family:'Poppins',sans-serif;display:flex;align-items:center;justify-content:center;padding:20px}.box{width:100%;max-width:400px;background:#111119;border:1px solid #ffffff22;border-radius:22px;padding:26px;box-shadow:0 20px 60px #0008}h1{font-family:'Orbitron',sans-serif;text-align:center;font-size:22px;margin:0 0 6px}.sub{text-align:center;color:#aaa;font-size:13px;margin:0 0 20px}.field{width:100%;padding:13px;margin-top:10px;background:#08080d;border:1px solid #333;border-radius:12px;color:#fff;outline:none;font-family:inherit}.button{width:100%;padding:13px;margin-top:14px;border:0;border-radius:12px;background:linear-gradient(135deg,#ff316f,#ff9d00);color:#fff;font-weight:700;cursor:pointer;font-family:inherit}.secondary{background:#ffffff10;border:1px solid #ffffff22}.msg{text-align:center;color:#aaa;margin-top:14px;font-size:13px;min-height:20px}.links{display:flex;justify-content:space-between;gap:10px;margin-top:16px}.links a{color:#fff;text-decoration:none;font-size:13px}.hint{margin-top:14px;padding:10px 12px;border-radius:12px;background:#ffffff08;color:#999;font-size:11px;line-height:1.5}
+</style></head>
+<body><div class="box">
+<h1>👤 KENZZ MEMBER</h1><p class="sub">Masuk ke akun member kamu</p>
+<input class="field" id="identifier" placeholder="Email atau nomor telepon" autocomplete="username">
+<input class="field" id="password" type="password" placeholder="Password" autocomplete="current-password">
+<button class="button" onclick="login()">Masuk</button>
+<button class="button secondary" onclick="google()">🔵 Masuk dengan Google</button>
+<div id="msg" class="msg"></div>
+<div class="links"><a href="register.html">Daftar member</a><a href="index.html">← Kembali ke toko</a></div>
+<div class="hint">Nomor telepon untuk login harus sudah menjadi akun Phone di Supabase Auth. Nomor HP yang hanya tersimpan sebagai profil tidak bisa dipakai sebagai pengganti password.</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase.js"></script>
+<script>
+async function login(){
+ const msg=document.getElementById('msg');
+ try{msg.textContent='Memeriksa akun...';await loginMember(document.getElementById('identifier').value.trim(),document.getElementById('password').value);msg.textContent='Login berhasil.';setTimeout(()=>location.href='profile.html',400);}catch(e){msg.textContent=e.message||'Login gagal.';}
+}
+async function google(){try{await signInGoogle();}catch(e){document.getElementById('msg').textContent=e.message;}}
+</script></body></html>

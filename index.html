@@ -227,8 +227,8 @@ body.light .member-menu a{color:#111}
 <div class="overlay"></div>
 
 <div class="member-menu" id="memberMenu">
-<a href="register.html">👤 Daftar Member</a>
-<a href="profile.html">🙍 Profil Member</a>
+<a id="memberAction" href="member-login.html">👤 Login Member</a>
+<a id="registerAction" href="register.html">📝 Daftar Member</a>
 <a href="login.html">👑 Login Owner</a>
 <a href="members.html">👥 Member Owner</a>
 </div>
@@ -376,5 +376,19 @@ loadStats();
 </script>
 
 
+
+<script>
+(async function(){
+ try{
+  const user=await getCurrentUser();
+  const action=document.getElementById('memberAction');
+  const reg=document.getElementById('registerAction');
+  if(user){
+   if(action){action.href='profile.html';action.textContent='🙍 Profil Member';}
+   if(reg){reg.href='profile.html';reg.textContent='✓ Akun Saya';}
+  }
+ }catch(e){console.log('MEMBER MENU:',e);}
+})();
+</script>
 </body>
 </html>
