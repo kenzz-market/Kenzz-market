@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kenzz Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
 body.light{
 background:#f5f5f5;
@@ -22,7 +24,7 @@ body.light .bottom a{color:#111}
 *{box-sizing:border-box}
 body{
 margin:0;
-font-family:Inter,Arial,sans-serif;
+font-family:'Poppins',Inter,Arial,sans-serif;
 color:#fff;
 background:#050509;
 min-height:100vh;
@@ -56,6 +58,7 @@ align-items:center;
 }
 
 .logo{
+font-family:'Orbitron',sans-serif;
 font-size:24px;
 font-weight:900;
 margin-right:auto;
@@ -80,6 +83,9 @@ background-size:cover;
 background-position:center;
 text-align:center;
 }
+
+.hero h1,.logo{font-family:'Orbitron',sans-serif;font-weight:900;letter-spacing:2px}
+.button,.item{font-family:'Poppins',sans-serif;font-weight:700}
 
 .button{
 display:inline-block;
@@ -140,6 +146,7 @@ gap:12px;
 
 .social a{
 padding:12px;
+font-size:18px;
 border-radius:50%;
 background:#ffffff15;
 color:white;
@@ -269,28 +276,28 @@ body.light .member-menu a{color:#111}
 <div class="card socialmedia">
 <h2>🌐 Sosial Media & Community</h2>
 <div class="social">
-<a id="ig">📷</a>
-<a id="tt">🎵</a>
-<a id="yt">▶️</a>
-<a id="tg">✈️</a>
+<a id="ig" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+<a id="tt" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+<a id="yt" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+<a id="tg" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
 </div>
 
 <br>
 
-<a class="button" id="waChannel">📢 Saluran WhatsApp</a>
-<a class="button" id="waGroup">👥 Grup WhatsApp</a>
+<a class="button" id="waChannel"><i class="fa-brands fa-whatsapp"></i> Saluran WhatsApp</a>
+<a class="button" id="waGroup"><i class="fa-brands fa-whatsapp"></i> Grup WhatsApp</a>
 
 </div>
 
 </div>
 
-<a id="wa" class="wa">💬</a>
+<a id="wa" class="wa" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
 
 <nav class="bottom">
-<a href="index.html">🏠</a>
-<a href="announcement.html">🔔</a>
-<a href="cart.html">🛒</a>
-<a href="login.html">👑</a>
+<a href="index.html" aria-label="Home"><i class="fa-solid fa-house"></i></a>
+<a href="announcement.html" aria-label="Update"><i class="fa-solid fa-bell"></i></a>
+<a href="cart.html" aria-label="Keranjang"><i class="fa-solid fa-cart-shopping"></i></a>
+<a href="login.html" aria-label="Admin"><i class="fa-solid fa-crown"></i></a>
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
