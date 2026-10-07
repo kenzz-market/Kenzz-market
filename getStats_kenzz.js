@@ -2,63 +2,25 @@
 // KENZZ STORE STATISTIK AUTO
 // =====================================
 
-
 async function getStats(){
+    let products = 0;
+    let member = 0;
 
+    const productResult = await supabaseClient
+        .from("products")
+        .select("*", { count:"exact", head:true });
 
-    const { count: products, error } =
+    if(!productResult.error) products = productResult.count || 0;
 
-    await supabaseClient
-
-    .from("products")
-
-    .select("*", {
-
-        count:"exact",
-
-        head:true
-
-    });
-
-
-
-    if(error){
-
-        console.log(
-            "STAT ERROR:",
-            error
-        );
-
-
-        return {
-
-            products:0,
-
-            member:0,
-
-            uptime:"99%"
-
-        };
-
+    if(typeof getMemberCount === "function"){
+        member = await getMemberCount();
     }
 
-
-
     return {
-
-        products: products || 0,
-
-        member: 0,
-
-        uptime: "99%"
-
+        products,
+        member,
+        uptime:"99%"
     };
-
-
 }
-
-
-
-// EXPORT GLOBAL
 
 window.getStats = getStats;
