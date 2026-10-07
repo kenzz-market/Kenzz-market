@@ -22,29 +22,13 @@ const STORE_SETTINGS = {
     version: "1.0.0",
 
 
-
     // =========================
     // KONTAK WHATSAPP
     // =========================
 
-    whatsappOwner:
-    "6283194748380",
+    whatsappOwner: "6283194748380",
 
-    supportWhatsapp:
-    "6283194748380",
-
-
-    // =========================
-    // WHATSAPP COMMUNITY
-    // =========================
-
-    whatsappChannel:
-    "https://whatsapp.com/channel/0029VbBgwqRF6smwQktSGi1i",
-
-
-    whatsappGroup:
-    "https://chat.whatsapp.com/JYepT5u3BTI33kermw0NED",
-
+    supportWhatsapp: "6283194748380",
 
 
     // =========================
@@ -54,64 +38,27 @@ const STORE_SETTINGS = {
     socialMedia: {
 
         tiktok:
-        "https://www.tiktok.com/@kenzzeln2?_r=1&_t=ZS-9AKQO1w2fvo",
+        "https://www.tiktok.com/@kenzzel",
 
         instagram:
-        "https://www.instagram.com/kenzzeln?stkn=MWNhaWpmNjh5Nnd6NA==",
+        "https://www.instagram.com/@kenzzeln",
 
         youtube:
-        "https://youtube.com/@rakenn_yt?si=txcgDo7LFpK85Z8v",
+        "https://www.youtube.com/@rakenn_yt",
 
         telegram:
-        "t.me/Ryukenntzy"
+        "https://t.me/ryukenntzy"
 
     },
-
-
-
-    // =========================
-    // MEDIA WEBSITE
-    // =========================
-
-    backgroundVideo:
-    "https://link-video-kamu.mp4",
-
-
-    heroImage:
-    "https://link-foto-kamu.jpg",
-
-
-
-    // =========================
-    // STATISTIK TOKO
-    // =========================
-
-    stats: {
-
-        member:
-        "56+",
-
-        products:
-        "0+",
-
-        uptime:
-        "99%"
-
-    },
-
 
 
     // =========================
     // TOKO
     // =========================
 
-    currency:
-    "IDR",
+    currency: "IDR",
 
-
-    defaultTheme:
-    "dark",
-
+    defaultTheme: "dark",
 
 
     // =========================
@@ -122,8 +69,8 @@ const STORE_SETTINGS = {
 
     "Halo bg kenzz, apakah ini pemilik kenzz store? ."
 
-};
 
+};
 
 
 // Jangan dihapus

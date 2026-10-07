@@ -175,7 +175,37 @@ button{font:inherit}
   .features{grid-template-columns:1fr 1fr}.feature{padding:14px}.feature p{font-size:11px}
   #product-list{grid-template-columns:1fr}
 }
+
+body{font-family:'Poppins',sans-serif;}
+.logo,.hero h1{font-family:'Orbitron',sans-serif;font-weight:900;letter-spacing:2px;}
+.button,.item{font-family:'Poppins',sans-serif;font-weight:700;}
+
+.icon-btn{
+width:45px;height:45px;
+display:flex;align-items:center;justify-content:center;
+border-radius:50%;
+background:#ffffff18;
+border:1px solid #ffffff30;
+font-size:22px;
+transition:.3s;
+}
+.icon-btn:hover{transform:translateY(-4px) scale(1.08);}
+
+.community{
+display:inline-flex;
+align-items:center;
+gap:8px;
+padding:13px 18px;
+border-radius:15px;
+text-decoration:none;
+color:white;
+font-weight:700;
+background:#ffffff15;
+border:1px solid #ffffff30;
+}
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
@@ -192,9 +222,8 @@ button{font:inherit}
     <a href="index.html" onclick="closeMenu()">🏠 Home</a>
     <a href="#store" onclick="closeMenu()">🛒 Store</a>
     <a href="#updates" onclick="closeMenu()">🔔 Update</a>
-    <a href="register.html">👤 Daftar Member</a>
-    <a href="profile.html">🪪 Profil Member</a>
-    <a href="login.html">👑 Admin</a>
+    <a href="register.html">👤 Member</a>
+    <a href="admin.html">👑 Admin</a>
   </aside>
 
   <header class="top">
@@ -250,11 +279,11 @@ button{font:inherit}
         <div class="online">online</div>
       </div>
       <div class="socials">
-        <div class="social">🎵</div><div class="social">▶️</div><div class="social">💬</div>
-        <div class="social">📷</div><div class="social">✈️</div><div class="social">𝕏</div>
+        <div class="social"><i class="fa-brands fa-tiktok"></i></div><div class="social"><i class="fa-brands fa-youtube"></i></div><div class="social">💬</div>
+        <div class="social"><i class="fa-brands fa-instagram"></i></div><div class="social"><i class="fa-brands fa-telegram"></i></div><div class="social">𝕏</div>
       </div>
       <div class="stats">
-        <div class="stat"><strong id="member-count">0</strong><small>Member</small></div>
+        <div class="stat"><strong id="member-count">0</strong><small>Pelanggan</small></div>
         <div class="stat"><strong id="product-count">0</strong><small>Produk Store</small></div>
         <div class="stat"><strong>0%</strong><small>Kepuasan</small></div>
       </div>
@@ -296,7 +325,6 @@ button{font:inherit}
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
 <script>
 (function () {
@@ -385,16 +413,6 @@ button{font:inherit}
     }[char]));
   }
 
-  async function loadMemberCount() {
-    try {
-      const count = await window.getMemberCount();
-      $("#member-count").textContent = Number(count || 0);
-    } catch (error) {
-      console.error("Gagal memuat jumlah member:", error);
-      $("#member-count").textContent = "0";
-    }
-  }
-
   async function loadProducts() {
     const list = $("#product-list");
 
@@ -426,6 +444,17 @@ button{font:inherit}
       renderProducts();
     });
   });
+
+  async function loadMemberCount() {
+    const el = $("#member-count");
+    if (!el || typeof window.getMemberCount !== "function") return;
+    try {
+      el.textContent = await window.getMemberCount();
+    } catch (error) {
+      console.error("Gagal memuat jumlah member:", error);
+      el.textContent = "0";
+    }
+  }
 
   clock();
   setInterval(clock, 1000);
