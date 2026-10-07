@@ -7,242 +7,38 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Keranjang Kenzz Store</title>
+<title>Keranjang • Kenzz Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet>
 
 
 <style>
-
-*{
-box-sizing:border-box;
-}
-
-
-body{
-
-margin:0;
-
-padding:20px;
-
-background:#08080d;
-
-color:white;
-
-font-family:Arial,sans-serif;
-
-}
-
-
-
-.container{
-
-max-width:800px;
-
-margin:auto;
-
-}
-
-
-
-h1{
-
-text-align:center;
-
-}
-
-
-
-.card{
-
-display:flex;
-
-gap:15px;
-
-align-items:center;
-
-background:#111119;
-
-border:1px solid #333;
-
-border-radius:18px;
-
-padding:15px;
-
-margin-top:15px;
-
-}
-
-
-
-.card img{
-
-width:80px;
-
-height:80px;
-
-border-radius:12px;
-
-object-fit:cover;
-
-}
-
-
-
-.info{
-
-flex:1;
-
-}
-
-
-
-.price{
-
-color:#00ffd5;
-
-font-weight:bold;
-
-}
-
-
-
-.qty{
-
-display:flex;
-
-gap:8px;
-
-align-items:center;
-
-}
-
-
-
-.qty button{
-
-width:30px;
-
-height:30px;
-
-border:0;
-
-border-radius:8px;
-
-cursor:pointer;
-
-}
-
-
-
-.remove{
-
-background:#ff316f;
-
-color:white;
-
-}
-
-
-
-.checkout{
-
-width:100%;
-
-padding:15px;
-
-margin-top:20px;
-
-border:0;
-
-border-radius:15px;
-
-background:#25d366;
-
-color:white;
-
-font-size:16px;
-
-font-weight:bold;
-
-cursor:pointer;
-
-}
-
-
-
-.total{
-
-margin-top:20px;
-
-font-size:22px;
-
-font-weight:bold;
-
-text-align:right;
-
-color:#00ffd5;
-
-}
-
-
-
-.empty{
-
-text-align:center;
-
-padding:50px;
-
-color:#aaa;
-
-}
-
-
-</style>
+*{box-sizing:border-box}
+:root{--pink:#ff316f;--cyan:#00ffd5;--green:#25d366;--bg:#07070c;--panel:rgba(16,16,26,.88);--line:rgba(255,255,255,.09)}
+body{margin:0;min-height:100vh;padding:18px;background:radial-gradient(circle at 10% 0%,rgba(255,49,111,.12),transparent 28%),radial-gradient(circle at 90% 10%,rgba(0,255,213,.08),transparent 25%),var(--bg);color:#fff;font-family:Poppins,Arial,sans-serif}
+.container{max-width:980px;margin:auto}.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.back{display:inline-flex;align-items:center;gap:8px;color:#fff;text-decoration:none;background:#151520;border:1px solid var(--line);padding:10px 13px;border-radius:12px;font-weight:700}.brand{font-family:Orbitron,sans-serif;font-weight:900;letter-spacing:1px}.hero{background:linear-gradient(135deg,rgba(255,49,111,.16),rgba(0,255,213,.07));border:1px solid var(--line);border-radius:24px;padding:22px;margin-bottom:16px;box-shadow:0 20px 55px rgba(0,0,0,.25)}.hero h1{margin:0;font-family:Orbitron,sans-serif;font-size:28px}.hero p{margin:7px 0 0;color:#aaa}.cart-grid{display:grid;grid-template-columns:1fr 320px;gap:16px}.card{display:flex;gap:14px;align-items:center;background:var(--panel);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:20px;padding:13px;margin-bottom:11px;box-shadow:0 12px 35px rgba(0,0,0,.18)}.card img{width:86px;height:86px;border-radius:15px;object-fit:cover;background:#101018}.info{flex:1;min-width:0}.info h3{margin:0 0 6px;font-size:15px}.price{color:var(--cyan);font-weight:800;font-size:15px}.subtotal{color:#aaa;font-size:12px;margin-top:4px}.qty{display:flex;gap:7px;align-items:center;margin-top:10px}.qty button{width:31px;height:31px;border:1px solid #333;border-radius:9px;background:#181823;color:#fff;font-weight:800;cursor:pointer}.qty button:hover{border-color:var(--cyan)}.qty b{min-width:25px;text-align:center}.remove{width:auto!important;padding:0 10px;background:rgba(255,49,111,.13)!important;border-color:rgba(255,49,111,.35)!important;color:#ff7b9f!important}.summary{background:var(--panel);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:22px;padding:20px;height:max-content;position:sticky;top:14px;box-shadow:0 16px 45px rgba(0,0,0,.22)}.summary h2{margin:0 0 15px;font-size:18px}.line{display:flex;justify-content:space-between;gap:12px;color:#aaa;margin:10px 0;font-size:13px}.line strong{color:#fff}.total{border-top:1px solid var(--line);padding-top:14px;margin-top:14px;display:flex;justify-content:space-between;font-size:20px;font-weight:900;color:var(--cyan)}.checkout{width:100%;padding:14px;margin-top:18px;border:0;border-radius:14px;background:linear-gradient(135deg,#25d366,#19b957);color:#fff;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 10px 25px rgba(37,211,102,.18)}.checkout:hover{transform:translateY(-1px)}.secure{margin-top:11px;text-align:center;color:#777;font-size:11px}.empty{text-align:center;padding:55px 20px;color:#999;background:var(--panel);border:1px dashed #333;border-radius:20px}.empty .icon{font-size:45px;margin-bottom:10px}.continue{display:inline-block;margin-top:13px;color:var(--cyan);text-decoration:none;font-weight:700}.count{color:#aaa;font-size:12px;margin-top:2px}@media(max-width:760px){body{padding:12px}.cart-grid{grid-template-columns:1fr}.summary{position:static}.hero h1{font-size:22px}.card img{width:72px;height:72px}.topbar{align-items:flex-start}.brand{font-size:14px}}</style>
 
 
 </head>
 
 
 <body>
-
-
 <div class="container">
-
-
-<h1>
-🛒 Keranjang
-</h1>
-
-
-
-<div id="cart">
-
+  <div class="topbar"><a class="back" href="products.html">← Belanja lagi</a><div class="brand">KENZZ STORE</div></div>
+  <div class="hero"><h1>🛒 Keranjang Belanja</h1><p>Produk pilihanmu sudah siap. Tinggal cek pesanan dan lanjut ke Owner.</p></div>
+  <div class="cart-grid">
+    <div><div id="cart"></div></div>
+    <aside class="summary">
+      <h2>Ringkasan Pesanan</h2>
+      <div class="line"><span>Jumlah produk</span><strong id="itemCount">0 item</strong></div>
+      <div class="line"><span>Status</span><strong style="color:#7dffbf">● Siap diproses</strong></div>
+      <div class="total"><span>Total</span><span>Rp <span id="total">0</span></span></div>
+      <button class="checkout" onclick="checkout()">💬 Lanjut ke WhatsApp Owner</button>
+      <div class="secure">🔒 Pembelian dilanjutkan bersama Owner untuk cek ketersediaan.</div>
+    </aside>
+  </div>
 </div>
-
-
-
-<div class="total">
-
-Total:
-Rp <span id="total">0</span>
-
-</div>
-
-
-
-<button class="checkout"
-onclick="checkout()">
-
-💬 Checkout WhatsApp
-
-</button>
-
-
-
-</div>
-
-
-
-
 
 <script src="settings.js"></script>
 
@@ -261,153 +57,20 @@ getCart();
 
 
 function renderCart(){
-
-
-const box =
-document.getElementById("cart");
-
-
-if(!cart.length){
-
-
-box.innerHTML=
-
-`
-
-<div class="empty">
-
-Keranjang masih kosong
-
-</div>
-
-`;
-
-
-
-document
-.getElementById("total")
-.innerHTML="0";
-
-
-return;
-
-
+  const box=document.getElementById("cart");
+  const itemCount=cart.reduce((n,p)=>n+Number(p.qty||1),0);
+  document.getElementById("itemCount").textContent=itemCount+" item"+(itemCount===1?"":"");
+  if(!cart.length){
+    box.innerHTML=`<div class="empty"><div class="icon">🛒</div><h3>Keranjang masih kosong</h3><p>Belum ada produk yang kamu pilih.</p><a class="continue" href="products.html">Mulai belanja →</a></div>`;
+    document.getElementById("total").textContent="0"; return;
+  }
+  let total=0;
+  box.innerHTML=cart.map((p,index)=>{
+    const price=Number(p.price||0), qty=Number(p.qty||1), sub=price*qty; total+=sub;
+    return `<div class="card"><img src="${p.image||'https://via.placeholder.com/100'}" alt="${p.name||'Produk'}"><div class="info"><h3>${p.name||'Produk'}</h3><div class="price">Rp ${price.toLocaleString('id-ID')}</div><div class="subtotal">Subtotal: Rp ${sub.toLocaleString('id-ID')}</div><div class="qty"><button onclick="minus(${index})">−</button><b>${qty}</b><button onclick="plus(${index})">+</button><button class="remove" onclick="removeItem(${index})">Hapus</button></div></div></div>`;
+  }).join("");
+  document.getElementById("total").textContent=total.toLocaleString("id-ID");
 }
-
-
-
-
-
-let total=0;
-
-
-
-
-box.innerHTML =
-
-cart.map((p,index)=>{
-
-
-let price =
-Number(p.price);
-
-
-total +=
-price * p.qty;
-
-
-
-return `
-
-
-<div class="card">
-
-
-<img src="${p.image || 'https://via.placeholder.com/100'}">
-
-
-<div class="info">
-
-
-<h3>
-
-${p.name}
-
-</h3>
-
-
-<div class="price">
-
-Rp ${price.toLocaleString("id-ID")}
-
-</div>
-
-
-
-<div class="qty">
-
-
-<button onclick="minus(${index})">
-
--
-
-</button>
-
-
-
-<b>
-
-${p.qty}
-
-</b>
-
-
-
-<button onclick="plus(${index})">
-
-+
-
-</button>
-
-
-
-<button class="remove"
-
-onclick="removeItem(${index})">
-
-Hapus
-
-</button>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-`;
-
-
-}).join("");
-
-
-
-document
-.getElementById("total")
-.innerHTML =
-
-total.toLocaleString("id-ID");
-
-
-}
-
-
-
-
 
 function save(){
 
