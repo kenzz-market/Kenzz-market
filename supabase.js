@@ -2,7 +2,9 @@
 // KENZZ STORE SUPABASE SYSTEM
 // =====================================
 
+
 // URL & KEY SUPABASE
+
 const SUPABASE_URL =
 "https://uvcmkwwczsrjzsujomjb.supabase.co";
 
@@ -18,6 +20,7 @@ supabase.createClient(
 );
 
 
+
 // =====================================
 // AUTH LOGIN
 // =====================================
@@ -25,10 +28,7 @@ supabase.createClient(
 
 async function loginUser(email,password){
 
-    const {
-        data,
-        error
-    } =
+    const {data,error} =
     await supabaseClient.auth.signInWithPassword({
 
         email,
@@ -59,6 +59,7 @@ async function logoutUser(){
 
     await supabaseClient.auth.signOut();
 
+
     localStorage.removeItem(
         "kenzz_role"
     );
@@ -78,19 +79,42 @@ async function logoutUser(){
 
 async function checkRole(){
 
-const {data:userData}=await supabaseClient.auth.getUser();
 
-console.log("USER LOGIN:",userData);
+    const {data:userData}
+    =
+    await supabaseClient.auth.getUser();
 
-const {data,error}=await supabaseClient
-.from("admins")
-.select("*")
-.eq("user_id",userData.user.id);
 
-console.log("DATA ADMIN:",data);
-console.log("ERROR:",error);
+    if(!userData.user){
 
-return data?.[0]?.role || null;
+        return null;
+
+    }
+
+
+    const {data,error}
+    =
+    await supabaseClient
+
+    .from("admins")
+
+    .select("*")
+
+    .eq(
+        "user_id",
+        userData.user.id
+    );
+
+
+    if(error){
+
+        console.log(error);
+
+    }
+
+
+    return data?.[0]?.role || null;
+
 }
 
 
@@ -103,12 +127,8 @@ return data?.[0]?.role || null;
 async function getProducts(){
 
 
-    const {
-        data,
-        error
-
-    } =
-
+    const {data,error}
+    =
     await supabaseClient
 
     .from("products")
@@ -126,6 +146,11 @@ async function getProducts(){
 
     if(error){
 
+        console.log(
+            "GET PRODUCT ERROR:",
+            error
+        );
+
         throw error;
 
     }
@@ -141,21 +166,26 @@ async function getProducts(){
 async function addProduct(product){
 
 
-    const {
-        data,
-        error
-
-    } =
-
+    const {data,error}
+    =
     await supabaseClient
 
     .from("products")
 
-    .insert(product);
+    .insert([
+        product
+    ])
+
+    .select();
 
 
 
     if(error){
+
+        console.log(
+            "ADD PRODUCT ERROR:",
+            error
+        );
 
         throw error;
 
@@ -169,15 +199,12 @@ async function addProduct(product){
 
 
 
+
 async function updateProduct(id,product){
 
 
-    const {
-        data,
-        error
-
-    } =
-
+    const {data,error}
+    =
     await supabaseClient
 
     .from("products")
@@ -187,7 +214,9 @@ async function updateProduct(id,product){
     .eq(
         "id",
         id
-    );
+    )
+
+    .select();
 
 
 
@@ -205,16 +234,11 @@ async function updateProduct(id,product){
 
 
 
-
 async function deleteProduct(id){
 
 
-    const {
-        data,
-        error
-
-    } =
-
+    const {data,error}
+    =
     await supabaseClient
 
     .from("products")
@@ -260,7 +284,10 @@ function getCart(){
 
 
 
+
+
 function saveCart(cart){
+
 
     localStorage.setItem(
 
@@ -282,19 +309,25 @@ function addToCart(product){
     getCart();
 
 
+
     const exist =
     cart.find(
+
         item =>
         item.id === product.id
+
     );
 
 
 
     if(exist){
 
+
         exist.qty++;
 
+
     }else{
+
 
         cart.push({
 
@@ -304,7 +337,9 @@ function addToCart(product){
 
         });
 
+
     }
+
 
 
     saveCart(cart);
@@ -315,8 +350,8 @@ function addToCart(product){
 
 
 
-
 function clearCart(){
+
 
     localStorage.removeItem(
         "kenzz_cart"
@@ -325,209 +360,6 @@ function clearCart(){
 }
 
 
-
-
-// =====================================
-// MEMBER SYSTEM
-// =====================================
-
-async function getMemberCount(){
-
-    const {
-        data,
-        error
-    } = await supabaseClient.rpc("get_member_count");
-
-    if(error){
-        console.error("Gagal mengambil jumlah member:", error);
-        return 0;
-    }
-
-    return Number(data || 0);
-}
-
-
-async function getMemberProfile(){
-
-    const {
-        data: { user },
-        error: userError
-    } = await supabaseClient.auth.getUser();
-
-    if(userError || !user){
-        return null;
-    }
-
-    const {
-        data,
-        error
-    } = await supabaseClient
-        .from("members")
-        .select("*")
-        .eq("user_id", user.id)
-        .maybeSingle();
-
-    if(error){
-        throw error;
-    }
-
-    return data || null;
-}
-
-
-async function createMember(member){
-
-    const {
-        data,
-        error
-    } = await supabaseClient
-        .from("members")
-        .insert(member)
-        .select()
-        .single();
-
-    if(error){
-        throw error;
-    }
-
-    return data;
-}
-
-
-async function updateMember(userId, member){
-
-    const {
-        data,
-        error
-    } = await supabaseClient
-        .from("members")
-        .update(member)
-        .eq("user_id", userId)
-        .select()
-        .single();
-
-    if(error){
-        throw error;
-    }
-
-    return data;
-}
-
-
-// =====================================
-// OWNER NOTIFICATIONS
-// =====================================
-
-async function getOwnerNotifications(){
-
-    const {
-        data,
-        error
-    } = await supabaseClient
-        .from("notifications")
-        .select("*")
-        .eq("is_read", false)
-        .order("created_at", { ascending:false });
-
-    if(error){
-        console.error("Gagal mengambil notifikasi:", error);
-        return [];
-    }
-
-    return data || [];
-}
-
-
-async function getAllOwnerNotifications(){
-
-    const {
-        data,
-        error
-    } = await supabaseClient
-        .from("notifications")
-        .select("*")
-        .order("created_at", { ascending:false });
-
-    if(error){
-        console.error("Gagal mengambil semua notifikasi:", error);
-        return [];
-    }
-
-    return data || [];
-}
-
-
-async function markNotificationAsRead(id){
-
-    const {
-        error
-    } = await supabaseClient
-        .from("notifications")
-        .update({ is_read:true })
-        .eq("id", id);
-
-    if(error){
-        throw error;
-    }
-
-    return true;
-}
-
-
-async function markAllNotificationsAsRead(){
-
-    const {
-        error
-    } = await supabaseClient
-        .from("notifications")
-        .update({ is_read:true })
-        .eq("is_read", false);
-
-    if(error){
-        throw error;
-    }
-
-    return true;
-}
-
-
-// =====================================
-// MEMBER LIST FOR OWNER
-// =====================================
-
-async function getMembers(){
-
-    const {
-        data,
-        error
-    } = await supabaseClient
-        .from("members")
-        .select("*")
-        .order("created_at", { ascending:false });
-
-    if(error){
-        throw error;
-    }
-
-    return data || [];
-}
-
-
-// =====================================
-// EXPORT MEMBER SYSTEM
-// =====================================
-
-window.getMemberCount = getMemberCount;
-window.getMemberProfile = getMemberProfile;
-window.createMember = createMember;
-window.updateMember = updateMember;
-
-window.getOwnerNotifications = getOwnerNotifications;
-window.getAllOwnerNotifications = getAllOwnerNotifications;
-window.markNotificationAsRead = markNotificationAsRead;
-window.markAllNotificationsAsRead = markAllNotificationsAsRead;
-
-window.getMembers = getMembers;
 
 // =====================================
 // EXPORT GLOBAL
@@ -546,6 +378,7 @@ window.checkRole =
 checkRole;
 
 
+
 window.getProducts =
 getProducts;
 
@@ -562,6 +395,7 @@ window.deleteProduct =
 deleteProduct;
 
 
+
 window.getCart =
 getCart;
 
@@ -576,3 +410,154 @@ addToCart;
 
 window.clearCart =
 clearCart;
+
+
+// =====================================
+// KENZZ STORE MEMBER SYSTEM
+// =====================================
+
+async function getMemberCount(){
+    const { data, error } = await supabaseClient.rpc("get_member_count");
+    if(error){
+        console.error("MEMBER COUNT ERROR:", error);
+        return 0;
+    }
+    return Number(data || 0);
+}
+
+async function getCurrentUser(){
+    const { data, error } = await supabaseClient.auth.getUser();
+    if(error || !data?.user) return null;
+    return data.user;
+}
+
+async function getMemberProfile(){
+    const user = await getCurrentUser();
+    if(!user) return null;
+
+    const { data, error } = await supabaseClient
+        .from("members")
+        .select("*")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+    if(error) throw error;
+    return data || null;
+}
+
+async function updateMember(userId, member){
+    const { data, error } = await supabaseClient
+        .from("members")
+        .update(member)
+        .eq("user_id", userId)
+        .select()
+        .single();
+
+    if(error) throw error;
+    return data;
+}
+
+async function signUpMember(email, password, name, phone){
+    const { data, error } = await supabaseClient.auth.signUp({
+        email,
+        password,
+        options: {
+            data: {
+                name: name || "",
+                phone: phone || ""
+            }
+        }
+    });
+
+    if(error) throw error;
+    return data;
+}
+
+async function signInGoogle(){
+    const { data, error } = await supabaseClient.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+            redirectTo: window.location.origin + "/index.html"
+        }
+    });
+    if(error) throw error;
+    return data;
+}
+
+async function sendPhoneOtp(phone){
+    const { data, error } = await supabaseClient.auth.signInWithOtp({
+        phone
+    });
+    if(error) throw error;
+    return data;
+}
+
+async function verifyPhoneOtp(phone, token){
+    const { data, error } = await supabaseClient.auth.verifyOtp({
+        phone,
+        token,
+        type: "sms"
+    });
+    if(error) throw error;
+    return data;
+}
+
+async function getMembers(){
+    const role = await checkRole();
+    if(role !== "owner") throw new Error("Akses hanya untuk owner.");
+
+    const { data, error } = await supabaseClient
+        .from("members")
+        .select("*")
+        .order("created_at", { ascending:false });
+
+    if(error) throw error;
+    return data || [];
+}
+
+async function getOwnerNotifications(unreadOnly=true){
+    const role = await checkRole();
+    if(role !== "owner") throw new Error("Akses hanya untuk owner.");
+
+    let query = supabaseClient
+        .from("notifications")
+        .select("*")
+        .order("created_at", { ascending:false });
+
+    if(unreadOnly) query = query.eq("is_read", false);
+
+    const { data, error } = await query;
+    if(error) throw error;
+    return data || [];
+}
+
+async function markNotificationAsRead(id){
+    const { error } = await supabaseClient
+        .from("notifications")
+        .update({ is_read:true })
+        .eq("id", id);
+    if(error) throw error;
+    return true;
+}
+
+async function markAllNotificationsAsRead(){
+    const { error } = await supabaseClient
+        .from("notifications")
+        .update({ is_read:true })
+        .eq("is_read", false);
+    if(error) throw error;
+    return true;
+}
+
+window.getMemberCount = getMemberCount;
+window.getCurrentUser = getCurrentUser;
+window.getMemberProfile = getMemberProfile;
+window.updateMember = updateMember;
+window.signUpMember = signUpMember;
+window.signInGoogle = signInGoogle;
+window.sendPhoneOtp = sendPhoneOtp;
+window.verifyPhoneOtp = verifyPhoneOtp;
+window.getMembers = getMembers;
+window.getOwnerNotifications = getOwnerNotifications;
+window.markNotificationAsRead = markNotificationAsRead;
+window.markAllNotificationsAsRead = markAllNotificationsAsRead;
