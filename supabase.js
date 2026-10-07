@@ -361,6 +361,66 @@ function clearCart(){
 
 
 
+
+
+// =====================================
+// KATALOG PRODUK PROMO
+// =====================================
+
+async function getPromoProducts(){
+    const {data,error}=await supabaseClient
+        .from('promo_products')
+        .select('*')
+        .eq('is_active', true)
+        .gt('expires_at', new Date().toISOString())
+        .order('created_at',{ascending:false});
+    if(error) throw error;
+    return data || [];
+}
+
+async function addPromoProduct(promo){
+    const {data,error}=await supabaseClient
+        .from('promo_products')
+        .insert([promo])
+        .select();
+    if(error) throw error;
+    return data;
+}
+
+async function updatePromoProduct(id,promo){
+    const {data,error}=await supabaseClient
+        .from('promo_products')
+        .update(promo)
+        .eq('id',id)
+        .select();
+    if(error) throw error;
+    return data;
+}
+
+async function deletePromoProduct(id){
+    const {data,error}=await supabaseClient
+        .from('promo_products')
+        .delete()
+        .eq('id',id);
+    if(error) throw error;
+    return data;
+}
+
+async function decrementPromoStock(id,qty=1){
+    const {data,error}=await supabaseClient.rpc('decrement_promo_stock',{
+        p_promo_id:String(id),
+        p_qty:Math.max(1,Number(qty||1))
+    });
+    if(error) throw error;
+    return data === true;
+}
+
+window.getPromoProducts=getPromoProducts;
+window.addPromoProduct=addPromoProduct;
+window.updatePromoProduct=updatePromoProduct;
+window.deletePromoProduct=deletePromoProduct;
+window.decrementPromoStock=decrementPromoStock;
+
 // =====================================
 // EXPORT GLOBAL
 // =====================================
@@ -577,6 +637,48 @@ async function logoutMember(){
     location.href='index.html';
 }
 window.logoutMember=logoutMember;
+
+
+// =====================================
+// OWNER MANAGEMENT
+// =====================================
+
+async function getAdmins(){
+    const role=await checkRole();
+    if(role!=="owner") throw new Error("Akses hanya untuk owner.");
+    const {data,error}=await supabaseClient.rpc("owner_list_admins");
+    if(error) throw error;
+    return data || [];
+}
+
+async function addAdminByEmail(email){
+    const role=await checkRole();
+    if(role!=="owner") throw new Error("Akses hanya untuk owner.");
+    const {data,error}=await supabaseClient.rpc("owner_add_admin_by_email",{p_email:email});
+    if(error) throw error;
+    return data;
+}
+
+async function deleteAdmin(userId){
+    const role=await checkRole();
+    if(role!=="owner") throw new Error("Akses hanya untuk owner.");
+    const {data,error}=await supabaseClient.rpc("owner_delete_admin",{p_user_id:userId});
+    if(error) throw error;
+    return data;
+}
+
+async function deleteMember(userId){
+    const role=await checkRole();
+    if(role!=="owner") throw new Error("Akses hanya untuk owner.");
+    const {data,error}=await supabaseClient.rpc("owner_delete_member",{p_user_id:userId});
+    if(error) throw error;
+    return data;
+}
+
+window.getAdmins=getAdmins;
+window.addAdminByEmail=addAdminByEmail;
+window.deleteAdmin=deleteAdmin;
+window.deleteMember=deleteMember;
 
 // =====================================
 // MEMBER PURCHASE GATE

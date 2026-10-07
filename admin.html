@@ -7,194 +7,18 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Admin Kenzz Store</title>
+<title>Owner Center • Kenzz Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 
 <style>
-
-*{
-box-sizing:border-box;
-}
-
-
-body{
-
-margin:0;
-
-padding:20px;
-
-background:#08080d;
-
-color:white;
-
-font-family:Arial,sans-serif;
-
-}
-
-
-
-.container{
-
-max-width:900px;
-
-margin:auto;
-
-}
-
-
-
-.header{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-margin-bottom:20px;
-
-}
-
-
-
-button{
-
-padding:12px;
-
-border:0;
-
-border-radius:12px;
-
-cursor:pointer;
-
-font-weight:bold;
-
-}
-
-
-
-.logout{
-
-background:#ff316f;
-
-color:white;
-
-}
-
-
-
-.card{
-
-background:#111119;
-
-border:1px solid #333;
-
-border-radius:18px;
-
-padding:20px;
-
-margin-bottom:20px;
-
-}
-
-
-
-input{
-
-width:100%;
-
-padding:12px;
-
-margin-top:10px;
-
-background:#08080d;
-
-border:1px solid #333;
-
-border-radius:12px;
-
-color:white;
-
-}
-
-
-
-.save{
-
-width:100%;
-
-margin-top:15px;
-
-background:#25d366;
-
-color:white;
-
-}
-
-
-
-.product{
-
-display:flex;
-
-gap:15px;
-
-align-items:center;
-
-background:#181823;
-
-padding:15px;
-
-border-radius:15px;
-
-margin-top:12px;
-
-}
-
-
-
-.product img{
-
-width:80px;
-
-height:80px;
-
-object-fit:cover;
-
-border-radius:12px;
-
-}
-
-
-
-.info{
-
-flex:1;
-
-}
-
-
-
-.delete{
-
-background:#ff316f;
-
-color:white;
-
-}
-
-
-
-.edit{
-
-background:#ff9d00;
-
-color:white;
-
-}
-
-
-
+*{box-sizing:border-box}
+:root{--pink:#ff316f;--cyan:#00ffd5;--green:#25d366;--panel:rgba(12,12,20,.86);--line:rgba(255,255,255,.10)}
+body{margin:0;padding:24px;min-height:100vh;color:#fff;font-family:Poppins,sans-serif;background:#07070c center/cover fixed no-repeat;position:relative}
+body:before{content:"";position:fixed;inset:0;background:linear-gradient(135deg,rgba(5,5,10,.90),rgba(8,8,15,.72));z-index:-1}
+.container{max-width:1180px;margin:auto}.header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px;flex-wrap:wrap}.brand h1{margin:0;font-family:Orbitron,sans-serif;letter-spacing:1px}.brand p{margin:6px 0 0;color:#aaa}.header-actions{display:flex;gap:8px;flex-wrap:wrap}button{padding:11px 14px;border:0;border-radius:12px;cursor:pointer;font-weight:700;color:#fff}.logout,.danger{background:var(--pink)}.secondary{background:#181823;border:1px solid #333}.primary{background:linear-gradient(135deg,var(--pink),#ff6b9a)}.success{background:var(--green)}.card{background:var(--panel);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:0 14px 40px rgba(0,0,0,.22)}.card h2{margin-top:0}.dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}.stat{background:rgba(255,255,255,.05);border:1px solid var(--line);padding:16px;border-radius:16px}.stat b{display:block;font-size:24px;color:var(--cyan)}.stat span{color:#aaa;font-size:12px}.owner-nav{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px}.nav-btn{background:#12121c;border:1px solid var(--line);min-height:70px}.nav-btn.active{border-color:var(--pink);background:rgba(255,49,111,.12)}.owner-section{display:none}.owner-section.active{display:block}input,select,textarea{width:100%;padding:12px;margin-top:9px;background:#08080d;border:1px solid #333;border-radius:12px;color:#fff;font-family:inherit}textarea{min-height:90px;resize:vertical}.save{width:100%;margin-top:14px;background:var(--green)}.product,.member-row,.admin-row,.note-row{display:flex;gap:14px;align-items:center;background:rgba(255,255,255,.045);padding:14px;border-radius:15px;margin-top:10px;border:1px solid rgba(255,255,255,.06)}.product img{width:72px;height:72px;object-fit:cover;border-radius:12px}.info{flex:1}.info h3{margin:0 0 5px}.info p{margin:4px 0;color:#aaa}.delete{background:var(--pink)}.edit{background:#ff9d00}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.tab-btn{background:#15151f;color:#fff;border:1px solid #333}.tab-btn.active{background:var(--pink)}.section{display:none}.section.active{display:block}.promo-badge{display:inline-block;padding:4px 8px;border-radius:999px;background:var(--pink);color:#fff;font-size:11px;font-weight:700}.countdown{color:#ffd36a;font-weight:700}.hint{color:#888;font-size:12px;line-height:1.5}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.toolbar input{flex:1;min-width:180px;margin-top:0}.empty{text-align:center;color:#888;padding:25px}.background-preview{height:150px;border-radius:16px;margin-top:12px;background:#111 center/cover no-repeat;border:1px solid var(--line)}.badge{display:inline-block;padding:5px 8px;border-radius:999px;background:rgba(0,255,213,.1);color:var(--cyan);font-size:11px}.mobile-stack{display:flex;gap:8px;flex-wrap:wrap}@media(max-width:900px){.dashboard-grid{grid-template-columns:repeat(2,1fr)}.owner-nav{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){body{padding:14px}.dashboard-grid{grid-template-columns:1fr 1fr}.owner-nav{grid-template-columns:1fr 1fr}.product,.member-row,.admin-row,.note-row{align-items:flex-start;flex-wrap:wrap}.product img{width:58px;height:58px}.product .info{min-width:calc(100% - 75px)}}
 </style>
 
 
@@ -202,543 +26,97 @@ color:white;
 
 
 <body>
-
-
 <div class="container" id="app" style="display:none;">
+  <div class="header">
+    <div class="brand"><h1>👑 OWNER CENTER</h1><p id="role">Kenzz Store Management</p></div>
+    <div class="header-actions"><button class="secondary" onclick="location.href='index.html'">🏠 Toko</button><button class="logout" onclick="logoutUser()">Keluar</button></div>
+  </div>
 
+  <div class="dashboard-grid">
+    <div class="stat"><b id="memberTotal">0</b><span>Member</span></div>
+    <div class="stat"><b id="productTotal">0</b><span>Produk biasa</span></div>
+    <div class="stat"><b id="promoTotal">0</b><span>Promo aktif</span></div>
+    <div class="stat"><b id="adminTotal">0</b><span>Admin</span></div>
+  </div>
 
+  <div class="owner-nav">
+    <button class="nav-btn active" onclick="showOwnerSection('products',this)">📦<br>Katalog</button>
+    <button class="nav-btn" onclick="showOwnerSection('promo',this)">🔥<br>Promo</button>
+    <button class="nav-btn" onclick="showOwnerSection('members',this)">👥<br>Member</button>
+    <button class="nav-btn" onclick="showOwnerSection('notifications',this)">🔔<br>Notifikasi</button>
+    <button class="nav-btn" onclick="showOwnerSection('admins',this)">🛡️<br>Admin</button>
+    <button class="nav-btn" onclick="showOwnerSection('settings',this)">⚙️<br>Pengaturan</button>
+  </div>
 
-<div class="header">
+  <section id="productsSection" class="owner-section active">
+    <div class="tabs"><button class="tab-btn active" id="tabNormal" onclick="showCatalog('normal')">📦 Katalog Biasa</button><button class="tab-btn" id="tabPromo" onclick="showCatalog('promo')">🔥 Katalog Promo</button></div>
+    <div id="normalCatalog">
+      <div class="card"><h2>Tambah / Edit Produk Biasa</h2><input id="id" type="hidden"><input id="name" placeholder="Nama produk, contoh: Canva Pro 1 Bulan"><input id="price" placeholder="Harga" type="number"><input id="category" placeholder="Kategori"><input id="image" placeholder="Link gambar"><input id="stock" placeholder="Stok" type="number"><button class="save" onclick="saveProductData()">Simpan Produk</button></div>
+      <div class="card"><h2>📦 Daftar Produk Biasa</h2><div id="list">Memuat...</div></div>
+    </div>
+    <div id="promoCatalog" class="section">
+      <div class="card"><h2>🔥 Buat Katalog Produk Promo</h2><input id="promoId" type="hidden"><input id="promoName" placeholder="Nama produk promo, contoh: Canva Pro 1 Bulan"><input id="promoPrice" placeholder="Harga promo" type="number"><input id="promoCategory" placeholder="Kategori"><input id="promoImage" placeholder="Link gambar"><input id="promoStock" placeholder="Stok promo" type="number"><select id="promoDuration"><option value="30">30 Menit</option><option value="60" selected>1 Jam</option><option value="180">3 Jam</option><option value="360">6 Jam</option><option value="720">12 Jam</option><option value="1440">24 Jam</option></select><button class="save" onclick="savePromoData()">🔥 Mulai / Simpan Promo</button></div>
+      <div class="card"><h2>🔥 Promo Aktif</h2><div id="promoList">Memuat...</div></div>
+    </div>
+  </section>
 
+  <section id="promoSection" class="owner-section"></section>
 
-<div>
+  <section id="membersSection" class="owner-section">
+    <div class="card"><h2>👥 Kelola Member</h2><div class="toolbar"><input id="memberSearch" placeholder="Cari nama, email, nomor HP..." oninput="renderMembers()"><button class="secondary" onclick="loadOwnerData()">↻ Refresh</button></div><div id="memberList">Memuat...</div></div>
+  </section>
 
+  <section id="notificationsSection" class="owner-section">
+    <div class="card"><h2>🔔 Notifikasi</h2><div class="mobile-stack"><button class="secondary" onclick="loadNotifications(false)">Semua</button><button class="secondary" onclick="loadNotifications(true)">Belum dibaca</button><button class="success" onclick="markAllNotificationsAsRead().then(()=>loadNotifications(false))">Tandai semua dibaca</button></div><div id="notifications">Memuat...</div></div>
+  </section>
 
-<h1>
-👑 Admin Panel
-</h1>
+  <section id="adminsSection" class="owner-section">
+    <div class="card"><h2>🛡️ Kelola Admin</h2><p class="hint">Tambahkan admin berdasarkan email akun yang sudah terdaftar di Supabase Auth. Owner tetap menjadi pengendali utama.</p><input id="newAdminEmail" type="email" placeholder="Email akun admin"><button class="save" onclick="addAdminFromForm()">+ Tambahkan Admin</button></div>
+    <div class="card"><h2>Daftar Admin</h2><div id="adminList">Memuat...</div></div>
+  </section>
 
-
-<p id="role"></p>
-
-
+  <section id="settingsSection" class="owner-section">
+    <div class="card"><h2>⚙️ Pengaturan Owner</h2><p class="hint">Atur identitas toko dan tampilan halaman owner. Latar belakang dapat memakai link foto atau file gambar dari perangkat.</p><input id="storeNameSetting" placeholder="Nama toko"><input id="ownerNameSetting" placeholder="Nama owner"><input id="whatsappSetting" placeholder="Nomor WhatsApp owner"><input id="backgroundUrl" placeholder="URL foto latar belakang"><input id="backgroundFile" type="file" accept="image/*"><div id="backgroundPreview" class="background-preview"></div><button class="save" onclick="saveOwnerSettings()">Simpan Pengaturan</button><button class="secondary" style="width:100%;margin-top:10px" onclick="resetOwnerBackground()">Reset Latar Belakang</button></div>
+  </section>
 </div>
-
-
-
-<button onclick="location.href='members.html'">👥 Member</button>
-<button class="logout"
-onclick="logoutUser()">
-
-Keluar
-
-</button>
-
-
-</div>
-
-
-
-
-
-
-
-<div class="card">
-
-
-<h2>
-
-Tambah / Edit Produk
-
-</h2>
-
-
-
-<input id="id"
-type="hidden">
-
-
-
-<input id="name"
-placeholder="Nama produk">
-
-
-
-<input id="price"
-placeholder="Harga"
-type="number">
-
-
-
-<input id="category"
-placeholder="Kategori">
-
-
-
-<input id="image"
-placeholder="Link gambar">
-
-
-
-<input id="stock"
-placeholder="Stok"
-type="number">
-
-
-
-<button class="save"
-onclick="saveProductData()">
-
-Simpan Produk
-
-</button>
-
-
-
-</div>
-
-
-
-
-
-
-
-<div class="card">
-<h2>🔔 Notifikasi Member</h2>
-<div id="notifications">Memuat...</div>
-<button class="save" onclick="markAllNotificationsAsRead();loadNotifications();">Tandai semua dibaca</button>
-</div>
-
-<div class="card">
-<h2>👥 Ringkasan Member</h2>
-<p id="memberTotal">Memuat...</p>
-<a href="members.html" style="color:#fff">Lihat semua member →</a>
-</div>
-
-<div class="card">
-
-
-<h2>
-📦 Daftar Produk
-</h2>
-
-
-<div id="list">
-
-Memuat...
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-</div>
-
-
-
-
-
-
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="settings.js"></script>
 
 <script src="supabase.js"></script>
-
-
-
 <script>
-
-
-
-async function loadNotifications(){
-    const box=document.getElementById("notifications");
-    try{
-        const notes=await getOwnerNotifications(true);
-        box.innerHTML=notes.length ? notes.map(n=>`
-            <div style="padding:12px 0;border-bottom:1px solid #333">
-              <b>${n.title||"Notifikasi"}</b>
-              <p style="margin:6px 0;color:#aaa">${n.message||""}</p>
-              <small style="color:#777">${new Date(n.created_at).toLocaleString("id-ID")}</small>
-              <button style="margin-top:8px" onclick="markNotificationAsRead('${n.id}').then(loadNotifications)">Tandai dibaca</button>
-            </div>`).join("") : "Tidak ada notifikasi baru.";
-    }catch(e){box.textContent=e.message;}
-}
-async function loadMemberTotal(){
-    try{
-        const n=await getMemberCount();
-        document.getElementById("memberTotal").textContent=n+" member terdaftar";
-    }catch(e){document.getElementById("memberTotal").textContent="Gagal memuat member";}
-}
-
-async function start(){
-
-
-
-const role =
-
-await checkRole();
-
-
-
-if(
-role !== "owner"
-&&
-role !== "admin"
-){
-
-
-alert(
-"Akses ditolak"
-);
-
-
-location.href =
-"login.html";
-
-
-return;
-
-}
-
-
-
-
-document
-.getElementById("app")
-.style.display="block";
-
-
-
-document
-.getElementById("role")
-.innerHTML =
-
-"Role: "
-+
-role;
-
-
-
-loadProducts();
-loadNotifications();
-loadMemberTotal();
-
-
-}
-
-
-
-
-
-async function loadProducts(){
-
-
-
-const products =
-
-await getProducts();
-
-
-
-const box =
-
-document
-.getElementById("list");
-
-
-
-if(!products.length){
-
-
-box.innerHTML =
-"Tidak ada produk";
-
-
-return;
-
-
-}
-
-
-
-
-box.innerHTML =
-
-products.map(p=>`
-
-
-
-<div class="product">
-
-
-<img src="${p.image || 'https://via.placeholder.com/100'}">
-
-
-
-<div class="info">
-
-
-<h3>
-
-${p.name}
-
-</h3>
-
-
-
-<p>
-
-Rp ${Number(p.price)
-.toLocaleString("id-ID")}
-
-</p>
-
-
-<p>
-
-${p.category}
-
-|
-
-Stok:
-${p.stock}
-
-</p>
-
-
-
-</div>
-
-
-
-<button class="edit"
-
-onclick='editProduct(${JSON.stringify(p)})'>
-
-Edit
-
-</button>
-
-
-
-<button class="delete"
-
-onclick="removeProduct('${p.id}')">
-
-Hapus
-
-</button>
-
-
-
-</div>
-
-
-
-`).join("");
-
-
-
-}
-
-
-
-
-
-
-
-
-async function saveProductData(){
-
-
-
-const id =
-
-document
-.getElementById("id")
-.value;
-
-
-
-const data = {
-
-
-name:
-
-document
-.getElementById("name")
-.value,
-
-
-price:
-
-Number(
-document
-.getElementById("price")
-.value
-),
-
-
-category:
-
-document
-.getElementById("category")
-.value,
-
-
-image:
-
-document
-.getElementById("image")
-.value,
-
-
-stock:
-
-Number(
-document
-.getElementById("stock")
-.value
-)
-
-
-};
-
-
-
-
-
-if(id){
-
-
-await updateProduct(
-id,
-data
-);
-
-
-}else{
-
-
-await addProduct(
-data
-);
-
-
-}
-
-
-
-alert(
-"Produk tersimpan"
-);
-
-
-
-clearForm();
-
-
-loadProducts();
-
-
-}
-
-
-
-
-
-function editProduct(p){
-
-
-document
-.getElementById("id")
-.value=p.id;
-
-
-document
-.getElementById("name")
-.value=p.name;
-
-
-document
-.getElementById("price")
-.value=p.price;
-
-
-document
-.getElementById("category")
-.value=p.category;
-
-
-document
-.getElementById("image")
-.value=p.image;
-
-
-document
-.getElementById("stock")
-.value=p.stock;
-
-
-}
-
-
-
-
-
-function clearForm(){
-
-
-document
-.querySelectorAll("input")
-.forEach(
-x=>x.value=""
-);
-
-
-}
-
-
-
-
-
-async function removeProduct(id){
-
-
-if(
-confirm("Hapus produk?")
-){
-
-
-await deleteProduct(id);
-
-
-loadProducts();
-
-
-}
-
-
-}
-
-
-
-
-
+let ownerMembers=[];
+let ownerAdmins=[];
+function showOwnerSection(name,btn){document.querySelectorAll('.owner-section').forEach(x=>x.classList.remove('active'));document.getElementById(name+'Section').classList.add('active');document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');if(name==='members')loadMembersOwner();if(name==='notifications')loadNotifications(false);if(name==='admins')loadAdmins();if(name==='settings')loadOwnerSettings();}
+function showCatalog(which){document.getElementById('normalCatalog').style.display=which==='normal'?'block':'none';document.getElementById('promoCatalog').classList.toggle('active',which==='promo');document.getElementById('tabNormal').classList.toggle('active',which==='normal');document.getElementById('tabPromo').classList.toggle('active',which==='promo');if(which==='promo')loadPromos();}
+async function loadOwnerData(){try{const [products,promos,members,admins]=await Promise.all([getProducts(),getPromoProducts(),getMembers(),getAdmins()]);document.getElementById('productTotal').textContent=products.length;document.getElementById('promoTotal').textContent=promos.length;document.getElementById('memberTotal').textContent=members.length;document.getElementById('adminTotal').textContent=admins.length;ownerMembers=members;ownerAdmins=admins;loadProducts(products);loadPromos(promos);renderMembers();renderAdmins();}catch(e){console.error(e);alert('Data owner gagal dimuat: '+e.message)}}
+async function loadProducts(products){products=products||await getProducts();const box=document.getElementById('list');box.innerHTML=products.length?products.map(p=>`<div class="product"><img src="${p.image||'https://via.placeholder.com/100'}"><div class="info"><h3>${p.name}</h3><p>Rp ${Number(p.price||0).toLocaleString('id-ID')}</p><p>${p.category||'-'} · Stok: ${p.stock||0}</p></div><button class="edit" onclick='editProduct(${JSON.stringify(p)})'>Edit</button><button class="delete" onclick="removeProduct('${p.id}')">Hapus</button></div>`).join(''):'<div class="empty">Belum ada produk.</div>';}
+async function saveProductData(){const id=document.getElementById('id').value;const data={name:document.getElementById('name').value.trim(),price:Number(document.getElementById('price').value||0),category:document.getElementById('category').value.trim(),image:document.getElementById('image').value.trim(),stock:Number(document.getElementById('stock').value||0)};if(!data.name){alert('Nama produk wajib diisi');return;}if(id)await updateProduct(id,data);else await addProduct(data);clearProductForm();await loadOwnerData();alert('Produk tersimpan.');}
+function editProduct(p){document.getElementById('id').value=p.id;document.getElementById('name').value=p.name||'';document.getElementById('price').value=p.price||0;document.getElementById('category').value=p.category||'';document.getElementById('image').value=p.image||'';document.getElementById('stock').value=p.stock||0;window.scrollTo({top:0,behavior:'smooth'});}
+function clearProductForm(){['id','name','price','category','image','stock'].forEach(x=>document.getElementById(x).value='');}
+async function removeProduct(id){if(confirm('Hapus produk ini?')){await deleteProduct(id);loadOwnerData();}}
+function promoRemaining(expires){const ms=new Date(expires).getTime()-Date.now();if(ms<=0)return 'Berakhir';const t=Math.floor(ms/1000),h=Math.floor(t/3600),m=Math.floor((t%3600)/60),s=t%60;return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}
+async function loadPromos(promos){promos=promos||await getPromoProducts();const box=document.getElementById('promoList');box.innerHTML=promos.length?promos.map(p=>`<div class="product"><img src="${p.image||'https://via.placeholder.com/100'}"><div class="info"><h3>${p.name}</h3><p>Rp ${Number(p.price||0).toLocaleString('id-ID')} · Stok ${p.stock||0}</p><span class="promo-badge">PROMO</span><p class="countdown" data-expires="${p.expires_at}">⏱ ${promoRemaining(p.expires_at)}</p></div><button class="edit" onclick='editPromo(${JSON.stringify(p)})'>Edit</button><button class="delete" onclick="removePromo('${p.id}')">Hapus</button></div>`).join(''):'<div class="empty">Tidak ada promo aktif.</div>';}
+async function savePromoData(){const id=document.getElementById('promoId').value;const minutes=Number(document.getElementById('promoDuration').value||60);const data={name:document.getElementById('promoName').value.trim(),price:Number(document.getElementById('promoPrice').value||0),category:document.getElementById('promoCategory').value.trim(),image:document.getElementById('promoImage').value.trim(),stock:Number(document.getElementById('promoStock').value||0),is_active:true,expires_at:id?(document.getElementById('promoExpires')?.value||new Date(Date.now()+minutes*60000).toISOString()):new Date(Date.now()+minutes*60000).toISOString()};if(!data.name){alert('Nama promo wajib diisi');return;}if(id)await updatePromoProduct(id,data);else await addPromoProduct(data);clearPromoForm();await loadOwnerData();alert('Promo tersimpan.');}
+function editPromo(p){document.getElementById('promoId').value=p.id;document.getElementById('promoName').value=p.name||'';document.getElementById('promoPrice').value=p.price||0;document.getElementById('promoCategory').value=p.category||'';document.getElementById('promoImage').value=p.image||'';document.getElementById('promoStock').value=p.stock||0;let h=document.getElementById('promoExpires');if(!h){h=document.createElement('input');h.type='hidden';h.id='promoExpires';document.getElementById('promoCatalog').appendChild(h)}h.value=p.expires_at;}
+function clearPromoForm(){['promoId','promoName','promoPrice','promoCategory','promoImage','promoStock','promoExpires'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});document.getElementById('promoDuration').value='60'}
+async function removePromo(id){if(confirm('Hapus promo ini?')){await deletePromoProduct(id);loadOwnerData();}}
+function renderMembers(){const q=(document.getElementById('memberSearch')?.value||'').toLowerCase();const box=document.getElementById('memberList');const data=ownerMembers.filter(m=>[m.name,m.email,m.phone].join(' ').toLowerCase().includes(q));box.innerHTML=data.length?data.map(m=>`<div class="member-row"><div class="info"><h3>${m.name||'Tanpa nama'}</h3><p>${m.email||'-'} · ${m.phone||'-'}</p><p><span class="badge">${m.provider||'email'}</span> · ${m.created_at?new Date(m.created_at).toLocaleString('id-ID'):'-'}</p></div><button class="delete" onclick="removeMember('${m.user_id}')">Hapus Member</button></div>`).join(''):'<div class="empty">Member tidak ditemukan.</div>';}
+async function loadMembersOwner(){try{ownerMembers=await getMembers();document.getElementById('memberTotal').textContent=ownerMembers.length;renderMembers()}catch(e){document.getElementById('memberList').textContent=e.message}}
+async function removeMember(id){if(!confirm('Hapus member dan akun login ini? Tindakan ini tidak dapat dibatalkan.'))return;try{await deleteMember(id);await loadOwnerData();alert('Member dihapus.')}catch(e){alert('Gagal menghapus member: '+e.message)}}
+async function loadNotifications(unread=false){const box=document.getElementById('notifications');try{const notes=await getOwnerNotifications(unread);box.innerHTML=notes.length?notes.map(n=>`<div class="note-row"><div class="info"><h3>${n.title||'Notifikasi'}</h3><p>${n.message||''}</p><small>${new Date(n.created_at).toLocaleString('id-ID')}</small></div>${!n.is_read?`<button class="secondary" onclick="markNotificationAsRead('${n.id}').then(()=>loadNotifications(false))">Tandai dibaca</button>`:''}</div>`).join(''):'<div class="empty">Tidak ada notifikasi.</div>'}catch(e){box.textContent=e.message}}
+async function loadAdmins(){try{ownerAdmins=await getAdmins();document.getElementById('adminTotal').textContent=ownerAdmins.length;renderAdmins()}catch(e){document.getElementById('adminList').textContent=e.message}}
+function renderAdmins(){const box=document.getElementById('adminList');box.innerHTML=ownerAdmins.length?ownerAdmins.map(a=>`<div class="admin-row"><div class="info"><h3>${a.email||a.user_id}</h3><p><span class="badge">${a.role}</span></p></div>${a.role==='admin'?`<button class="delete" onclick="removeAdmin('${a.user_id}')">Hapus Admin</button>`:'<span class="badge">OWNER</span>'}</div>`).join(''):'<div class="empty">Belum ada admin.</div>';}
+async function addAdminFromForm(){const email=document.getElementById('newAdminEmail').value.trim();if(!email)return alert('Email wajib diisi');try{await addAdminByEmail(email);document.getElementById('newAdminEmail').value='';await loadOwnerData();alert('Admin berhasil ditambahkan.')}catch(e){alert('Gagal menambahkan admin: '+e.message)}}
+async function removeAdmin(id){if(!confirm('Hapus akses admin ini?'))return;try{await deleteAdmin(id);await loadOwnerData();alert('Admin dihapus.')}catch(e){alert('Gagal menghapus admin: '+e.message)}}
+function applyOwnerBackground(url){document.body.style.backgroundImage=url?`url("${url.replace(/"/g,'\"')}")`:'';document.getElementById('backgroundPreview').style.backgroundImage=url?`url("${url.replace(/"/g,'\"')}")`:'';}
+function loadOwnerSettings(){const s=JSON.parse(localStorage.getItem('kenzz_owner_settings')||'{}');document.getElementById('storeNameSetting').value=s.storeName||STORE_SETTINGS.storeName||'Kenzz Store';document.getElementById('ownerNameSetting').value=s.ownerName||STORE_SETTINGS.ownerName||'';document.getElementById('whatsappSetting').value=s.whatsappOwner||STORE_SETTINGS.whatsappOwner||'';document.getElementById('backgroundUrl').value=s.backgroundUrl||'';applyOwnerBackground(s.backgroundUrl||'');}
+function saveOwnerSettings(){const url=document.getElementById('backgroundUrl').value.trim();const s={storeName:document.getElementById('storeNameSetting').value.trim(),ownerName:document.getElementById('ownerNameSetting').value.trim(),whatsappOwner:document.getElementById('whatsappSetting').value.trim(),backgroundUrl:url};const f=document.getElementById('backgroundFile').files[0];if(f){const reader=new FileReader();reader.onload=()=>{s.backgroundUrl=reader.result;localStorage.setItem('kenzz_owner_settings',JSON.stringify(s));applyOwnerBackground(s.backgroundUrl);alert('Pengaturan dan latar belakang tersimpan di perangkat ini.');};reader.readAsDataURL(f);}else{localStorage.setItem('kenzz_owner_settings',JSON.stringify(s));applyOwnerBackground(url);alert('Pengaturan tersimpan.');}}
+function resetOwnerBackground(){const s=JSON.parse(localStorage.getItem('kenzz_owner_settings')||'{}');delete s.backgroundUrl;localStorage.setItem('kenzz_owner_settings',JSON.stringify(s));document.getElementById('backgroundUrl').value='';applyOwnerBackground('');}
+setInterval(()=>document.querySelectorAll('[data-expires]').forEach(e=>e.textContent='⏱ '+promoRemaining(e.dataset.expires)),1000);
+async function start(){try{const role=await checkRole();if(role!=='owner'){alert('Akses ditolak');location.href='login.html';return}document.getElementById('app').style.display='block';document.getElementById('role').textContent='Role: '+role+(role==='owner'?' · Kontrol penuh':' · Admin');loadOwnerSettings();await loadOwnerData();await loadNotifications(false);}catch(e){alert('Gagal membuka Owner Center: '+e.message);location.href='login.html'}}
 start();
-
-
 </script>
-
-
 </body>
-
 </html>

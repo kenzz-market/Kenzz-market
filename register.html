@@ -42,7 +42,9 @@ async function finishMember(){
    try{
      const updated = pending.type==='cart'
        ? await decrementProductStocks(pending.items || [])
-       : await decrementProductStock(pending.id, pending.qty || 1);
+       : pending.type==='promo'
+         ? await decrementPromoStock(pending.id, pending.qty || 1)
+         : await decrementProductStock(pending.id, pending.qty || 1);
      if(!updated){
        clearPendingPurchase();
        document.getElementById('msg').textContent='Pendaftaran berhasil, tetapi stok produk sudah habis atau tidak mencukupi. Silakan kembali ke katalog.';
