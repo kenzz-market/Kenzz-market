@@ -630,13 +630,8 @@ Stok: ${stock > 0 ? stock : "Cek admin"}
 
 
 
-<button class="cart"
-
-onclick='addProductCart(${JSON.stringify(p)})'>
-
-🛒 Tambah Keranjang
-
-</button>
+<button class="cart" onclick='addProductCart(${JSON.stringify(p)})'>🛒 Tambah Keranjang</button>
+<button class="buy" style="background:#7c5cff" onclick="location.href='product-detail.html?id=${encodeURIComponent(p.id)}'">↗ Detail Produk</button>
 
 
 

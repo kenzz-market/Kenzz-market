@@ -805,11 +805,11 @@ async function toggleFavorite(product){
     return true;
 }
 
-async function savePurchaseHistory(items,total,status='Menunggu konfirmasi'){
+async function savePurchaseHistory(items,total,status='Menunggu konfirmasi',voucherCode=null,discount=0){
     const user=await getCurrentUser();
     if(!user) return null;
     const clean=(items||[]).map(p=>({id:String(p.id||''),name:p.name||'',price:Number(p.price||0),qty:Math.max(1,Number(p.qty||1)),image:p.image||''}));
-    const {data,error}=await supabaseClient.from('purchase_history').insert({user_id:user.id,items:clean,total:Number(total||0),status,source:'whatsapp'}).select().single();
+    const {data,error}=await supabaseClient.from('purchase_history').insert({user_id:user.id,items:clean,total:Number(total||0),status,source:'whatsapp',voucher_code:voucherCode,discount:Number(discount||0)}).select().single();
     if(error) throw error;
     return data;
 }
@@ -836,3 +836,35 @@ window.toggleFavorite=toggleFavorite;
 window.savePurchaseHistory=savePurchaseHistory;
 window.getPurchaseHistory=getPurchaseHistory;
 window.getOwnerPurchaseHistory=getOwnerPurchaseHistory;
+
+// =====================================
+// KENZZ STORE: ORDER + VOUCHER UPGRADE
+// =====================================
+async function getActiveVouchers(){
+  const {data,error}=await supabaseClient.from('vouchers').select('*').eq('is_active',true).order('created_at',{ascending:false});
+  if(error) throw error; return data||[];
+}
+async function validateVoucher(code,total){
+  const user=await getCurrentUser(); if(!user) throw new Error('Login member diperlukan.');
+  const {data,error}=await supabaseClient.rpc('redeem_voucher',{p_code:String(code||''),p_total:Number(total||0)});
+  if(error) throw error; return data;
+}
+async function incrementVoucherUsage(code){const {data,error}=await supabaseClient.rpc('increment_voucher_usage',{p_code:String(code||'')});if(error) throw error;return data===true;}
+async function getOwnerVouchers(){const role=await checkRole();if(role!=='owner')throw new Error('Akses hanya untuk owner.');const {data,error}=await supabaseClient.from('vouchers').select('*').order('created_at',{ascending:false});if(error)throw error;return data||[];}
+async function addVoucher(v){const role=await checkRole();if(role!=='owner')throw new Error('Akses hanya untuk owner.');const {data,error}=await supabaseClient.from('vouchers').insert([v]).select().single();if(error)throw error;return data;}
+async function updateVoucher(id,v){const role=await checkRole();if(role!=='owner')throw new Error('Akses hanya untuk owner.');const {data,error}=await supabaseClient.from('vouchers').update(v).eq('id',id).select().single();if(error)throw error;return data;}
+async function deleteVoucher(id){const role=await checkRole();if(role!=='owner')throw new Error('Akses hanya untuk owner.');const {error}=await supabaseClient.from('vouchers').delete().eq('id',id);if(error)throw error;return true;}
+async function updatePurchaseStatus(id,status){const role=await checkRole();if(role!=='owner')throw new Error('Akses hanya untuk owner.');const {data,error}=await supabaseClient.from('purchase_history').update({status}).eq('id',id).select().single();if(error)throw error;return data;}
+async function getMemberNotifications(){const user=await getCurrentUser();if(!user)return [];const {data,error}=await supabaseClient.from('notifications').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(50);if(error)throw error;return data||[];}
+async function markMemberNotificationsRead(){const user=await getCurrentUser();if(!user)return;const {error}=await supabaseClient.from('notifications').update({is_read:true}).eq('user_id',user.id).eq('is_read',false);if(error)throw error;}
+window.getActiveVouchers=getActiveVouchers;window.validateVoucher=validateVoucher;window.incrementVoucherUsage=incrementVoucherUsage;window.getOwnerVouchers=getOwnerVouchers;window.addVoucher=addVoucher;window.updateVoucher=updateVoucher;window.deleteVoucher=deleteVoucher;window.updatePurchaseStatus=updatePurchaseStatus;window.getMemberNotifications=getMemberNotifications;window.markMemberNotificationsRead=markMemberNotificationsRead;
+
+
+
+// SESSION SAFETY: logout after 30 minutes of inactivity.
+(function(){
+ const KEY='kenzz_last_activity', LIMIT=30*60*1000;
+ function touch(){localStorage.setItem(KEY,String(Date.now()));}
+ ['click','keydown','touchstart','scroll'].forEach(e=>window.addEventListener(e,touch,{passive:true}));
+ setInterval(async()=>{const t=Number(localStorage.getItem(KEY)||0);if(t&&Date.now()-t>LIMIT){localStorage.removeItem(KEY);try{await supabaseClient.auth.signOut()}catch(e){} location.href='login.html';}},60000); touch();
+})();
