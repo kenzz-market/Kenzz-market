@@ -47,7 +47,7 @@ z-index:-2;
 }
 
 .container{
-max-width:600px;
+max-width:900px;
 margin:auto;
 padding:20px 15px 100px;
 }
@@ -96,6 +96,72 @@ color:white;
 text-decoration:none;
 font-weight:bold;
 margin:5px;
+}
+
+/* Premium edge-light / glow */
+.button,.item,.btn-icon,.menu-toggle,.social a,.wa{
+position:relative;
+transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease, filter .22s ease;
+overflow:hidden;
+}
+.button::before,.item::before,.btn-icon::before,.menu-toggle::before,.social a::before,.wa::before{
+content:"";
+position:absolute;
+left:14%;
+right:14%;
+bottom:-8px;
+height:18px;
+background:linear-gradient(90deg,transparent,#66eaffaa,#7dffb2aa,transparent);
+filter:blur(10px);
+opacity:.55;
+pointer-events:none;
+transition:opacity .22s ease, transform .22s ease;
+}
+.button:hover,.item:hover,.btn-icon:hover,.menu-toggle:hover,.social a:hover,.wa:hover{
+transform:translateY(-2px);
+box-shadow:0 0 0 1px #7eeeff55, 0 0 18px #38d9ff44, 0 8px 28px #0008;
+filter:brightness(1.08);
+}
+.button:hover::before,.item:hover::before,.btn-icon:hover::before,.menu-toggle:hover::before,.social a:hover::before,.wa:hover::before{
+opacity:1;
+transform:translateY(-3px);
+}
+.button:active,.item:active,.btn-icon:active,.menu-toggle:active,.social a:active,.wa:active{
+transform:translateY(0) scale(.98);
+}
+
+.card-grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:15px;
+}
+.card-grid .card{margin-top:15px;}
+.card-grid .card:first-child,.card-grid .card:nth-child(2){margin-top:15px;}
+
+.card{
+position:relative;
+overflow:hidden;
+box-shadow:inset 0 1px 0 #ffffff18, 0 12px 35px #0005;
+}
+.card::after{
+content:"";
+position:absolute;
+top:10%;
+left:-20%;
+width:42%;
+height:80%;
+background:linear-gradient(90deg,transparent,#67e8ff22,transparent);
+filter:blur(12px);
+transform:rotate(8deg);
+pointer-events:none;
+}
+
+@media(max-width:650px){
+.container{padding-left:12px;padding-right:12px;}
+.card-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.card-grid .card{padding:16px;}
+.card-grid h2{font-size:17px;}
+.card-grid p{font-size:12px;}
 }
 
 .card{
@@ -249,10 +315,19 @@ body.light .member-menu a{color:#111}
 <a class="button" href="products.html">🔎 Jelajahi</a>
 </div>
 
+<div class="card-grid">
 <div class="card verified">
 <h2>✅ Verified Official</h2>
 <p>Official Digital Store</p>
 <p>🟢 Online • Trusted Store</p>
+</div>
+
+<div class="card statistik">
+<h2>📊 Statistik</h2>
+<p id="memberCount">Memuat...</p>
+<p id="productCount">Memuat...</p>
+<p id="uptimeCount">Memuat...</p>
+</div>
 </div>
 
 <div class="card menu">
@@ -262,13 +337,7 @@ body.light .member-menu a{color:#111}
 <a class="item" href="support.html">🎧<br>Support</a>
 </div>
 
-<div class="card statistik">
-<h2>📊 Statistik</h2>
-<p id="memberCount">Memuat...</p>
-<p id="productCount">Memuat...</p>
-<p id="uptimeCount">Memuat...</p>
-</div>
-
+<div class="card-grid">
 <div class="card announcement">
 <h2>📢 Announcement</h2>
 <p>Selamat datang di Kenzz Store. Nikmati layanan digital premium.</p>
@@ -288,6 +357,7 @@ body.light .member-menu a{color:#111}
 <a class="button" id="waChannel"><i class="fa-brands fa-whatsapp"></i> Saluran WhatsApp</a>
 <a class="button" id="waGroup"><i class="fa-brands fa-whatsapp"></i> Grup WhatsApp</a>
 
+</div>
 </div>
 
 </div>
