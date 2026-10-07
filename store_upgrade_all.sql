@@ -32,6 +32,32 @@ create table if not exists public.vouchers (
 
 alter table public.vouchers enable row level security;
 
+
+-- =====================================
+-- MEMBER NOTIFICATION ACCESS
+-- =====================================
+-- Member hanya boleh membaca dan menandai notifikasi miliknya sendiri.
+
+drop policy if exists "Members view own notifications"
+on public.notifications;
+
+create policy "Members view own notifications"
+on public.notifications
+for select
+to authenticated
+using (auth.uid() = user_id);
+
+drop policy if exists "Members update own notifications"
+on public.notifications;
+
+create policy "Members update own notifications"
+on public.notifications
+for update
+to authenticated
+using (auth.uid() = user_id)
+with check (auth.uid() = user_id);
+
+
 drop policy if exists "Authenticated view active vouchers" on public.vouchers;
 create policy "Authenticated view active vouchers"
 on public.vouchers for select to authenticated
