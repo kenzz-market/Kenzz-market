@@ -38,6 +38,8 @@ height:100%;
 object-fit:cover;
 z-index:-3;
 }
+#bg{transition:opacity .35s ease}
+body.custom-background{background-size:cover;background-position:center;background-attachment:fixed}
 
 .overlay{
 position:fixed;
@@ -119,8 +121,8 @@ transition:opacity .22s ease, transform .22s ease;
 }
 .button:hover,.item:hover,.btn-icon:hover,.menu-toggle:hover,.social a:hover,.wa:hover{
 transform:translateY(-2px);
-box-shadow:0 0 0 1px #7eeeff55, 0 0 18px #38d9ff44, 0 8px 28px #0008;
-filter:brightness(1.08);
+box-shadow:0 0 0 1px #7eeeff88, 0 0 28px #38d9ff66, 0 8px 30px #0009;
+filter:brightness(1.13);
 }
 .button:hover::before,.item:hover::before,.btn-icon:hover::before,.menu-toggle:hover::before,.social a:hover::before,.wa:hover::before{
 opacity:1;
@@ -171,7 +173,12 @@ border-radius:22px;
 background-size:cover;
 background-position:center;
 border:1px solid #ffffff30;
+position:relative;overflow:hidden;
 }
+.hero{position:relative;overflow:hidden}
+.hero > .visual-video,.card > .visual-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none}
+.hero > .visual-shade,.card > .visual-shade{position:absolute;inset:0;background:linear-gradient(120deg,rgba(0,0,0,.52),rgba(0,0,0,.68));z-index:0;pointer-events:none}
+.hero > *, .card > *{position:relative;z-index:1}
 
 .verified{
 background:linear-gradient(#0008,#0008),url("https://c.termai.cc/i148/N28g6Y6.jpg");
@@ -304,7 +311,7 @@ body.light .member-menu a{color:#111}
 
 <div class="top">
 <div class="logo">👑 Kenzz Store</div>
-<button class="btn-icon" onclick="theme()">🌙</button>
+<button class="btn-icon" id="themeButton" onclick="theme()" aria-label="Mode tampilan"><i id="timeThemeIcon" class="fa-solid fa-moon"></i></button>
 <button class="menu-toggle" onclick="toggleMemberMenu()" aria-label="Menu">☰</button>
 </div>
 
@@ -404,6 +411,24 @@ waGroup.href=STORE_SETTINGS.whatsappGroup;
 
 
 
+
+<script>
+const VISUAL_KEYS=['background','hero','verified','statistik','announcement','social'];
+function setTimeIcon(){
+  const icon=document.getElementById('timeThemeIcon'),btn=document.getElementById('themeButton'); if(!icon||!btn)return;
+  const hour=new Date().getHours(),day=hour>=6&&hour<18;
+  icon.className=day?'fa-solid fa-sun':'fa-solid fa-moon'; btn.title=day?'Siang':'Malam';
+}
+function applySectionVisual(key,data){
+  if(key==='background'){const bg=document.getElementById('bg'); if(data.video_url){bg.style.display='block';bg.innerHTML='<source src="'+data.video_url.replace(/"/g,'&quot;')+'" type="video/mp4">';bg.load();bg.play().catch(()=>{});document.body.style.backgroundImage='';document.body.classList.remove('custom-background');}else{bg.style.display='none';if(data.image_url){document.body.style.backgroundImage='url("'+data.image_url.replace(/"/g,'&quot;')+'")';document.body.classList.add('custom-background');}else{document.body.style.backgroundImage='';document.body.classList.remove('custom-background');}}return;}
+  const map={hero:'.hero',verified:'.verified',statistik:'.statistik',announcement:'.announcement',social:'.socialmedia'},el=document.querySelector(map[key]);if(!el)return;
+  el.querySelectorAll('.visual-video,.visual-shade').forEach(x=>x.remove());
+  if(data.video_url){el.style.backgroundImage='none';const v=document.createElement('video');v.className='visual-video';v.src=data.video_url;v.autoplay=true;v.muted=true;v.loop=true;v.playsInline=true;const shade=document.createElement('div');shade.className='visual-shade';el.prepend(shade);el.prepend(v);v.play().catch(()=>{});}
+  else if(data.image_url){el.style.backgroundImage='linear-gradient(rgba(0,0,0,.52),rgba(0,0,0,.68)),url("'+data.image_url.replace(/"/g,'&quot;')+'")';}
+}
+async function loadStoreVisuals(){try{const {data,error}=await supabaseClient.from('store_visual_settings').select('*').eq('id',1).maybeSingle();if(error)throw error;if(!data)return;VISUAL_KEYS.forEach(k=>applySectionVisual(k,{image_url:data[k+'_image_url'],video_url:data[k+'_video_url']}));}catch(e){console.log('VISUAL SETTINGS:',e.message)}}
+setTimeIcon();setInterval(setTimeIcon,60000);loadStoreVisuals();
+</script>
 
 <script>
 async function loadStats(){
