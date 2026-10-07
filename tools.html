@@ -231,19 +231,14 @@ box-shadow:0 8px 25px rgba(0,0,0,.25);
 }
 
 
-.app-search{display:flex;gap:10px;margin-top:18px}
-.app-search input{flex:1;min-width:0;padding:15px 16px;border-radius:15px;border:1px solid rgba(255,255,255,.1);background:#0b0b12;color:#fff;outline:none;font-size:14px}
-.app-search input:focus{border-color:rgba(0,255,213,.55);box-shadow:0 0 0 3px rgba(0,255,213,.08)}
-.app-search button,.search-result button{width:auto;margin:0;padding:13px 18px;border-radius:14px;background:#00d9a8;color:#06120f;font-weight:900;white-space:nowrap}
-.search-hint{margin-top:9px;color:#777;font-size:12px}
-.launcher-label{margin-top:22px;color:#00ffd5;font-size:12px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}
-.app-generic{background:linear-gradient(145deg,#171722,#252535);color:#fff}
-.search-result{display:flex;align-items:center;gap:13px;margin-top:16px;padding:14px;border:1px solid rgba(0,255,213,.25);border-radius:18px;background:rgba(0,255,213,.05)}
-.search-result[hidden]{display:none}
-.result-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:#00d9a8;color:#06120f;font-weight:900;font-size:22px}
-.result-copy{flex:1;display:flex;flex-direction:column;gap:3px}.result-copy span{font-size:11px;color:#888}
-@media(max-width:520px){.app-search{flex-direction:column}.app-search button{width:100%}.search-result{align-items:flex-start;flex-wrap:wrap}.search-result button{width:100%}}
-
+.launcher-search{margin:18px 0 12px}
+.launcher-search input{width:100%;box-sizing:border-box;padding:14px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;outline:none;font-family:inherit;font-size:15px}
+.launcher-search input:focus{border-color:#25f4ee;box-shadow:0 0 0 3px rgba(37,244,238,.10)}
+.app-categories{display:flex;gap:8px;overflow:auto;padding:4px 0 14px;scrollbar-width:none}
+.app-categories::-webkit-scrollbar{display:none}
+.cat-btn{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#ddd;padding:8px 12px;border-radius:999px;white-space:nowrap;cursor:pointer;font:600 12px Poppins,sans-serif}
+.cat-btn.active{background:#25f4ee;color:#061011;border-color:#25f4ee}
+.app-empty{text-align:center;padding:28px;color:#aaa}
 </style>
 
 
@@ -274,34 +269,45 @@ Layanan digital premium Kenzz Store
 
 
 
-<!-- KENZZ UNIVERSAL APP LAUNCHER -->
-<section class="app-launcher" aria-label="Universal App Launcher">
+<!-- KENZZ APP LAUNCHER -->
+<section class="app-launcher" aria-label="Buka aplikasi">
   <div class="launcher-head">
-    <span class="launcher-kicker">KENZZ UNIVERSAL LAUNCHER</span>
-    <h2>📲 Buka Aplikasi</h2>
-    <p>Cari aplikasi apa pun di Google Play atau buka aplikasi populer langsung dari perangkat.</p>
-  </div>
-
-  <div class="app-search">
-    <input id="appSearch" type="search" placeholder="🔎 Cari aplikasi, misalnya CapCut, Spotify, Gojek..." autocomplete="off">
-    <button type="button" onclick="searchPlayStore()">Cari Aplikasi</button>
-  </div>
-
-  <div id="appSearchHint" class="search-hint">Ketik nama aplikasi lalu tekan Cari Aplikasi.</div>
-
-  <div class="launcher-label">🔥 Aplikasi populer</div>
-  <div class="app-grid" id="popularApps"></div>
-
-  <div id="appSearchResult" class="search-result" hidden>
-    <div class="result-icon">▶</div>
-    <div class="result-copy">
-      <strong id="resultName">Aplikasi</strong>
-      <span>Google Play Store</span>
+    <div>
+      <span class="launcher-kicker">KENZZ UNIVERSAL APP LAUNCHER</span>
+      <h2>📲 Buka Aplikasi</h2>
+      <p>Cari aplikasi, lalu coba buka aplikasi native atau halaman Google Play.</p>
     </div>
-    <button type="button" onclick="openPlaySearch()">Buka / Cari →</button>
   </div>
 
-  <p class="launcher-note">Untuk aplikasi yang terpasang, Kenzz mencoba membuka aplikasi native. Jika perangkat/browser tidak mengizinkan deep link, pengguna diarahkan ke Google Play atau situs resminya.</p>
+  <div class="launcher-search">
+    <input id="appSearch" type="search" placeholder="🔎 Cari aplikasi..." autocomplete="off" oninput="filterApps()">
+  </div>
+
+  <div id="appCategories" class="app-categories">
+    <button type="button" class="cat-btn active" onclick="setCategory('all',this)">Semua</button>
+    <button type="button" class="cat-btn" onclick="setCategory('social',this)">Sosial</button>
+    <button type="button" class="cat-btn" onclick="setCategory('video',this)">Video</button>
+    <button type="button" class="cat-btn" onclick="setCategory('music',this)">Musik</button>
+    <button type="button" class="cat-btn" onclick="setCategory('chat',this)">Chat</button>
+    <button type="button" class="cat-btn" onclick="setCategory('shopping',this)">Belanja</button>
+    <button type="button" class="cat-btn" onclick="setCategory('finance',this)">Keuangan</button>
+    <button type="button" class="cat-btn" onclick="setCategory('game',this)">Game</button>
+    <button type="button" class="cat-btn" onclick="setCategory('tools',this)">Tools</button>
+    <button type="button" class="cat-btn" onclick="setCategory('education',this)">Edukasi</button>
+    <button type="button" class="cat-btn" onclick="setCategory('edit',this)">Edit & Kreatif</button>
+    <button type="button" class="cat-btn" onclick="setCategory('ai',this)">AI</button>
+    <button type="button" class="cat-btn" onclick="setCategory('productivity',this)">Produktivitas</button>
+    <button type="button" class="cat-btn" onclick="setCategory('streaming',this)">Streaming</button>
+    <button type="button" class="cat-btn" onclick="setCategory('travel',this)">Travel</button>
+    <button type="button" class="cat-btn" onclick="setCategory('food',this)">Makanan</button>
+    <button type="button" class="cat-btn" onclick="setCategory('health',this)">Kesehatan</button>
+    <button type="button" class="cat-btn" onclick="setCategory('photo',this)">Foto</button>
+    <button type="button" class="cat-btn" onclick="setCategory('developer',this)">Developer</button>
+  </div>
+
+  <div id="appGrid" class="app-grid"></div>
+  <div id="appEmpty" class="app-empty" hidden>Aplikasi tidak ditemukan. Coba kata kunci lain.</div>
+  <p class="launcher-note">Jika aplikasi tidak terpasang atau deep link ditolak perangkat, Kenzz akan mengarahkan ke halaman resmi/Google Play.</p>
 </section>
 
 <div class="grid">
@@ -475,99 +481,399 @@ Custom
 <script src="settings.js"></script>
 <script>
 const APP_LINKS = {
-  tiktok:{name:'TikTok',deep:'snssdk1233://',web:'https://www.tiktok.com/',package:'com.zhiliaoapp.musically'},
-  instagram:{name:'Instagram',deep:'instagram://app',web:'https://www.instagram.com/',package:'com.instagram.android'},
-  youtube:{name:'YouTube',deep:'youtube://',web:'https://www.youtube.com/',package:'com.google.android.youtube'},
-  telegram:{name:'Telegram',deep:'tg://resolve',web:'https://telegram.org/',package:'org.telegram.messenger'},
-  whatsapp:{name:'WhatsApp',deep:'whatsapp://send',web:'https://www.whatsapp.com/',package:'com.whatsapp'},
-  facebook:{name:'Facebook',deep:'fb://',web:'https://www.facebook.com/',package:'com.facebook.katana'},
-  spotify:{name:'Spotify',deep:'spotify://',web:'https://open.spotify.com/',package:'com.spotify.music'},
-  netflix:{name:'Netflix',deep:'nflx://',web:'https://www.netflix.com/',package:'com.netflix.mediaclient'},
-  discord:{name:'Discord',deep:'discord://',web:'https://discord.com/',package:'com.discord'},
-  capcut:{name:'CapCut',deep:'capcut://',web:'https://www.capcut.com/',package:'com.lemon.lvoverseas'},
-  canva:{name:'Canva',deep:'canva://',web:'https://www.canva.com/',package:'com.canva.editor'},
-  shopee:{name:'Shopee',deep:'shopee://',web:'https://shopee.co.id/',package:'com.shopee.id'},
-  tokopedia:{name:'Tokopedia',deep:'tokopedia://',web:'https://www.tokopedia.com/',package:'com.tokopedia.tkpd'},
-  gojek:{name:'Gojek',deep:'gojek://',web:'https://www.gojek.com/',package:'com.gojek.app'},
-  grab:{name:'Grab',deep:'grab://',web:'https://www.grab.com/',package:'com.grabtaxi.passenger'},
-  roblox:{name:'Roblox',deep:'roblox://',web:'https://www.roblox.com/',package:'com.roblox.client'},
-  zoom:{name:'Zoom',deep:'zoomus://',web:'https://zoom.us/',package:'us.zoom.videomeetings'},
-  gmail:{name:'Gmail',deep:'googlegmail://',web:'https://mail.google.com/',package:'com.google.android.gm'},
-  maps:{name:'Google Maps',deep:'geo:0,0?q=',web:'https://maps.google.com/',package:'com.google.android.apps.maps'},
-  chrome:{name:'Chrome',deep:'googlechrome://',web:'https://www.google.com/chrome/',package:'com.android.chrome'}
+  tiktok:{name:'TikTok',icon:'fa-brands fa-tiktok',cat:'social video',deep:'snssdk1233://',web:'https://www.tiktok.com/',play:'com.zhiliaoapp.musically'},
+  instagram:{name:'Instagram',icon:'fa-brands fa-instagram',cat:'social',deep:'instagram://app',web:'https://www.instagram.com/',play:'com.instagram.android'},
+  facebook:{name:'Facebook',icon:'fa-brands fa-facebook',cat:'social',deep:'fb://',web:'https://www.facebook.com/',play:'com.facebook.katana'},
+  threads:{name:'Threads',icon:'fa-brands fa-threads',cat:'social',deep:'https://www.threads.net/',web:'https://www.threads.net/',play:'com.instagram.barcelona'},
+  x:{name:'X',icon:'fa-brands fa-x-twitter',cat:'social',deep:'twitter://',web:'https://x.com/',play:'com.twitter.android'},
+  pinterest:{name:'Pinterest',icon:'fa-brands fa-pinterest',cat:'social',deep:'pinterest://',web:'https://www.pinterest.com/',play:'com.pinterest'},
+  snapchat:{name:'Snapchat',icon:'fa-brands fa-snapchat',cat:'social',deep:'snapchat://',web:'https://www.snapchat.com/',play:'com.snapchat.android'},
+  reddit:{name:'Reddit',icon:'fa-brands fa-reddit',cat:'social',deep:'reddit://',web:'https://www.reddit.com/',play:'com.reddit.frontpage'},
+  linkedin:{name:'LinkedIn',icon:'fa-brands fa-linkedin',cat:'social',deep:'linkedin://',web:'https://www.linkedin.com/',play:'com.linkedin.android'},
+  youtube:{name:'YouTube',icon:'fa-brands fa-youtube',cat:'video',deep:'youtube://',web:'https://www.youtube.com/',play:'com.google.android.youtube'},
+  netflix:{name:'Netflix',icon:'fa-solid fa-film',cat:'video',deep:'nflx://',web:'https://www.netflix.com/',play:'com.netflix.mediaclient'},
+  capcut:{name:'CapCut',icon:'fa-solid fa-scissors',cat:'video tools',deep:'capcut://',web:'https://www.capcut.com/',play:'com.lemon.lvoverseas'},
+  primevideo:{name:'Prime Video',icon:'fa-solid fa-play',cat:'video',deep:'https://www.primevideo.com/',web:'https://www.primevideo.com/',play:'com.amazon.avod.thirdpartyclient'},
+  disneyplus:{name:'Disney+',icon:'fa-solid fa-wand-magic-sparkles',cat:'video',deep:'https://www.disneyplus.com/',web:'https://www.disneyplus.com/',play:'com.disney.disneyplus'},
+  spotify:{name:'Spotify',icon:'fa-brands fa-spotify',cat:'music',deep:'spotify://',web:'https://open.spotify.com/',play:'com.spotify.music'},
+  soundcloud:{name:'SoundCloud',icon:'fa-brands fa-soundcloud',cat:'music',deep:'soundcloud://',web:'https://soundcloud.com/',play:'com.soundcloud.android'},
+  deezer:{name:'Deezer',icon:'fa-solid fa-music',cat:'music',deep:'deezer://',web:'https://www.deezer.com/',play:'deezer.android.app'},
+  telegram:{name:'Telegram',icon:'fa-brands fa-telegram',cat:'chat',deep:'tg://resolve',web:'https://telegram.org/',play:'org.telegram.messenger'},
+  whatsapp:{name:'WhatsApp',icon:'fa-brands fa-whatsapp',cat:'chat',deep:'whatsapp://send',web:'https://www.whatsapp.com/',play:'com.whatsapp'},
+  messenger:{name:'Messenger',icon:'fa-brands fa-facebook-messenger',cat:'chat',deep:'fb-messenger://',web:'https://www.messenger.com/',play:'com.facebook.orca'},
+  discord:{name:'Discord',icon:'fa-brands fa-discord',cat:'chat game',deep:'discord://',web:'https://discord.com/app',play:'com.discord'},
+  line:{name:'LINE',icon:'fa-brands fa-line',cat:'chat',deep:'line://',web:'https://line.me/',play:'jp.naver.line.android'},
+  signal:{name:'Signal',icon:'fa-solid fa-comment',cat:'chat',deep:'sgnl://',web:'https://signal.org/',play:'org.thoughtcrime.securesms'},
+  gmail:{name:'Gmail',icon:'fa-solid fa-envelope',cat:'tools',deep:'googlegmail://',web:'https://mail.google.com/',play:'com.google.android.gm'},
+  chrome:{name:'Google Chrome',icon:'fa-brands fa-chrome',cat:'tools',deep:'googlechrome://',web:'https://www.google.com/chrome/',play:'com.android.chrome'},
+  maps:{name:'Google Maps',icon:'fa-solid fa-map-location-dot',cat:'tools',deep:'geo:0,0',web:'https://maps.google.com/',play:'com.google.android.apps.maps'},
+  drive:{name:'Google Drive',icon:'fa-brands fa-google-drive',cat:'tools',deep:'googledrive://',web:'https://drive.google.com/',play:'com.google.android.apps.docs'},
+  canva:{name:'Canva',icon:'fa-solid fa-palette',cat:'tools education',deep:'canva://',web:'https://www.canva.com/',play:'com.canva.editor'},
+  zoom:{name:'Zoom',icon:'fa-solid fa-video',cat:'tools education',deep:'zoomus://',web:'https://zoom.us/',play:'us.zoom.videomeetings'},
+  notion:{name:'Notion',icon:'fa-solid fa-note-sticky',cat:'tools education',deep:'notion://',web:'https://www.notion.so/',play:'notion.id'},
+  dropbox:{name:'Dropbox',icon:'fa-brands fa-dropbox',cat:'tools',deep:'dbapi-2://',web:'https://www.dropbox.com/',play:'com.dropbox.android'},
+  github:{name:'GitHub',icon:'fa-brands fa-github',cat:'tools education',deep:'github://',web:'https://github.com/',play:'com.github.android'},
+  shopee:{name:'Shopee',icon:'fa-solid fa-bag-shopping',cat:'shopping',deep:'shopee://',web:'https://shopee.co.id/',play:'com.shopee.id'},
+  tokopedia:{name:'Tokopedia',icon:'fa-solid fa-store',cat:'shopping',deep:'tokopedia://',web:'https://www.tokopedia.com/',play:'com.tokopedia.tkpd'},
+  lazada:{name:'Lazada',icon:'fa-solid fa-cart-shopping',cat:'shopping',deep:'lazada://',web:'https://www.lazada.co.id/',play:'com.lazada.android'},
+  blibli:{name:'Blibli',icon:'fa-solid fa-shop',cat:'shopping',deep:'blibli://',web:'https://www.blibli.com/',play:'blibli.mobile.commerce'},
+  amazon:{name:'Amazon',icon:'fa-brands fa-amazon',cat:'shopping',deep:'com.amazon.mobile.shopping://',web:'https://www.amazon.com/',play:'com.amazon.mShop.android.shopping'},
+  aliexpress:{name:'AliExpress',icon:'fa-solid fa-globe',cat:'shopping',deep:'aliexpress://',web:'https://www.aliexpress.com/',play:'com.alibaba.aliexpresshd'},
+  gojek:{name:'Gojek',icon:'fa-solid fa-motorcycle',cat:'shopping',deep:'gojek://',web:'https://www.gojek.com/',play:'com.gojek.app'},
+  grab:{name:'Grab',icon:'fa-solid fa-car',cat:'shopping',deep:'grab://',web:'https://www.grab.com/id/',play:'com.grabtaxi.passenger'},
+  dana:{name:'DANA',icon:'fa-solid fa-wallet',cat:'finance',deep:'dana://',web:'https://www.dana.id/',play:'id.dana'},
+  ovo:{name:'OVO',icon:'fa-solid fa-wallet',cat:'finance',deep:'ovo://',web:'https://www.ovo.id/',play:'ovo.id'},
+  linkaja:{name:'LinkAja',icon:'fa-solid fa-money-bill-transfer',cat:'finance',deep:'linkaja://',web:'https://www.linkaja.id/',play:'com.telkom.mwallet'},
+  bca:{name:'myBCA',icon:'fa-solid fa-building-columns',cat:'finance',deep:'mybca://',web:'https://www.bca.co.id/',play:'com.bca'},
+  mandiri:{name:'Livin by Mandiri',icon:'fa-solid fa-building-columns',cat:'finance',deep:'livin://',web:'https://www.bankmandiri.co.id/',play:'id.bmri.livin'},
+  bri:{name:'BRImo',icon:'fa-solid fa-building-columns',cat:'finance',deep:'brimo://',web:'https://bri.co.id/',play:'id.co.bri.brimo'},
+  dana: {name:'DANA',icon:'fa-solid fa-wallet',cat:'finance',deep:'dana://',web:'https://www.dana.id/',play:'id.dana'},
+  roblox:{name:'Roblox',icon:'fa-solid fa-gamepad',cat:'game',deep:'roblox://',web:'https://www.roblox.com/',play:'com.roblox.client'},
+  minecraft:{name:'Minecraft',icon:'fa-solid fa-cubes',cat:'game',deep:'minecraft://',web:'https://www.minecraft.net/',play:'com.mojang.minecraftpe'},
+  pubg:{name:'PUBG Mobile',icon:'fa-solid fa-crosshairs',cat:'game',deep:'pubgmobile://',web:'https://www.pubgmobile.com/',play:'com.tencent.ig'},
+  freefire:{name:'Free Fire',icon:'fa-solid fa-fire',cat:'game',deep:'freefire://',web:'https://ff.garena.com/',play:'com.dts.freefireth'},
+  mobilelegends:{name:'Mobile Legends',icon:'fa-solid fa-shield-halved',cat:'game',deep:'mobilelegends://',web:'https://www.mobilelegends.com/',play:'com.mobile.legends'},
+  clashroyale:{name:'Clash Royale',icon:'fa-solid fa-crown',cat:'game',deep:'clashroyale://',web:'https://supercell.com/en/games/clashroyale/',play:'com.supercell.clashroyale'},
+  amongus:{name:'Among Us',icon:'fa-solid fa-user-astronaut',cat:'game',deep:'amongus://',web:'https://www.innersloth.com/games/among-us/',play:'com.innersloth.spacemafia'},
+  duolingo:{name:'Duolingo',icon:'fa-solid fa-language',cat:'education',deep:'duolingo://',web:'https://www.duolingo.com/',play:'com.duolingo'},
+  coursera:{name:'Coursera',icon:'fa-solid fa-graduation-cap',cat:'education',deep:'coursera://',web:'https://www.coursera.org/',play:'org.coursera.android'},
+  udemy:{name:'Udemy',icon:'fa-solid fa-chalkboard-user',cat:'education',deep:'udemy://',web:'https://www.udemy.com/',play:'com.udemy.android'},
+  googleclassroom:{name:'Google Classroom',icon:'fa-solid fa-school',cat:'education',deep:'googleclassroom://',web:'https://classroom.google.com/',play:'com.google.android.apps.classroom'},
+  chatgpt:{name:'ChatGPT',icon:'fa-solid fa-robot',cat:'tools education',deep:'https://chatgpt.com/',web:'https://chatgpt.com/',play:'com.openai.chatgpt'},
+  gemini:{name:'Google Gemini',icon:'fa-solid fa-sparkles',cat:'tools education',deep:'https://gemini.google.com/',web:'https://gemini.google.com/',play:'com.google.android.apps.bard'}
 };
 
-const POPULAR = [
-  ['tiktok','🎵'],['instagram','📸'],['youtube','▶️'],['whatsapp','💬'],
-  ['telegram','✈️'],['facebook','f'],['spotify','🎧'],['netflix','N'],
-  ['discord','☯'],['capcut','✂️'],['canva','C'],['shopee','🛍️'],
-  ['tokopedia','🟢'],['gojek','🛵'],['grab','🚕'],['roblox','🎮'],
-  ['zoom','📹'],['gmail','✉️'],['maps','📍'],['chrome','🌐']
+
+// Katalog aplikasi diperluas: populer lebih dulu, lalu katalog kategori lainnya.
+Object.assign(APP_LINKS, {
+  whatsappbusiness:{name:"WhatsApp Business",icon:'fa-solid fa-mobile-screen-button',cat:"chat",deep:'',web:"https://www.whatsapp.com/business/",play:''},
+  whatsapp2:{name:"WhatsApp",icon:'fa-solid fa-mobile-screen-button',cat:"chat",deep:'',web:"https://www.whatsapp.com/",play:''},
+  tiktoklite:{name:"TikTok Lite",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://www.tiktok.com/",play:''},
+  tiktok2:{name:"TikTok",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://www.tiktok.com/",play:''},
+  instagram2:{name:"Instagram",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://www.instagram.com/",play:''},
+  facebook2:{name:"Facebook",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://www.facebook.com/",play:''},
+  youtube2:{name:"YouTube",icon:'fa-solid fa-mobile-screen-button',cat:"video",deep:'',web:"https://www.youtube.com/",play:''},
+  dana2:{name:"DANA",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://www.dana.id/",play:''},
+  shopee2:{name:"Shopee",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://shopee.co.id/",play:''},
+  capcut2:{name:"CapCut",icon:'fa-solid fa-mobile-screen-button',cat:"edit",deep:'',web:"https://www.capcut.com/",play:''},
+  gopay:{name:"GoPay",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://www.gojek.com/gopay/",play:''},
+  gauth:{name:"Gauth",icon:'fa-solid fa-mobile-screen-button',cat:"education ai",deep:'',web:"https://gauthmath.com/",play:''},
+  chatgpt2:{name:"ChatGPT",icon:'fa-solid fa-mobile-screen-button',cat:"ai productivity",deep:'',web:"https://chatgpt.com/",play:''},
+  ucbrowser:{name:"UC Browser",icon:'fa-solid fa-mobile-screen-button',cat:"tools",deep:'',web:"https://www.ucweb.com/",play:''},
+  shopeepay:{name:"ShopeePay",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://shopeepay.co.id/",play:''},
+  chrome2:{name:"Google Chrome",icon:'fa-solid fa-mobile-screen-button',cat:"tools",deep:'',web:"https://www.google.com/chrome/",play:''},
+  facebooklite:{name:"Facebook Lite",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://www.facebook.com/lite/",play:''},
+  maps2:{name:"Google Maps",icon:'fa-solid fa-mobile-screen-button',cat:"travel",deep:'',web:"https://maps.google.com/",play:''},
+  gmail2:{name:"Gmail",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://mail.google.com/",play:''},
+  telegram2:{name:"Telegram",icon:'fa-solid fa-mobile-screen-button',cat:"chat",deep:'',web:"https://telegram.org/",play:''},
+  x2:{name:"X",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://x.com/",play:''},
+  threads2:{name:"Threads",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://www.threads.net/",play:''},
+  discord2:{name:"Discord",icon:'fa-solid fa-mobile-screen-button',cat:"chat game",deep:'',web:"https://discord.com/",play:''},
+  messenger2:{name:"Messenger",icon:'fa-solid fa-mobile-screen-button',cat:"chat",deep:'',web:"https://www.messenger.com/",play:''},
+  spotify2:{name:"Spotify",icon:'fa-solid fa-mobile-screen-button',cat:"music",deep:'',web:"https://open.spotify.com/",play:''},
+  netflix2:{name:"Netflix",icon:'fa-solid fa-mobile-screen-button',cat:"streaming",deep:'',web:"https://www.netflix.com/",play:''},
+  primevideo2:{name:"Prime Video",icon:'fa-solid fa-mobile-screen-button',cat:"streaming",deep:'',web:"https://www.primevideo.com/",play:''},
+  disneyplus2:{name:"Disney+",icon:'fa-solid fa-mobile-screen-button',cat:"streaming",deep:'',web:"https://www.disneyplus.com/",play:''},
+  vidio:{name:"Vidio",icon:'fa-solid fa-mobile-screen-button',cat:"streaming",deep:'',web:"https://www.vidio.com/",play:''},
+  wetv:{name:"WeTV",icon:'fa-solid fa-mobile-screen-button',cat:"streaming",deep:'',web:"https://wetv.vip/",play:''},
+  viu:{name:"Viu",icon:'fa-solid fa-mobile-screen-button',cat:"streaming",deep:'',web:"https://www.viu.com/",play:''},
+  iqiyi:{name:"iQIYI",icon:'fa-solid fa-mobile-screen-button',cat:"streaming",deep:'',web:"https://www.iq.com/",play:''},
+  crunchyroll:{name:"Crunchyroll",icon:'fa-solid fa-mobile-screen-button',cat:"streaming",deep:'',web:"https://www.crunchyroll.com/",play:''},
+  twitch:{name:"Twitch",icon:'fa-solid fa-mobile-screen-button',cat:"streaming",deep:'',web:"https://www.twitch.tv/",play:''},
+  soundcloud2:{name:"SoundCloud",icon:'fa-solid fa-mobile-screen-button',cat:"music",deep:'',web:"https://soundcloud.com/",play:''},
+  deezer2:{name:"Deezer",icon:'fa-solid fa-mobile-screen-button',cat:"music",deep:'',web:"https://www.deezer.com/",play:''},
+  youtubemusic:{name:"YouTube Music",icon:'fa-solid fa-mobile-screen-button',cat:"music",deep:'',web:"https://music.youtube.com/",play:''},
+  youtubekids:{name:"YouTube Kids",icon:'fa-solid fa-mobile-screen-button',cat:"video",deep:'',web:"https://www.youtube.com/kids/",play:''},
+  applemusic:{name:"Apple Music",icon:'fa-solid fa-mobile-screen-button',cat:"music",deep:'',web:"https://music.apple.com/",play:''},
+  joox:{name:"JOOX",icon:'fa-solid fa-mobile-screen-button',cat:"music",deep:'',web:"https://www.joox.com/",play:''},
+  resso:{name:"Resso",icon:'fa-solid fa-mobile-screen-button',cat:"music",deep:'',web:"https://www.resso.com/",play:''},
+  mobilelegends2:{name:"Mobile Legends",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://www.mobilelegends.com/",play:''},
+  freefire2:{name:"Free Fire",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://ff.garena.com/",play:''},
+  freefiremax:{name:"Free Fire MAX",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://ff.garena.com/",play:''},
+  pubg2:{name:"PUBG Mobile",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://www.pubgmobile.com/",play:''},
+  roblox2:{name:"Roblox",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://www.roblox.com/",play:''},
+  minecraft2:{name:"Minecraft",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://www.minecraft.net/",play:''},
+  efootball:{name:"eFootball",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://www.konami.com/efootball/",play:''},
+  higgs:{name:"Higgs Games Island",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://www.higgsgames.com/",play:''},
+  clashofclans:{name:"Clash of Clans",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://supercell.com/en/games/clashofclans/",play:''},
+  clashroyale2:{name:"Clash Royale",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://supercell.com/en/games/clashroyale/",play:''},
+  candycrush:{name:"Candy Crush Saga",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://www.king.com/game/candycrushsaga/",play:''},
+  honkaistarrail:{name:"Honkai: Star Rail",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://hsr.hoyoverse.com/",play:''},
+  genshin:{name:"Genshin Impact",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://genshin.hoyoverse.com/",play:''},
+  valorantmobile:{name:"Valorant Mobile",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://playvalorant.com/",play:''},
+  wildrift:{name:"League of Legends: Wild Rift",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://wildrift.leagueoflegends.com/",play:''},
+  codmobile:{name:"Call of Duty Mobile",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://www.callofduty.com/mobile",play:''},
+  arenabreakout:{name:"Arena Breakout",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://arenabreakout.com/",play:''},
+  farlight84:{name:"Farlight 84",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://www.farlight84.com/",play:''},
+  amongus2:{name:"Among Us",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://www.innersloth.com/games/among-us/",play:''},
+  brawlstars:{name:"Brawl Stars",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://supercell.com/en/games/brawlstars/",play:''},
+  subwaysurfers:{name:"Subway Surfers",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://sybo.com/subway-surfers/",play:''},
+  blockblast:{name:"Block Blast",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://blockblast.com/",play:''},
+  tocaboca:{name:"Toca Boca World",icon:'fa-solid fa-mobile-screen-button',cat:"game",deep:'',web:"https://tocaboca.com/",play:''},
+  alightmotion:{name:"Alight Motion",icon:'fa-solid fa-mobile-screen-button',cat:"edit",deep:'',web:"https://alightmotion.com/",play:''},
+  inshot:{name:"InShot",icon:'fa-solid fa-mobile-screen-button',cat:"edit",deep:'',web:"https://inshot.com/",play:''},
+  vneditor:{name:"VN Video Editor",icon:'fa-solid fa-mobile-screen-button',cat:"edit",deep:'',web:"https://www.vlognow.me/",play:''},
+  kinemaster:{name:"KineMaster",icon:'fa-solid fa-mobile-screen-button',cat:"edit",deep:'',web:"https://www.kinemaster.com/",play:''},
+  powerdirector:{name:"PowerDirector",icon:'fa-solid fa-mobile-screen-button',cat:"edit",deep:'',web:"https://www.cyberlink.com/products/powerdirector-video-editing-software/overview_en_US.html",play:''},
+  filmora:{name:"Filmora",icon:'fa-solid fa-mobile-screen-button',cat:"edit",deep:'',web:"https://filmora.wondershare.com/",play:''},
+  picsart:{name:"Picsart",icon:'fa-solid fa-mobile-screen-button',cat:"edit photo",deep:'',web:"https://picsart.com/",play:''},
+  canva2:{name:"Canva",icon:'fa-solid fa-mobile-screen-button',cat:"edit productivity",deep:'',web:"https://www.canva.com/",play:''},
+  lightroom:{name:"Adobe Lightroom",icon:'fa-solid fa-mobile-screen-button',cat:"photo edit",deep:'',web:"https://www.adobe.com/products/photoshop-lightroom.html",play:''},
+  photoshop:{name:"Adobe Photoshop",icon:'fa-solid fa-mobile-screen-button',cat:"edit photo",deep:'',web:"https://www.adobe.com/products/photoshop.html",play:''},
+  adobeexpress:{name:"Adobe Express",icon:'fa-solid fa-mobile-screen-button',cat:"edit",deep:'',web:"https://www.adobe.com/express/",play:''},
+  premiererush:{name:"Adobe Premiere Rush",icon:'fa-solid fa-mobile-screen-button',cat:"edit",deep:'',web:"https://www.adobe.com/products/premiere-rush.html",play:''},
+  prequel:{name:"Prequel",icon:'fa-solid fa-mobile-screen-button',cat:"edit photo",deep:'',web:"https://prequel.app/",play:''},
+  remini:{name:"Remini",icon:'fa-solid fa-mobile-screen-button',cat:"photo ai",deep:'',web:"https://remini.ai/",play:''},
+  faceapp:{name:"FaceApp",icon:'fa-solid fa-mobile-screen-button',cat:"photo",deep:'',web:"https://www.faceapp.com/",play:''},
+  airbrush:{name:"AirBrush",icon:'fa-solid fa-mobile-screen-button',cat:"photo",deep:'',web:"https://airbrush.com/",play:''},
+  photoroom:{name:"Photoroom",icon:'fa-solid fa-mobile-screen-button',cat:"photo edit",deep:'',web:"https://www.photoroom.com/",play:''},
+  meitu:{name:"Meitu",icon:'fa-solid fa-mobile-screen-button',cat:"photo edit",deep:'',web:"https://www.meitu.com/",play:''},
+  snapseed:{name:"Snapseed",icon:'fa-solid fa-mobile-screen-button',cat:"photo",deep:'',web:"https://snapseed.online/",play:''},
+  vsco:{name:"VSCO",icon:'fa-solid fa-mobile-screen-button',cat:"photo",deep:'',web:"https://www.vsco.co/",play:''},
+  picsartai:{name:"Picsart AI",icon:'fa-solid fa-mobile-screen-button',cat:"photo ai",deep:'',web:"https://picsart.com/",play:''},
+  hypic:{name:"Hypic",icon:'fa-solid fa-mobile-screen-button',cat:"photo edit",deep:'',web:"https://hypic.app/",play:''},
+  beautyplus:{name:"BeautyPlus",icon:'fa-solid fa-mobile-screen-button',cat:"photo",deep:'',web:"https://www.beautyplus.com/",play:''},
+  photos:{name:"Google Photos",icon:'fa-solid fa-mobile-screen-button',cat:"photo",deep:'',web:"https://photos.google.com/",play:''},
+  wink:{name:"Wink",icon:'fa-solid fa-mobile-screen-button',cat:"photo edit",deep:'',web:"https://wink.meitu.com/",play:''},
+  dana3:{name:"DANA",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://www.dana.id/",play:''},
+  ovo2:{name:"OVO",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://www.ovo.id/",play:''},
+  linkaja2:{name:"LinkAja",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://www.linkaja.id/",play:''},
+  brimo2:{name:"BRImo",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://bri.co.id/brimo",play:''},
+  mybca2:{name:"myBCA",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://www.bca.co.id/",play:''},
+  bcamobile:{name:"BCA mobile",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://www.bca.co.id/",play:''},
+  livin2:{name:"Livin by Mandiri",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://www.bankmandiri.co.id/livin",play:''},
+  wondr:{name:"wondr by BNI",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://www.bni.co.id/",play:''},
+  jenius:{name:"Jenius",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://www.jenius.com/",play:''},
+  seabank:{name:"SeaBank",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://www.seabank.co.id/",play:''},
+  bankjago:{name:"Bank Jago",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://www.jago.com/",play:''},
+  kredivo:{name:"Kredivo",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://www.kredivo.com/",play:''},
+  akulaku:{name:"Akulaku",icon:'fa-solid fa-mobile-screen-button',cat:"finance shopping",deep:'',web:"https://www.akulaku.com/",play:''},
+  gopay2:{name:"GoPay",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://www.gojek.com/gopay/",play:''},
+  gopaymerchant:{name:"GoPay Merchant",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://www.gojek.com/gopay/",play:''},
+  gojek2:{name:"Gojek",icon:'fa-solid fa-mobile-screen-button',cat:"travel food",deep:'',web:"https://www.gojek.com/",play:''},
+  grab2:{name:"Grab",icon:'fa-solid fa-mobile-screen-button',cat:"travel food",deep:'',web:"https://www.grab.com/id/",play:''},
+  maxim:{name:"Maxim",icon:'fa-solid fa-mobile-screen-button',cat:"travel",deep:'',web:"https://taximaxim.com/",play:''},
+  indrive:{name:"inDrive",icon:'fa-solid fa-mobile-screen-button',cat:"travel",deep:'',web:"https://indrive.com/",play:''},
+  uber:{name:"Uber",icon:'fa-solid fa-mobile-screen-button',cat:"travel",deep:'',web:"https://www.uber.com/",play:''},
+  traveloka:{name:"Traveloka",icon:'fa-solid fa-mobile-screen-button',cat:"travel",deep:'',web:"https://www.traveloka.com/",play:''},
+  tiket:{name:"tiket.com",icon:'fa-solid fa-mobile-screen-button',cat:"travel",deep:'',web:"https://www.tiket.com/",play:''},
+  agoda:{name:"Agoda",icon:'fa-solid fa-mobile-screen-button',cat:"travel",deep:'',web:"https://www.agoda.com/",play:''},
+  booking:{name:"Booking.com",icon:'fa-solid fa-mobile-screen-button',cat:"travel",deep:'',web:"https://www.booking.com/",play:''},
+  maps3:{name:"Google Maps",icon:'fa-solid fa-mobile-screen-button',cat:"travel",deep:'',web:"https://maps.google.com/",play:''},
+  waze:{name:"Waze",icon:'fa-solid fa-mobile-screen-button',cat:"travel",deep:'',web:"https://www.waze.com/",play:''},
+  moovit:{name:"Moovit",icon:'fa-solid fa-mobile-screen-button',cat:"travel",deep:'',web:"https://moovitapp.com/",play:''},
+  kaiaccess:{name:"KAI Access",icon:'fa-solid fa-mobile-screen-button',cat:"travel",deep:'',web:"https://apps.kereta-api.co.id/",play:''},
+  mypertamina:{name:"MyPertamina",icon:'fa-solid fa-mobile-screen-button',cat:"travel finance",deep:'',web:"https://mypertamina.id/",play:''},
+  shopee3:{name:"Shopee",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://shopee.co.id/",play:''},
+  tokopedia2:{name:"Tokopedia",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://www.tokopedia.com/",play:''},
+  lazada2:{name:"Lazada",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://www.lazada.co.id/",play:''},
+  blibli2:{name:"Blibli",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://www.blibli.com/",play:''},
+  bukalapak:{name:"Bukalapak",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://www.bukalapak.com/",play:''},
+  akulaku2:{name:"Akulaku",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://www.akulaku.com/",play:''},
+  alfagift:{name:"Alfagift",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://alfagift.id/",play:''},
+  klikindomaret:{name:"Klik Indomaret",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://www.klikindomaret.com/",play:''},
+  uniqlo:{name:"UNIQLO",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://www.uniqlo.com/id/",play:''},
+  zalora:{name:"Zalora",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://www.zalora.co.id/",play:''},
+  amazon2:{name:"Amazon",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://www.amazon.com/",play:''},
+  aliexpress2:{name:"AliExpress",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://www.aliexpress.com/",play:''},
+  alibaba:{name:"Alibaba.com",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://www.alibaba.com/",play:''},
+  shopback:{name:"ShopBack",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://www.shopback.co.id/",play:''},
+  sociolla:{name:"Sociolla",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://www.sociolla.com/",play:''},
+  watsons:{name:"Watsons",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://www.watsons.co.id/",play:''},
+  blibliseller:{name:"Blibli Seller",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://seller.blibli.com/",play:''},
+  tokopediaseller:{name:"Tokopedia Seller",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://seller.tokopedia.com/",play:''},
+  shopeeseller:{name:"Shopee Seller",icon:'fa-solid fa-mobile-screen-button',cat:"shopping",deep:'',web:"https://seller.shopee.co.id/",play:''},
+  chatgpt3:{name:"ChatGPT",icon:'fa-solid fa-mobile-screen-button',cat:"ai",deep:'',web:"https://chatgpt.com/",play:''},
+  gemini2:{name:"Gemini",icon:'fa-solid fa-mobile-screen-button',cat:"ai",deep:'',web:"https://gemini.google.com/",play:''},
+  claude:{name:"Claude",icon:'fa-solid fa-mobile-screen-button',cat:"ai",deep:'',web:"https://claude.ai/",play:''},
+  copilot:{name:"Microsoft Copilot",icon:'fa-solid fa-mobile-screen-button',cat:"ai",deep:'',web:"https://copilot.microsoft.com/",play:''},
+  perplexity:{name:"Perplexity",icon:'fa-solid fa-mobile-screen-button',cat:"ai",deep:'',web:"https://www.perplexity.ai/",play:''},
+  grok:{name:"Grok",icon:'fa-solid fa-mobile-screen-button',cat:"ai",deep:'',web:"https://grok.com/",play:''},
+  deepseek:{name:"DeepSeek",icon:'fa-solid fa-mobile-screen-button',cat:"ai",deep:'',web:"https://www.deepseek.com/",play:''},
+  poe:{name:"Poe",icon:'fa-solid fa-mobile-screen-button',cat:"ai",deep:'',web:"https://poe.com/",play:''},
+  characterai:{name:"Character AI",icon:'fa-solid fa-mobile-screen-button',cat:"ai",deep:'',web:"https://character.ai/",play:''},
+  gemini3:{name:"Google Gemini",icon:'fa-solid fa-mobile-screen-button',cat:"ai",deep:'',web:"https://gemini.google.com/",play:''},
+  notebooklm:{name:"NotebookLM",icon:'fa-solid fa-mobile-screen-button',cat:"ai education",deep:'',web:"https://notebooklm.google.com/",play:''},
+  quillbot:{name:"QuillBot",icon:'fa-solid fa-mobile-screen-button',cat:"ai education",deep:'',web:"https://quillbot.com/",play:''},
+  grammarly:{name:"Grammarly",icon:'fa-solid fa-mobile-screen-button',cat:"ai productivity",deep:'',web:"https://www.grammarly.com/",play:''},
+  gamma:{name:"Gamma",icon:'fa-solid fa-mobile-screen-button',cat:"ai productivity",deep:'',web:"https://gamma.app/",play:''},
+  notionai:{name:"Notion AI",icon:'fa-solid fa-mobile-screen-button',cat:"ai productivity",deep:'',web:"https://www.notion.so/product/ai",play:''},
+  m365copilot:{name:"Microsoft 365 Copilot",icon:'fa-solid fa-mobile-screen-button',cat:"ai productivity",deep:'',web:"https://www.microsoft.com/microsoft-365/copilot",play:''},
+  drive2:{name:"Google Drive",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://drive.google.com/",play:''},
+  docs:{name:"Google Docs",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://docs.google.com/",play:''},
+  sheets:{name:"Google Sheets",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://sheets.google.com/",play:''},
+  slides:{name:"Google Slides",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://slides.google.com/",play:''},
+  word:{name:"Microsoft Word",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://www.microsoft.com/microsoft-365/word",play:''},
+  excel:{name:"Microsoft Excel",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://www.microsoft.com/microsoft-365/excel",play:''},
+  powerpoint:{name:"Microsoft PowerPoint",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://www.microsoft.com/microsoft-365/powerpoint",play:''},
+  wpsoffice:{name:"WPS Office",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://www.wps.com/",play:''},
+  notion2:{name:"Notion",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://www.notion.so/",play:''},
+  evernote:{name:"Evernote",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://evernote.com/",play:''},
+  trello:{name:"Trello",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://trello.com/",play:''},
+  asana:{name:"Asana",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://asana.com/",play:''},
+  slack:{name:"Slack",icon:'fa-solid fa-mobile-screen-button',cat:"productivity chat",deep:'',web:"https://slack.com/",play:''},
+  teams:{name:"Microsoft Teams",icon:'fa-solid fa-mobile-screen-button',cat:"productivity chat",deep:'',web:"https://www.microsoft.com/microsoft-teams/",play:''},
+  zoom2:{name:"Zoom",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://zoom.us/",play:''},
+  dropbox2:{name:"Dropbox",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://www.dropbox.com/",play:''},
+  googleone:{name:"Google One",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://one.google.com/",play:''},
+  camscanner:{name:"CamScanner",icon:'fa-solid fa-mobile-screen-button',cat:"productivity photo",deep:'',web:"https://www.camscanner.com/",play:''},
+  acrobat:{name:"Adobe Acrobat",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://www.adobe.com/acrobat.html",play:''},
+  foxit:{name:"Foxit PDF",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://www.foxit.com/pdf-reader/",play:''},
+  xodo:{name:"Xodo",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://xodo.com/",play:''},
+  telegram3:{name:"Telegram",icon:'fa-solid fa-mobile-screen-button',cat:"chat",deep:'',web:"https://telegram.org/",play:''},
+  line2:{name:"LINE",icon:'fa-solid fa-mobile-screen-button',cat:"chat",deep:'',web:"https://line.me/",play:''},
+  signal2:{name:"Signal",icon:'fa-solid fa-mobile-screen-button',cat:"chat",deep:'',web:"https://signal.org/",play:''},
+  viber:{name:"Viber",icon:'fa-solid fa-mobile-screen-button',cat:"chat",deep:'',web:"https://www.viber.com/",play:''},
+  wechat:{name:"WeChat",icon:'fa-solid fa-mobile-screen-button',cat:"chat",deep:'',web:"https://www.wechat.com/",play:''},
+  kakaotalk:{name:"KakaoTalk",icon:'fa-solid fa-mobile-screen-button',cat:"chat",deep:'',web:"https://www.kakaocorp.com/page/service/service/KakaoTalk",play:''},
+  imo:{name:"imo",icon:'fa-solid fa-mobile-screen-button',cat:"chat",deep:'',web:"https://imo.im/",play:''},
+  zalo:{name:"Zalo",icon:'fa-solid fa-mobile-screen-button',cat:"chat",deep:'',web:"https://zalo.me/",play:''},
+  meetup:{name:"Meetup",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://www.meetup.com/",play:''},
+  linkedin2:{name:"LinkedIn",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://www.linkedin.com/",play:''},
+  reddit2:{name:"Reddit",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://www.reddit.com/",play:''},
+  pinterest2:{name:"Pinterest",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://www.pinterest.com/",play:''},
+  snapchat2:{name:"Snapchat",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://www.snapchat.com/",play:''},
+  tumblr:{name:"Tumblr",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://www.tumblr.com/",play:''},
+  quora:{name:"Quora",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://www.quora.com/",play:''},
+  weverse:{name:"Weverse",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://weverse.io/",play:''},
+  ngl:{name:"NGL",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://ngl.link/",play:''},
+  poppo:{name:"Poppo Live",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://www.poppo.com/",play:''},
+  jodel:{name:"Jodel",icon:'fa-solid fa-mobile-screen-button',cat:"social",deep:'',web:"https://jodel.com/",play:''},
+  twitch2:{name:"Twitch",icon:'fa-solid fa-mobile-screen-button',cat:"social streaming",deep:'',web:"https://www.twitch.tv/",play:''},
+  wattpad:{name:"Wattpad",icon:'fa-solid fa-mobile-screen-button',cat:"education entertainment",deep:'',web:"https://www.wattpad.com/",play:''},
+  medium:{name:"Medium",icon:'fa-solid fa-mobile-screen-button',cat:"education",deep:'',web:"https://medium.com/",play:''},
+  duolingo2:{name:"Duolingo",icon:'fa-solid fa-mobile-screen-button',cat:"education",deep:'',web:"https://www.duolingo.com/",play:''},
+  gauth2:{name:"Gauth",icon:'fa-solid fa-mobile-screen-button',cat:"education ai",deep:'',web:"https://gauthmath.com/",play:''},
+  classroom2:{name:"Google Classroom",icon:'fa-solid fa-mobile-screen-button',cat:"education",deep:'',web:"https://classroom.google.com/",play:''},
+  coursera2:{name:"Coursera",icon:'fa-solid fa-mobile-screen-button',cat:"education",deep:'',web:"https://www.coursera.org/",play:''},
+  udemy2:{name:"Udemy",icon:'fa-solid fa-mobile-screen-button',cat:"education",deep:'',web:"https://www.udemy.com/",play:''},
+  khan:{name:"Khan Academy",icon:'fa-solid fa-mobile-screen-button',cat:"education",deep:'',web:"https://www.khanacademy.org/",play:''},
+  photomath:{name:"Photomath",icon:'fa-solid fa-mobile-screen-button',cat:"education",deep:'',web:"https://photomath.com/",play:''},
+  brainly:{name:"Brainly",icon:'fa-solid fa-mobile-screen-button',cat:"education",deep:'',web:"https://brainly.com/",play:''},
+  quizlet:{name:"Quizlet",icon:'fa-solid fa-mobile-screen-button',cat:"education",deep:'',web:"https://quizlet.com/",play:''},
+  translate:{name:"Google Translate",icon:'fa-solid fa-mobile-screen-button',cat:"education tools",deep:'',web:"https://translate.google.com/",play:''},
+  mstranslator:{name:"Microsoft Translator",icon:'fa-solid fa-mobile-screen-button',cat:"education tools",deep:'',web:"https://www.microsoft.com/translator/",play:''},
+  myfitnesspal:{name:"MyFitnessPal",icon:'fa-solid fa-mobile-screen-button',cat:"health",deep:'',web:"https://www.myfitnesspal.com/",play:''},
+  strava:{name:"Strava",icon:'fa-solid fa-mobile-screen-button',cat:"health",deep:'',web:"https://www.strava.com/",play:''},
+  googlefit:{name:"Google Fit",icon:'fa-solid fa-mobile-screen-button',cat:"health",deep:'',web:"https://fit.google.com/",play:''},
+  fitbit:{name:"Fitbit",icon:'fa-solid fa-mobile-screen-button',cat:"health",deep:'',web:"https://www.fitbit.com/",play:''},
+  flo:{name:"Flo",icon:'fa-solid fa-mobile-screen-button',cat:"health",deep:'',web:"https://flo.health/",play:''},
+  halodoc:{name:"Halodoc",icon:'fa-solid fa-mobile-screen-button',cat:"health",deep:'',web:"https://www.halodoc.com/",play:''},
+  alodokter:{name:"Alodokter",icon:'fa-solid fa-mobile-screen-button',cat:"health",deep:'',web:"https://www.alodokter.com/",play:''},
+  klikdokter:{name:"KlikDokter",icon:'fa-solid fa-mobile-screen-button',cat:"health",deep:'',web:"https://www.klikdokter.com/",play:''},
+  satusehat:{name:"PeduliLindungi / SATUSEHAT",icon:'fa-solid fa-mobile-screen-button',cat:"health",deep:'',web:"https://satusehat.kemkes.go.id/",play:''},
+  googlenews:{name:"Google News",icon:'fa-solid fa-mobile-screen-button',cat:"news",deep:'',web:"https://news.google.com/",play:''},
+  kompas:{name:"Kompas.com",icon:'fa-solid fa-mobile-screen-button',cat:"news",deep:'',web:"https://www.kompas.com/",play:''},
+  detik:{name:"detikcom",icon:'fa-solid fa-mobile-screen-button',cat:"news",deep:'',web:"https://www.detik.com/",play:''},
+  cnnindonesia:{name:"CNN Indonesia",icon:'fa-solid fa-mobile-screen-button',cat:"news",deep:'',web:"https://www.cnnindonesia.com/",play:''},
+  liputan6:{name:"Liputan6",icon:'fa-solid fa-mobile-screen-button',cat:"news",deep:'',web:"https://www.liputan6.com/",play:''},
+  tempo:{name:"Tempo",icon:'fa-solid fa-mobile-screen-button',cat:"news",deep:'',web:"https://www.tempo.co/",play:''},
+  bbcnews:{name:"BBC News",icon:'fa-solid fa-mobile-screen-button',cat:"news",deep:'',web:"https://www.bbc.com/news",play:''},
+  playstore:{name:"Google Play Store",icon:'fa-solid fa-mobile-screen-button',cat:"tools",deep:'',web:"https://play.google.com/store",play:''},
+  firefox:{name:"Firefox",icon:'fa-solid fa-mobile-screen-button',cat:"tools",deep:'',web:"https://www.mozilla.org/firefox/",play:''},
+  brave:{name:"Brave",icon:'fa-solid fa-mobile-screen-button',cat:"tools",deep:'',web:"https://brave.com/",play:''},
+  opera:{name:"Opera",icon:'fa-solid fa-mobile-screen-button',cat:"tools",deep:'',web:"https://www.opera.com/",play:''},
+  edge:{name:"Microsoft Edge",icon:'fa-solid fa-mobile-screen-button',cat:"tools",deep:'',web:"https://www.microsoft.com/edge",play:''},
+  samsunginternet:{name:"Samsung Internet",icon:'fa-solid fa-mobile-screen-button',cat:"tools",deep:'',web:"https://www.samsung.com/us/apps/samsung-internet/",play:''},
+  filesgoogle:{name:"Files by Google",icon:'fa-solid fa-mobile-screen-button',cat:"tools",deep:'',web:"https://files.google.com/",play:''},
+  keep:{name:"Google Keep",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://keep.google.com/",play:''},
+  meet:{name:"Google Meet",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://meet.google.com/",play:''},
+  calendar:{name:"Google Calendar",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://calendar.google.com/",play:''},
+  photos2:{name:"Google Photos",icon:'fa-solid fa-mobile-screen-button',cat:"photo",deep:'',web:"https://photos.google.com/",play:''},
+  wallet:{name:"Google Wallet",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://wallet.google/",play:''},
+  paypal:{name:"PayPal",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://www.paypal.com/",play:''},
+  wise:{name:"Wise",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://wise.com/",play:''},
+  jenius2:{name:"Jenius",icon:'fa-solid fa-mobile-screen-button',cat:"finance",deep:'',web:"https://www.jenius.com/",play:''},
+  klook:{name:"Klook",icon:'fa-solid fa-mobile-screen-button',cat:"travel",deep:'',web:"https://www.klook.com/",play:''},
+  tripadvisor:{name:"Tripadvisor",icon:'fa-solid fa-mobile-screen-button',cat:"travel",deep:'',web:"https://www.tripadvisor.com/",play:''},
+  airbnb:{name:"Airbnb",icon:'fa-solid fa-mobile-screen-button',cat:"travel",deep:'',web:"https://www.airbnb.com/",play:''},
+  foodpanda:{name:"Foodpanda",icon:'fa-solid fa-mobile-screen-button',cat:"food",deep:'',web:"https://www.foodpanda.com/",play:''},
+  grabfood:{name:"GrabFood",icon:'fa-solid fa-mobile-screen-button',cat:"food",deep:'',web:"https://www.grab.com/id/food/",play:''},
+  gofood:{name:"GoFood",icon:'fa-solid fa-mobile-screen-button',cat:"food",deep:'',web:"https://www.gojek.com/gofood/",play:''},
+  mcdonalds:{name:"McDonald’s",icon:'fa-solid fa-mobile-screen-button',cat:"food",deep:'',web:"https://www.mcdonalds.com/",play:''},
+  kfc:{name:"KFC",icon:'fa-solid fa-mobile-screen-button',cat:"food",deep:'',web:"https://global.kfc.com/",play:''},
+  pizzahut:{name:"Pizza Hut",icon:'fa-solid fa-mobile-screen-button',cat:"food",deep:'',web:"https://www.pizzahut.com/",play:''},
+  dominos:{name:"Domino’s",icon:'fa-solid fa-mobile-screen-button',cat:"food",deep:'',web:"https://www.dominos.com/",play:''},
+  github2:{name:"GitHub",icon:'fa-solid fa-mobile-screen-button',cat:"developer",deep:'',web:"https://github.com/",play:''},
+  gitlab:{name:"GitLab",icon:'fa-solid fa-mobile-screen-button',cat:"developer",deep:'',web:"https://gitlab.com/",play:''},
+  stackoverflow:{name:"Stack Overflow",icon:'fa-solid fa-mobile-screen-button',cat:"developer",deep:'',web:"https://stackoverflow.com/",play:''},
+  postman:{name:"Postman",icon:'fa-solid fa-mobile-screen-button',cat:"developer",deep:'',web:"https://www.postman.com/",play:''},
+  termux:{name:"Termux",icon:'fa-solid fa-mobile-screen-button',cat:"developer",deep:'',web:"https://termux.dev/",play:''},
+  replit:{name:"Replit",icon:'fa-solid fa-mobile-screen-button',cat:"developer",deep:'',web:"https://replit.com/",play:''},
+  fdroid:{name:"F-Droid",icon:'fa-solid fa-mobile-screen-button',cat:"developer",deep:'',web:"https://f-droid.org/",play:''},
+  vscode:{name:"Visual Studio Code",icon:'fa-solid fa-mobile-screen-button',cat:"developer",deep:'',web:"https://code.visualstudio.com/",play:''},
+  miro:{name:"Miro",icon:'fa-solid fa-mobile-screen-button',cat:"productivity",deep:'',web:"https://miro.com/",play:''},
+  canva3:{name:"Canva",icon:'fa-solid fa-mobile-screen-button',cat:"edit",deep:'',web:"https://www.canva.com/",play:''},
+  capcuttemplates:{name:"CapCut Templates",icon:'fa-solid fa-mobile-screen-button',cat:"edit",deep:'',web:"https://www.capcut.com/",play:''},
+  motionninja:{name:"Motion Ninja",icon:'fa-solid fa-mobile-screen-button',cat:"edit",deep:'',web:"https://www.apkmirror.com/",play:''},
+  nodevideo:{name:"Node Video",icon:'fa-solid fa-mobile-screen-button',cat:"edit",deep:'',web:"https://nodevideo.com/",play:''},
+  alightmotion2:{name:"Alight Motion",icon:'fa-solid fa-mobile-screen-button',cat:"edit",deep:'',web:"https://alightmotion.com/",play:''},
+  kwai:{name:"Kwai",icon:'fa-solid fa-mobile-screen-button',cat:"social video",deep:'',web:"https://www.kwai.com/",play:''},
+  likee:{name:"Likee",icon:'fa-solid fa-mobile-screen-button',cat:"social video",deep:'',web:"https://likee.video/",play:''},
+  snackvideo:{name:"SnackVideo",icon:'fa-solid fa-mobile-screen-button',cat:"social video",deep:'',web:"https://www.snackvideo.com/",play:''},
+  bigolive:{name:"Bigo Live",icon:'fa-solid fa-mobile-screen-button',cat:"social video",deep:'',web:"https://www.bigo.tv/",play:''},
+  vimeo:{name:"Vimeo",icon:'fa-solid fa-mobile-screen-button',cat:"video",deep:'',web:"https://vimeo.com/",play:''},
+  dailymotion:{name:"Dailymotion",icon:'fa-solid fa-mobile-screen-button',cat:"video",deep:'',web:"https://www.dailymotion.com/",play:''},
+  rumble:{name:"Rumble",icon:'fa-solid fa-mobile-screen-button',cat:"video",deep:'',web:"https://rumble.com/",play:''},
+  operagx:{name:"Opera GX",icon:'fa-solid fa-mobile-screen-button',cat:"tools game",deep:'',web:"https://www.opera.com/gx",play:''},
+  samsungmembers:{name:"Samsung Members",icon:'fa-solid fa-mobile-screen-button',cat:"tools",deep:'',web:"https://www.samsung.com/",play:''},
+  mihome:{name:"Mi Home",icon:'fa-solid fa-mobile-screen-button',cat:"tools",deep:'',web:"https://www.mi.com/",play:''},
+  googlehome:{name:"Google Home",icon:'fa-solid fa-mobile-screen-button',cat:"tools",deep:'',web:"https://home.google.com/",play:''},
+  smartthings:{name:"SmartThings",icon:'fa-solid fa-mobile-screen-button',cat:"tools",deep:'',web:"https://www.smartthings.com/",play:''},
+  msauth:{name:"Microsoft Authenticator",icon:'fa-solid fa-mobile-screen-button',cat:"tools",deep:'',web:"https://www.microsoft.com/en-us/security/mobile-authenticator-app",play:''},
+  googleauth:{name:"Google Authenticator",icon:'fa-solid fa-mobile-screen-button',cat:"tools",deep:'',web:"https://support.google.com/accounts/answer/1066447",play:''},
+});
+
+let activeCategory='all';
+const POPULARITY_ORDER = [
+  'whatsapp','tiktok','dana','shopee','capcut','gopay','instagram','youtube','facebook','chatgpt','telegram','chrome','tokopedia','gojek','grab','mobilelegends','freefire','pubg','roblox','spotify','canva','alightmotion','discord','netflix','googleone','vidio','claude','gemini','x','threads','messenger','gmail','googlemaps','maps','drive','brimo','ovo','linkaja','mybca','mandiri','bca','seabank','twitch','inshot','kinemaster','vneditor','picsart','remini','waze','traveloka','lazada','blibli','minecraft','efootball','genshin','honkai','callofduty','valorant','duolingo','coursera','udemy','wpsoffice','notion','zoom','dropbox','github'
 ];
+POPULARITY_ORDER.forEach((key,i)=>{ if(APP_LINKS[key]) APP_LINKS[key].popularity=1000-i*7; });
+Object.values(APP_LINKS).forEach((a,i)=>{ if(a.popularity===undefined) a.popularity=400-i*0.1; });
 
-function esc(v){return String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
-
-function renderPopular(){
-  const el=document.getElementById('popularApps');
-  el.innerHTML=POPULAR.map(([key,icon])=>{
-    const app=APP_LINKS[key];
-    return `<button class="app-card" type="button" onclick="openApp('${key}')">
-      <span class="app-logo app-generic">${icon}</span>
-      <span class="app-name">${esc(app.name)}</span>
-      <span class="app-action">Buka →</span>
-    </button>`;
-  }).join('');
+function setCategory(category,btn){
+  activeCategory=category;
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderApps();
 }
-
+function filterApps(){ renderApps(); }
+function renderApps(){
+  const q=(document.getElementById('appSearch')?.value||'').trim().toLowerCase();
+  const grid=document.getElementById('appGrid');
+  const empty=document.getElementById('appEmpty');
+  const apps=Object.entries(APP_LINKS).filter(([key,a])=>{
+    const matchesText=!q || a.name.toLowerCase().includes(q) || key.includes(q);
+    const matchesCat=activeCategory==='all' || a.cat.split(' ').includes(activeCategory);
+    return matchesText && matchesCat;
+  }).sort((a,b)=>(b[1].popularity||0)-(a[1].popularity||0));
+  grid.innerHTML=apps.map(([key,a])=>`<button class="app-card" type="button" onclick="openApp('${key}')"><span class="app-logo"><i class="${a.icon}"></i></span><span class="app-name">${a.name}</span><span class="app-action">Buka →</span></button>`).join('');
+  empty.hidden=apps.length!==0;
+}
 function openApp(name){
   const app=APP_LINKS[name];
-  if(!app)return;
-  let hidden=false;
-  const mark=()=>{hidden=true;};
-  document.addEventListener('visibilitychange',mark,{once:true});
-  try{window.location.href=app.deep;}catch(e){}
-  setTimeout(()=>{
-    document.removeEventListener('visibilitychange',mark);
-    if(!hidden) window.location.href=app.web;
-  },1100);
-}
-
-let currentPlayQuery='';
-function searchPlayStore(){
-  const input=document.getElementById('appSearch');
-  const q=input.value.trim();
-  const hint=document.getElementById('appSearchHint');
-  const result=document.getElementById('appSearchResult');
-  if(!q){
-    hint.textContent='Masukkan nama aplikasi terlebih dahulu.';
-    input.focus();
+  if(!app) return;
+  if(app.deep){
+    let hidden=false;
+    const mark=()=>{hidden=true;};
+    document.addEventListener('visibilitychange',mark,{once:true});
+    const started=Date.now();
+    window.location.href=app.deep;
+    setTimeout(()=>{
+      document.removeEventListener('visibilitychange',mark);
+      if(!hidden && Date.now()-started>=900){
+        openStoreFallback(app);
+      }
+    },1100);
     return;
   }
-  currentPlayQuery=q;
-  document.getElementById('resultName').textContent=q;
-  result.hidden=false;
-  hint.textContent='Hasil siap dibuka di Google Play Store.';
+  openStoreFallback(app);
 }
-
-function openPlaySearch(){
-  if(!currentPlayQuery)return;
-  const q=encodeURIComponent(currentPlayQuery);
-  const market='market://search?q='+q;
-  const web='https://play.google.com/store/search?q='+q+'&c=apps';
-  let hidden=false;
-  const mark=()=>{hidden=true;};
-  document.addEventListener('visibilitychange',mark,{once:true});
-  try{window.location.href=market;}catch(e){}
-  setTimeout(()=>{
-    document.removeEventListener('visibilitychange',mark);
-    if(!hidden)window.location.href=web;
-  },900);
+function openStoreFallback(app){
+  const q=encodeURIComponent(app.name);
+  window.location.href='https://play.google.com/store/search?q='+q+'&c=apps';
 }
-
-document.getElementById('appSearch').addEventListener('keydown',e=>{
-  if(e.key==='Enter')searchPlayStore();
-});
-renderPopular();
+renderApps();
 </script>
 
 
