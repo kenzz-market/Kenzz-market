@@ -468,75 +468,43 @@ save();
 
 
 
-function checkout(){
+async function checkout(){
+    if(!cart.length){
+        alert("Keranjang kosong");
+        return;
+    }
 
+    const ok = await requireMemberForPurchase({
+        type: "cart",
+        items: cart.map(p=>({
+            id:p.id,
+            name:p.name,
+            price:Number(p.price || 0),
+            qty:Number(p.qty || 1)
+        }))
+    });
 
-if(!cart.length){
+    if(!ok) return;
 
-alert(
-"Keranjang kosong"
-);
+    try{
+        const updated = await decrementProductStocks(cart.map(p=>({id:p.id, qty:Number(p.qty || 1)})));
+        if(!updated){
+            alert('Salah satu produk sudah habis atau stoknya tidak mencukupi. Silakan cek kembali keranjang.');
+            return;
+        }
+    }catch(e){
+        console.error(e);
+        alert('Stok belum dapat dikurangi. Silakan coba lagi.');
+        return;
+    }
 
-return;
+    let text = `Halo ${STORE_SETTINGS.storeName},\n\nSaya ingin membeli:\n\n`;
+    cart.forEach(p=>{
+        text += `${p.name}\nJumlah: ${p.qty}\nHarga: Rp ${(Number(p.price)*p.qty).toLocaleString("id-ID")}\n\n`;
+    });
+    text += `Total: Rp ${document.getElementById("total").innerHTML}\n\nMohon bantu cek ketersediaan dan pilihkan produk yang tersedia.\n\nTerima kasih.`;
 
-}
-
-
-
-let text =
-
-`Halo ${STORE_SETTINGS.storeName},
-
-Saya ingin membeli:
-
-`;
-
-
-
-cart.forEach(p=>{
-
-
-text +=
-
-`
-${p.name}
-Jumlah: ${p.qty}
-Harga: Rp ${(
-Number(p.price)*p.qty
-).toLocaleString("id-ID")}
-
-`;
-
-
-});
-
-
-
-text +=
-
-`
-Total:
-Rp ${document
-.getElementById("total")
-.innerHTML}
-
-`;
-
-
-
-window.open(
-
-"https://wa.me/"+
-STORE_SETTINGS.whatsappOwner+
-"?text="+
-encodeURIComponent(text),
-
-"_blank"
-
-);
-
-
-
+    window.location.href = "https://wa.me/"+STORE_SETTINGS.whatsappOwner+"?text="+encodeURIComponent(text);
 }
 
 
