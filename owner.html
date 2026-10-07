@@ -109,7 +109,19 @@ html{scroll-behavior:smooth}body{margin:0;padding:22px;min-height:100vh;color:#f
       <input id="whatsappSetting" placeholder="Nomor WhatsApp owner">
     </div>
 
-    <div class="card visual-settings-card">
+    <div class="card">
+      <h2>🖥️ Background Owner Center</h2>
+      <p class="hint">Background khusus halaman Owner, terpisah dari background halaman utama toko. Bisa memakai URL atau foto dari galeri.</p>
+      <input id="ownerBgUrl" placeholder="URL foto background Owner (https://...)" autocomplete="off">
+      <input id="ownerBgFile" type="file" accept="image/*">
+      <div id="ownerBgPreview" class="background-preview" style="height:150px;display:grid;place-items:center;color:#777">Belum ada background Owner</div>
+      <div class="mobile-stack" style="margin-top:10px">
+        <button class="secondary" type="button" onclick="previewOwnerBackground()">👁️ Preview</button>
+        <button class="secondary" type="button" onclick="resetOwnerBackground()">↺ Reset</button>
+      </div>
+    </div>
+
+<div class="card visual-settings-card">
       <div class="section-title"><h2 style="margin:0">🎨 Visual Halaman Utama</h2><span class="badge">OWNER ONLY</span></div>
       <p class="hint">Upload dari galeri akan disimpan ke Supabase Storage, jadi tampil di perangkat pengunjung juga. Link bisa berupa gambar atau video yang dapat diakses publik.</p>
       <div id="visualSettingsGrid" class="visual-settings-grid">
@@ -199,12 +211,52 @@ async function loadAdmins(){try{ownerAdmins=await getAdmins();document.getElemen
 function renderAdmins(){const box=document.getElementById('adminList');box.innerHTML=ownerAdmins.length?ownerAdmins.map(a=>`<div class="admin-row"><div class="info"><h3>${a.email||a.user_id}</h3><p><span class="badge">${a.role}</span></p></div>${a.role==='admin'?`<button class="delete" onclick="removeAdmin('${a.user_id}')">Hapus Admin</button>`:'<span class="badge">OWNER</span>'}</div>`).join(''):'<div class="empty">Belum ada admin.</div>';}
 async function addAdminFromForm(){const email=document.getElementById('newAdminEmail').value.trim();if(!email)return alert('Email wajib diisi');try{await addAdminByEmail(email);document.getElementById('newAdminEmail').value='';await loadOwnerData();alert('Admin berhasil ditambahkan.')}catch(e){alert('Gagal menambahkan admin: '+e.message)}}
 async function removeAdmin(id){if(!confirm('Hapus akses admin ini?'))return;try{await deleteAdmin(id);await loadOwnerData();alert('Admin dihapus.')}catch(e){alert('Gagal menghapus admin: '+e.message)}}
+async function loadOwnerBackground(){
+  try{
+    const s=JSON.parse(localStorage.getItem('kenzz_owner_settings')||'{}');
+    const url=s.ownerBackgroundUrl||'';
+    const input=document.getElementById('ownerBgUrl');
+    if(input)input.value=url;
+    previewOwnerBackground();
+    if(url) document.body.style.backgroundImage='linear-gradient(135deg,rgba(3,4,10,.82),rgba(7,7,14,.55)),url("'+url.replace(/"/g,'\\"')+'")';
+  }catch(e){console.warn('OWNER BG:',e.message)}
+}
+async function saveOwnerBackground(){
+  const input=document.getElementById('ownerBgUrl'),fileInput=document.getElementById('ownerBgFile');
+  let url=(input?.value||'').trim();
+  const file=fileInput?.files?.[0];
+  if(file){
+    const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');
+    const path='owner-center/background-'+Date.now()+'.'+ext;
+    const {error}=await supabaseClient.storage.from('store-backgrounds').upload(path,file,{upsert:true,contentType:file.type||undefined});
+    if(error)throw error;
+    url=supabaseClient.storage.from('store-backgrounds').getPublicUrl(path).data.publicUrl;
+    input.value=url;
+  }
+  const s=JSON.parse(localStorage.getItem('kenzz_owner_settings')||'{}');
+  s.ownerBackgroundUrl=url;
+  localStorage.setItem('kenzz_owner_settings',JSON.stringify(s));
+  previewOwnerBackground();
+  document.body.style.backgroundImage=url?'linear-gradient(135deg,rgba(3,4,10,.82),rgba(7,7,14,.55)),url("'+url.replace(/"/g,'\\"')+'")':'';
+}
+function previewOwnerBackground(){
+  const url=(document.getElementById('ownerBgUrl')?.value||'').trim();
+  const box=document.getElementById('ownerBgPreview');
+  if(box){box.style.backgroundImage=url?'url("'+url.replace(/"/g,'\\"')+'")':'';box.textContent=url?'Preview Background Owner':'Belum ada background Owner';}
+}
+function resetOwnerBackground(){
+  const s=JSON.parse(localStorage.getItem('kenzz_owner_settings')||'{}');
+  delete s.ownerBackgroundUrl;localStorage.setItem('kenzz_owner_settings',JSON.stringify(s));
+  const input=document.getElementById('ownerBgUrl'),file=document.getElementById('ownerBgFile');
+  if(input)input.value='';if(file)file.value='';previewOwnerBackground();document.body.style.backgroundImage='';
+}
+
 const VISUAL_KEYS=['background','hero','verified','statistik','announcement','social'];
 function visualRow(key){return {image_url:document.getElementById(key+'ImageUrl').value.trim(),video_url:document.getElementById(key+'VideoUrl').value.trim()};}
 function renderVisualPreview(key){const box=document.getElementById(key+'Preview');if(!box)return;const image=document.getElementById(key+'ImageUrl').value.trim();const video=document.getElementById(key+'VideoUrl').value.trim();if(video){box.innerHTML='<video src="'+video.replace(/"/g,'&quot;')+'" muted autoplay loop playsinline></video>';}else if(image){box.innerHTML='<img src="'+image.replace(/"/g,'&quot;')+'" alt="Preview">';}else{box.innerHTML='<span>Belum ada visual</span>';}}
 async function uploadVisualFile(file,key,type){if(!file)return '';const ext=(file.name.split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'');const path='homepage/'+key+'-'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.'+ext;const {error}=await supabaseClient.storage.from('store-backgrounds').upload(path,file,{upsert:true,contentType:file.type||undefined});if(error)throw error;const {data}=supabaseClient.storage.from('store-backgrounds').getPublicUrl(path);return data.publicUrl;}
-async function loadOwnerSettings(){try{const s=JSON.parse(localStorage.getItem('kenzz_owner_settings')||'{}');document.getElementById('storeNameSetting').value=s.storeName||STORE_SETTINGS.storeName||'Kenzz Store';document.getElementById('ownerNameSetting').value=s.ownerName||STORE_SETTINGS.ownerName||'';document.getElementById('whatsappSetting').value=s.whatsappOwner||STORE_SETTINGS.whatsappOwner||'';const {data,error}=await supabaseClient.from('store_visual_settings').select('*').eq('id',1).maybeSingle();if(error)throw error;if(data){VISUAL_KEYS.forEach(k=>{document.getElementById(k+'ImageUrl').value=data[k+'_image_url']||'';document.getElementById(k+'VideoUrl').value=data[k+'_video_url']||'';renderVisualPreview(k);});}}catch(e){console.error(e);alert('Gagal memuat pengaturan visual: '+e.message)}}
-async function saveOwnerSettings(){const btn=document.getElementById('saveVisualsBtn');if(btn){btn.disabled=true;btn.textContent='⏳ Menyimpan...';}try{const s={storeName:document.getElementById('storeNameSetting').value.trim(),ownerName:document.getElementById('ownerNameSetting').value.trim(),whatsappOwner:document.getElementById('whatsappSetting').value.trim()};localStorage.setItem('kenzz_owner_settings',JSON.stringify(s));const payload={id:1,updated_at:new Date().toISOString()};for(const key of VISUAL_KEYS){let imageUrl=document.getElementById(key+'ImageUrl').value.trim();let videoUrl=document.getElementById(key+'VideoUrl').value.trim();const imageFile=document.getElementById(key+'ImageFile').files[0];const videoFile=document.getElementById(key+'VideoFile').files[0];if(imageFile)imageUrl=await uploadVisualFile(imageFile,key,'image');if(videoFile)videoUrl=await uploadVisualFile(videoFile,key,'video');payload[key+'_image_url']=imageUrl||null;payload[key+'_video_url']=videoUrl||null;document.getElementById(key+'ImageUrl').value=imageUrl;document.getElementById(key+'VideoUrl').value=videoUrl;renderVisualPreview(key);}const {error}=await supabaseClient.from('store_visual_settings').upsert(payload,{onConflict:'id'});if(error)throw error;alert('Pengaturan Owner dan semua visual halaman utama berhasil disimpan.');}catch(e){console.error(e);alert('Gagal menyimpan pengaturan: '+e.message)}finally{if(btn){btn.disabled=false;btn.textContent='💾 Simpan Semua Pengaturan & Visual';}}}
+async function loadOwnerSettings(){try{const s=JSON.parse(localStorage.getItem('kenzz_owner_settings')||'{}');document.getElementById('storeNameSetting').value=s.storeName||STORE_SETTINGS.storeName||'Kenzz Store';document.getElementById('ownerNameSetting').value=s.ownerName||STORE_SETTINGS.ownerName||'';document.getElementById('whatsappSetting').value=s.whatsappOwner||STORE_SETTINGS.whatsappOwner||'';loadOwnerBackground();const {data,error}=await supabaseClient.from('store_visual_settings').select('*').eq('id',1).maybeSingle();if(error)throw error;if(data){VISUAL_KEYS.forEach(k=>{document.getElementById(k+'ImageUrl').value=data[k+'_image_url']||'';document.getElementById(k+'VideoUrl').value=data[k+'_video_url']||'';renderVisualPreview(k);});}}catch(e){console.error(e);alert('Gagal memuat pengaturan visual: '+e.message)}}
+async function saveOwnerSettings(){const btn=document.getElementById('saveVisualsBtn');if(btn){btn.disabled=true;btn.textContent='⏳ Menyimpan...';}try{const s={storeName:document.getElementById('storeNameSetting').value.trim(),ownerName:document.getElementById('ownerNameSetting').value.trim(),whatsappOwner:document.getElementById('whatsappSetting').value.trim()};localStorage.setItem('kenzz_owner_settings',JSON.stringify(s));await saveOwnerBackground();const payload={id:1,updated_at:new Date().toISOString()};for(const key of VISUAL_KEYS){let imageUrl=document.getElementById(key+'ImageUrl').value.trim();let videoUrl=document.getElementById(key+'VideoUrl').value.trim();const imageFile=document.getElementById(key+'ImageFile').files[0];const videoFile=document.getElementById(key+'VideoFile').files[0];if(imageFile)imageUrl=await uploadVisualFile(imageFile,key,'image');if(videoFile)videoUrl=await uploadVisualFile(videoFile,key,'video');payload[key+'_image_url']=imageUrl||null;payload[key+'_video_url']=videoUrl||null;document.getElementById(key+'ImageUrl').value=imageUrl;document.getElementById(key+'VideoUrl').value=videoUrl;renderVisualPreview(key);}const {error}=await supabaseClient.from('store_visual_settings').upsert(payload,{onConflict:'id'});if(error)throw error;alert('Pengaturan Owner dan semua visual halaman utama berhasil disimpan.');}catch(e){console.error(e);alert('Gagal menyimpan pengaturan: '+e.message)}finally{if(btn){btn.disabled=false;btn.textContent='💾 Simpan Semua Pengaturan & Visual';}}}
 async function resetOwnerVisuals(){if(!confirm('Reset semua foto/video halaman utama?'))return;try{const payload={id:1,updated_at:new Date().toISOString()};VISUAL_KEYS.forEach(k=>{payload[k+'_image_url']=null;payload[k+'_video_url']=null;document.getElementById(k+'ImageUrl').value='';document.getElementById(k+'VideoUrl').value='';document.getElementById(k+'ImageFile').value='';document.getElementById(k+'VideoFile').value='';renderVisualPreview(k);});const {error}=await supabaseClient.from('store_visual_settings').upsert(payload,{onConflict:'id'});if(error)throw error;alert('Visual halaman utama berhasil direset.');}catch(e){alert('Gagal mereset visual: '+e.message)}}
 setInterval(()=>document.querySelectorAll('[data-expires]').forEach(e=>e.textContent='⏱ '+promoRemaining(e.dataset.expires)),1000);
 

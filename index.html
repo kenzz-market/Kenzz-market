@@ -8,18 +8,29 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
 body.light{
-background:#f5f5f5;
+background:#f7f8fb;
 color:#111;
 }
+body.light #bg{opacity:.04}
+body.light .overlay{background:rgba(255,255,255,.90);z-index:-2}
 body.light .card,
 body.light .item,
-body.light .btn-icon{
-background:#ffffffaa;
-color:#111;
-border-color:#0002;
+body.light .btn-icon,
+body.light .menu-toggle,
+body.light .social a,
+body.light .member-menu,
+body.light .bottom{
+background:#fff !important;
+color:#111 !important;
+border-color:rgba(0,0,0,.10) !important;
+box-shadow:0 12px 35px rgba(20,25,40,.10);
 }
-body.light .bottom{background:#ffffffdd}
-body.light .bottom a{color:#111}
+body.light .card h2,body.light .card p,body.light .logo,body.light .bottom a,body.light .menu-toggle,body.light .btn-icon{color:#111 !important}
+body.light .hero{background:linear-gradient(rgba(255,255,255,.96),rgba(255,255,255,.96)) !important;color:#111;border-color:rgba(0,0,0,.10)}
+body.light .hero p{color:#555}
+body.light .hero h1{color:#111}
+body.light .button{color:#fff !important}
+body.light .bottom{background:#fff !important}
 
 *{box-sizing:border-box}
 body{
@@ -416,8 +427,12 @@ waGroup.href=STORE_SETTINGS.whatsappGroup;
 const VISUAL_KEYS=['background','hero','verified','statistik','announcement','social'];
 function setTimeIcon(){
   const icon=document.getElementById('timeThemeIcon'),btn=document.getElementById('themeButton'); if(!icon||!btn)return;
-  const hour=new Date().getHours(),day=hour>=6&&hour<18;
-  icon.className=day?'fa-solid fa-sun':'fa-solid fa-moon'; btn.title=day?'Siang':'Malam';
+  const parts=new Intl.DateTimeFormat('id-ID',{timeZone:'Asia/Jakarta',hour:'2-digit',hour12:false}).formatToParts(new Date());
+  const hour=Number(parts.find(x=>x.type==='hour')?.value||new Date().getHours());
+  const day=hour>=6&&hour<18;
+  icon.className=day?'fa-solid fa-sun':'fa-solid fa-moon';
+  btn.title=day?'Siang':'Malam';
+  btn.setAttribute('aria-label',day?'Mode siang':'Mode malam');
 }
 function applySectionVisual(key,data){
   if(key==='background'){const bg=document.getElementById('bg'); if(data.video_url){bg.style.display='block';bg.innerHTML='<source src="'+data.video_url.replace(/"/g,'&quot;')+'" type="video/mp4">';bg.load();bg.play().catch(()=>{});document.body.style.backgroundImage='';document.body.classList.remove('custom-background');}else{bg.style.display='none';if(data.image_url){document.body.style.backgroundImage='url("'+data.image_url.replace(/"/g,'&quot;')+'")';document.body.classList.add('custom-background');}else{document.body.style.backgroundImage='';document.body.classList.remove('custom-background');}}return;}
