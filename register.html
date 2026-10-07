@@ -1,55 +1,24 @@
 <!DOCTYPE html>
 <html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Daftar Member Kenzz Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#08080d;color:#fff;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;padding:20px}
-.box{width:100%;max-width:390px;background:#111119;border:1px solid #333;border-radius:22px;padding:25px}
-h2{text-align:center;margin-top:0}input{width:100%;padding:13px;margin-top:10px;background:#08080d;border:1px solid #333;border-radius:12px;color:#fff}
-button{width:100%;padding:13px;margin-top:12px;border:0;border-radius:12px;background:linear-gradient(135deg,#ff316f,#ff9d00);color:#fff;font-weight:bold;cursor:pointer}
-.secondary{background:#ffffff12;border:1px solid #ffffff20}.msg{text-align:center;color:#aaa;margin-top:14px;font-size:14px}.divider{text-align:center;color:#777;margin:15px 0}
-.small{text-align:center;color:#aaa;font-size:13px}.back{display:block;text-align:center;margin-top:15px;color:#fff;text-decoration:none}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#08080d;color:#fff;font-family:'Poppins',sans-serif;display:flex;align-items:center;justify-content:center;padding:20px}.box{width:100%;max-width:400px;background:#111119;border:1px solid #ffffff22;border-radius:22px;padding:25px}h1{font-family:'Orbitron',sans-serif;text-align:center;font-size:21px;margin:0 0 5px}.sub{text-align:center;color:#aaa;font-size:13px;margin-bottom:18px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}.tab{padding:10px;border-radius:11px;background:#ffffff0d;color:#aaa;border:1px solid #ffffff18;font-weight:700;cursor:pointer}.tab.active{background:#ff316f;color:#fff}.panel{display:none}.panel.active{display:block}input{width:100%;padding:13px;margin-top:10px;background:#08080d;border:1px solid #333;border-radius:12px;color:#fff;outline:none;font-family:inherit}button.main{width:100%;padding:13px;margin-top:12px;border:0;border-radius:12px;background:linear-gradient(135deg,#ff316f,#ff9d00);color:#fff;font-weight:bold;cursor:pointer;font-family:inherit}.secondary{background:#ffffff12!important;border:1px solid #ffffff20!important}.divider{text-align:center;color:#777;margin:15px 0}.msg{text-align:center;color:#aaa;margin-top:14px;font-size:13px;min-height:20px}.small{text-align:center;color:#999;font-size:11px;line-height:1.5}.back{display:block;text-align:center;margin-top:15px;color:#fff;text-decoration:none;font-size:13px}
 </style></head><body><div class="box">
-<h2>👤 Daftar Member</h2>
+<h1>👤 DAFTAR MEMBER</h1><p class="sub">Buat akun dan simpan profil kamu</p>
+<div class="tabs"><button id="emailTab" class="tab active" onclick="showMode('email')">Email</button><button id="phoneTab" class="tab" onclick="showMode('phone')">Nomor HP</button></div>
 <input id="name" placeholder="Nama lengkap">
-<input id="email" type="email" placeholder="Email">
+<div id="emailPanel" class="panel active"><input id="email" type="email" placeholder="Email"></div>
+<div id="phonePanel" class="panel"><input id="phone" placeholder="Nomor HP, contoh 0812xxxx atau +62812xxxx"></div>
 <input id="password" type="password" placeholder="Password minimal 6 karakter">
-<input id="phone" placeholder="Nomor HP (opsional)">
-<button onclick="register()">Daftar dengan Email</button>
-<div class="divider">atau</div>
-<button class="secondary" onclick="google()">🔵 Daftar dengan Google</button>
-<div class="divider">Login via Phone OTP</div>
-<input id="phoneOtp" placeholder="+628xxxxxxxxxx">
-<button class="secondary" onclick="sendOtp()">Kirim OTP</button>
-<input id="otp" placeholder="Kode OTP">
-<button class="secondary" onclick="verifyOtp()">Verifikasi OTP</button>
-<div id="msg" class="msg"></div>
-<p class="small">Data member otomatis tersimpan setelah akun dibuat.</p>
-<a class="back" href="index.html">← Kembali ke toko</a>
+<button class="main" onclick="register()">Buat Akun</button>
+<div class="divider">atau</div><button class="main secondary" onclick="google()">🔵 Daftar dengan Google</button>
+<div id="msg" class="msg"></div><p class="small">Akun dan profil disimpan di Supabase. Password tidak disimpan di tabel profil.</p><a class="back" href="index.html">← Kembali ke toko</a>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase.js"></script>
 <script>
-async function register(){
- const msg=document.getElementById("msg");
- try{
-  msg.textContent="Mendaftarkan akun...";
-  await signUpMember(
-   document.getElementById("email").value.trim(),
-   document.getElementById("password").value,
-   document.getElementById("name").value.trim(),
-   document.getElementById("phone").value.trim()
-  );
-  msg.textContent="Pendaftaran berhasil. Jika email confirmation aktif, cek email kamu.";
- }catch(e){msg.textContent=e.message;}
-}
-async function google(){
- try{await signInGoogle();}catch(e){document.getElementById("msg").textContent=e.message;}
-}
-async function sendOtp(){
- try{await sendPhoneOtp(document.getElementById("phoneOtp").value.trim());document.getElementById("msg").textContent="OTP dikirim.";}
- catch(e){document.getElementById("msg").textContent=e.message;}
-}
-async function verifyOtp(){
- try{await verifyPhoneOtp(document.getElementById("phoneOtp").value.trim(),document.getElementById("otp").value.trim());location.href="profile.html";}
- catch(e){document.getElementById("msg").textContent=e.message;}
-}
+let mode='email';
+function showMode(next){mode=next;document.getElementById('emailPanel').classList.toggle('active',next==='email');document.getElementById('phonePanel').classList.toggle('active',next==='phone');document.getElementById('emailTab').classList.toggle('active',next==='email');document.getElementById('phoneTab').classList.toggle('active',next==='phone');}
+async function register(){const msg=document.getElementById('msg');try{const name=document.getElementById('name').value.trim();const password=document.getElementById('password').value;if(password.length<6)throw new Error('Password minimal 6 karakter.');const email=mode==='email'?document.getElementById('email').value.trim():'';const phone=mode==='phone'?document.getElementById('phone').value.trim():'';if(!name)throw new Error('Nama wajib diisi.');if(!email&&!phone)throw new Error('Masukkan email atau nomor telepon.');msg.textContent='Membuat akun...';const data=await signUpMember({email,phone,password,name});if(data.session){await ensureMemberProfile();location.href='profile.html';return;}msg.textContent=mode==='email'?'Akun dibuat. Jika konfirmasi email aktif, cek email lalu login.':'Akun dibuat. Jika konfirmasi SMS aktif, selesaikan verifikasi nomor lalu login.';}catch(e){msg.textContent=e.message||'Pendaftaran gagal.';}}
+async function google(){try{await signInGoogle();}catch(e){document.getElementById('msg').textContent=e.message;}}
 </script></body></html>
