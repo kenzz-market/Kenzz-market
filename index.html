@@ -380,7 +380,7 @@ loadStats();
         const pending=getPendingPurchase();
         const user=await getCurrentUser();
         if(pending && user){
-            openWhatsAppPurchase(pending);
+            await completePendingPurchase();
         }
     }catch(e){console.log("PENDING PURCHASE:",e);}
 })();

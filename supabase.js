@@ -534,10 +534,12 @@ async function signUpMember(email, password, name, phone){
 }
 
 async function signInGoogle(){
+    const pending = getPendingPurchase();
+    const redirectPath = pending ? "/register.html?return=purchase" : "/profile.html";
     const { data, error } = await supabaseClient.auth.signInWithOAuth({
         provider: "google",
         options: {
-            redirectTo: window.location.origin + "/index.html"
+            redirectTo: window.location.origin + redirectPath
         }
     });
     if(error) throw error;
@@ -759,6 +761,71 @@ function openWhatsAppPurchase(purchaseData){
     clearPendingPurchase();
     window.location.href = buildWhatsAppPurchaseUrl(purchaseData);
 }
+
+// =====================================
+// ATOMIC CHECKOUT / PENDING PURCHASE
+// =====================================
+async function createPurchaseOrder(items=[], voucherCode=null){
+    const user=await getCurrentUser();
+    if(!user) throw new Error('Login member diperlukan.');
+    const clean=(items||[]).map(p=>({
+        id:String(p.id||''),
+        qty:Math.max(1,Number(p.qty||1)),
+        type:p.type==='promo'?'promo':'product'
+    })).filter(p=>p.id);
+    if(!clean.length) throw new Error('Produk pembelian tidak valid.');
+    const {data,error}=await supabaseClient.rpc('create_purchase_order',{
+        p_items:clean,
+        p_voucher_code:voucherCode ? String(voucherCode) : null
+    });
+    if(error) throw error;
+    if(!data?.success) throw new Error(data?.message||'Checkout gagal.');
+    return data;
+}
+
+function buildOrderWhatsAppUrl(order){
+    const lines=[`Halo ${STORE_SETTINGS.storeName},`,'','Saya ingin membeli:',''];
+    (order.items||[]).forEach(p=>{
+        lines.push(`${p.name}\nJumlah: ${p.qty}\nHarga: Rp ${(Number(p.price)*Number(p.qty)).toLocaleString('id-ID')}`,'');
+    });
+    if(order.subtotal!=null) lines.push(`Subtotal: Rp ${Number(order.subtotal).toLocaleString('id-ID')}`);
+    if(Number(order.discount||0)>0) lines.push(`Diskon: Rp ${Number(order.discount).toLocaleString('id-ID')}${order.voucher_code?' ('+order.voucher_code+')':''}`);
+    lines.push(`Total: Rp ${Number(order.total||0).toLocaleString('id-ID')}`,'','Mohon bantu cek ketersediaan.','','Terima kasih.');
+    return 'https://wa.me/'+STORE_SETTINGS.whatsappOwner+'?text='+encodeURIComponent(lines.join('\n'));
+}
+
+async function completePendingPurchase(){
+    const pending=getPendingPurchase();
+    if(!pending) return null;
+    const items=pending.type==='cart'
+      ? (pending.items||[]).map(p=>({id:p.id,qty:p.qty,type:'product'}))
+      : [{id:pending.id,qty:pending.qty||1,type:pending.type==='promo'?'promo':'product'}];
+    const voucherCode=pending.voucher_code||pending.voucherCode||null;
+    const order=await createPurchaseOrder(items,voucherCode);
+    clearPendingPurchase();
+    if(pending.type==='cart'){
+        try{
+            const cart=JSON.parse(localStorage.getItem('kenzz_cart')||'[]');
+            const ids=new Set((pending.items||[]).map(p=>String(p.id)));
+            localStorage.setItem('kenzz_cart',JSON.stringify(cart.filter(p=>!ids.has(String(p.id)))));
+        }catch(e){}
+    }
+    window.location.href=buildOrderWhatsAppUrl(order);
+    return order;
+}
+
+function subscribeMemberRealtime(userId,onChange){
+    if(!userId) return null;
+    return supabaseClient.channel('kenzz-member-'+userId)
+      .on('postgres_changes',{event:'*',schema:'public',table:'notifications',filter:`user_id=eq.${userId}`},payload=>onChange?.(payload))
+      .on('postgres_changes',{event:'*',schema:'public',table:'purchase_history',filter:`user_id=eq.${userId}`},payload=>onChange?.(payload))
+      .subscribe();
+}
+
+window.createPurchaseOrder=createPurchaseOrder;
+window.buildOrderWhatsAppUrl=buildOrderWhatsAppUrl;
+window.completePendingPurchase=completePendingPurchase;
+window.subscribeMemberRealtime=subscribeMemberRealtime;
 
 window.requireMemberForPurchase = requireMemberForPurchase;
 window.getPendingPurchase = getPendingPurchase;

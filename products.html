@@ -420,10 +420,8 @@ async function buyPromo(p){
   const ok=await requireMemberForPurchase({type:'promo',id:p.id,name:p.name,price:Number(p.price||0),qty:1});
   if(!ok)return;
   try{
-    const updated=await decrementPromoStock(p.id,1);
-    if(!updated){alert('Promo sudah habis.');loadPromos();return;}
-    await savePurchaseHistory([{id:p.id,name:p.name,price:Number(p.price||0),qty:1,image:p.image||''}],Number(p.price||0));
-    openWhatsAppPurchase({id:p.id,name:p.name,price:Number(p.price||0),qty:1});
+    const order=await createPurchaseOrder([{id:p.id,qty:1,type:'promo'}]);
+    window.location.href=buildOrderWhatsAppUrl(order);
   }catch(e){console.error(e);alert('Stok promo belum dapat dikurangi. Silakan coba lagi.');}
 }
 setInterval(()=>document.querySelectorAll('[data-promo-expires]').forEach(e=>{e.textContent='⏱ '+remainingPromo(e.dataset.promoExpires);}),1000);
@@ -689,22 +687,12 @@ async function buyProduct(product){
     });
     if(ok){
         try{
-            const updated = await decrementProductStock(product.id, 1);
-            if(!updated){
-                alert('Stok produk sudah habis atau tidak mencukupi. Silakan cek produk lain.');
-                await loadProducts();
-                return;
-            }
-            await savePurchaseHistory([{id:product.id,name:product.name,price:Number(product.price||0),qty:1,image:product.image||''}],Number(product.price||0));
-            openWhatsAppPurchase({
-                id: product.id,
-                name: product.name,
-                price: Number(product.price || 0),
-                qty: 1
-            });
+            const order=await createPurchaseOrder([{id:product.id,qty:1,type:'product'}]);
+            window.location.href=buildOrderWhatsAppUrl(order);
         }catch(e){
             console.error(e);
-            alert('Stok belum dapat dikurangi. Silakan coba lagi.');
+            alert('Pembelian gagal: '+e.message);
+            await loadProducts();
         }
     }
 }
