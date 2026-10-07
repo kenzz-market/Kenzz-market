@@ -126,7 +126,7 @@ display:grid;
 
 grid-template-columns:repeat(2,1fr);
 
-gap:15px;
+gap:10px;
 
 }
 
@@ -162,7 +162,8 @@ border-radius:12px;
 
 .card h3{
 
-margin:10px 0;
+margin:7px 0 5px;
+font-size:14px;
 
 }
 
@@ -230,6 +231,27 @@ color:white;
 }
 
 
+
+.availability{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  margin:2px 0 4px;
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:700;
+}
+.availability.available{
+  color:#7dffbf;
+  background:rgba(37,211,102,.12);
+  border:1px solid rgba(37,211,102,.25);
+}
+.availability.check{
+  color:#ffd36a;
+  background:rgba(255,193,7,.10);
+  border:1px solid rgba(255,193,7,.22);
+}
 
 .empty{
 
@@ -525,6 +547,11 @@ box.innerHTML =
 data.map(p=>{
 
 
+const stock = Number(p.stock ?? 0);
+let availability = stock > 0
+  ? '<span class="availability available">● Tersedia</span>'
+  : '<span class="availability check">● Cek Ketersediaan</span>';
+
 let message =
 
 encodeURIComponent(
@@ -538,6 +565,8 @@ ${p.name}
 
 Harga:
 Rp ${Number(p.price).toLocaleString("id-ID")}
+
+Mohon cek ketersediaan produk terlebih dahulu.
 
 Terima kasih.`
 
@@ -566,7 +595,7 @@ Rp ${Number(p.price)
 
 </div>
 
-
+${availability}
 
 <p class="info">
 
@@ -575,8 +604,7 @@ ${p.category}
 
 <br>
 
-Stok:
-${p.stock}
+Stok: ${stock > 0 ? stock : "Cek admin"}
 
 </p>
 
