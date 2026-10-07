@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Login Owner • Kenzz Store</title>
+<title>Login Admin • Kenzz Store</title>
 
 <style>
 
@@ -119,7 +119,7 @@ color:#aaa;
 
 
 <h2>
-👑 Login Owner Kenzz Store
+🛡️ Login Admin Kenzz Store
 </h2>
 
 
@@ -220,7 +220,7 @@ await checkRole();
 
 
 if(
-role==="owner"
+role==="admin"
 ){
 
 
@@ -239,7 +239,7 @@ msg.innerHTML=
 
 setTimeout(()=>{
 
-location.href="owner.html";
+location.href="admin.html";
 
 },700);
 
@@ -250,7 +250,7 @@ location.href="owner.html";
 
 
 msg.innerHTML=
-"Akun ini bukan Owner. Gunakan Login Admin untuk akun admin.";
+"Akun ini bukan Admin. Gunakan Login Owner untuk akun owner.";
 
 
 
@@ -288,7 +288,7 @@ error.message;
 </script>
 
 
-<div style="text-align:center;margin:14px 0"><a href="admin-login.html" style="color:#00ffd5;text-decoration:none">🛡️ Login sebagai Admin</a></div>
+<div style="text-align:center;margin:14px 0"><a href="login.html" style="color:#00ffd5;text-decoration:none">👑 Login sebagai Owner</a></div>
 </body>
 
 </html>
