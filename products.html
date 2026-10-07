@@ -132,7 +132,7 @@ gap:10px;
 
 
 
-.card{
+.card{position:relative;
 
 background:#111119;
 
@@ -181,11 +181,8 @@ font-weight:bold;
 
 
 
-.info{
-
-color:#aaa;
-
-}
+.info{color:#aaa;}
+.favorite-btn{position:absolute;right:10px;top:10px;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:rgba(5,5,12,.72);color:#fff;cursor:pointer;font-size:17px;z-index:2}.favorite-btn.active{color:#ff4f87;background:rgba(255,49,111,.16);border-color:rgba(255,49,111,.35)}
 
 
 
@@ -305,15 +302,13 @@ grid-template-columns:repeat(2,1fr);
 
 
 <div class="top">
-
-
-<input
-
-id="search"
-
-placeholder="Cari produk...">
-
-
+<input id="search" placeholder="Cari produk...">
+<select id="sortProducts" style="padding:14px;border-radius:12px;border:1px solid #333;background:#111119;color:#fff">
+<option value="latest">Terbaru</option>
+<option value="low">Harga terendah</option>
+<option value="high">Harga tertinggi</option>
+<option value="stock">Stok tersedia</option>
+</select>
 </div>
 
 
@@ -393,7 +388,7 @@ Memuat produk...
 
 
 let allProducts=[];
-
+let favoriteIds=new Set();
 let activeCategory="Semua";
 
 
@@ -427,6 +422,7 @@ async function buyPromo(p){
   try{
     const updated=await decrementPromoStock(p.id,1);
     if(!updated){alert('Promo sudah habis.');loadPromos();return;}
+    await savePurchaseHistory([{id:p.id,name:p.name,price:Number(p.price||0),qty:1,image:p.image||''}],Number(p.price||0));
     openWhatsAppPurchase({id:p.id,name:p.name,price:Number(p.price||0),qty:1});
   }catch(e){console.error(e);alert('Stok promo belum dapat dikurangi. Silakan coba lagi.');}
 }
@@ -441,10 +437,8 @@ async function loadProducts(){
 try{
 
 
-allProducts =
-await getProducts();
-
-
+allProducts = await getProducts();
+try{ favoriteIds=new Set((await getFavorites()).map(x=>String(x.product_id))); }catch(e){ favoriteIds=new Set(); }
 render();
 
 
@@ -507,12 +501,8 @@ render();
 // SEARCH
 
 
-document
-.getElementById("search")
-.addEventListener(
-"input",
-render
-);
+document.getElementById("search").addEventListener("input",render);
+document.getElementById("sortProducts").addEventListener("change",render);
 
 
 
@@ -565,8 +555,12 @@ return matchText && matchCategory;
 
 
 
-let box =
-document.getElementById("products");
+const sort=document.getElementById('sortProducts').value;
+if(sort==='low') data.sort((a,b)=>Number(a.price||0)-Number(b.price||0));
+if(sort==='high') data.sort((a,b)=>Number(b.price||0)-Number(a.price||0));
+if(sort==='stock') data.sort((a,b)=>Number(b.stock||0)-Number(a.stock||0));
+
+let box = document.getElementById("products");
 
 
 
@@ -605,8 +599,7 @@ return `
 
 
 <div class="card">
-
-
+<button class="favorite-btn ${favoriteIds.has(String(p.id))?'active':''}" onclick='toggleProductFavorite(${JSON.stringify(p)},this)'>❤</button>
 <img src="${p.image || 'https://via.placeholder.com/300'}">
 
 
@@ -670,6 +663,14 @@ onclick='addProductCart(${JSON.stringify(p)})'>
 
 
 
+async function toggleProductFavorite(product,btn){
+  try{
+    const active=await toggleFavorite(product);
+    if(active) favoriteIds.add(String(product.id)); else favoriteIds.delete(String(product.id));
+    btn.classList.toggle('active',active);
+  }catch(e){alert('Favorit belum dapat disimpan: '+e.message);}
+}
+
 function addProductCart(product){
 
 
@@ -699,6 +700,7 @@ async function buyProduct(product){
                 await loadProducts();
                 return;
             }
+            await savePurchaseHistory([{id:product.id,name:product.name,price:Number(product.price||0),qty:1,image:product.image||''}],Number(product.price||0));
             openWhatsAppPurchase({
                 id: product.id,
                 name: product.name,

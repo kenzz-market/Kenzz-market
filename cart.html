@@ -174,7 +174,9 @@ async function checkout(){
     cart.forEach(p=>{
         text += `${p.name}\nJumlah: ${p.qty}\nHarga: Rp ${(Number(p.price)*p.qty).toLocaleString("id-ID")}\n\n`;
     });
-    text += `Total: Rp ${document.getElementById("total").innerHTML}\n\nMohon bantu cek ketersediaan dan pilihkan produk yang tersedia.\n\nTerima kasih.`;
+    const totalValue = cart.reduce((sum,p)=>sum + Number(p.price||0)*Number(p.qty||1),0);
+    await savePurchaseHistory(cart,totalValue);
+    text += `Total: Rp ${totalValue.toLocaleString("id-ID")}\n\nMohon bantu cek ketersediaan dan pilihkan produk yang tersedia.\n\nTerima kasih.`;
 
     window.location.href = "https://wa.me/"+STORE_SETTINGS.whatsappOwner+"?text="+encodeURIComponent(text);
 }

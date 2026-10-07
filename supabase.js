@@ -765,3 +765,74 @@ window.getPendingPurchase = getPendingPurchase;
 window.clearPendingPurchase = clearPendingPurchase;
 window.buildWhatsAppPurchaseUrl = buildWhatsAppPurchaseUrl;
 window.openWhatsAppPurchase = openWhatsAppPurchase;
+
+
+// =====================================
+// FAVORIT MEMBER + RIWAYAT PEMBELIAN
+// =====================================
+
+async function getFavorites(){
+    const user=await getCurrentUser();
+    if(!user) return [];
+    const {data,error}=await supabaseClient.from('member_favorites').select('*').eq('user_id',user.id).order('created_at',{ascending:false});
+    if(error) throw error;
+    return data||[];
+}
+
+async function isFavorite(productId){
+    const user=await getCurrentUser();
+    if(!user) return false;
+    const {data,error}=await supabaseClient.from('member_favorites').select('id').eq('user_id',user.id).eq('product_id',String(productId)).maybeSingle();
+    if(error) throw error;
+    return !!data;
+}
+
+async function toggleFavorite(product){
+    const user=await getCurrentUser();
+    if(!user){
+        localStorage.setItem('kenzz_pending_favorite',JSON.stringify(product));
+        location.href='register.html?return=favorite';
+        return false;
+    }
+    const exists=await isFavorite(product.id);
+    if(exists){
+        const {error}=await supabaseClient.from('member_favorites').delete().eq('user_id',user.id).eq('product_id',String(product.id));
+        if(error) throw error;
+        return false;
+    }
+    const {error}=await supabaseClient.from('member_favorites').insert({user_id:user.id,product_id:String(product.id),product_name:product.name||'',product_price:Number(product.price||0),product_image:product.image||''});
+    if(error) throw error;
+    return true;
+}
+
+async function savePurchaseHistory(items,total,status='Menunggu konfirmasi'){
+    const user=await getCurrentUser();
+    if(!user) return null;
+    const clean=(items||[]).map(p=>({id:String(p.id||''),name:p.name||'',price:Number(p.price||0),qty:Math.max(1,Number(p.qty||1)),image:p.image||''}));
+    const {data,error}=await supabaseClient.from('purchase_history').insert({user_id:user.id,items:clean,total:Number(total||0),status,source:'whatsapp'}).select().single();
+    if(error) throw error;
+    return data;
+}
+
+async function getPurchaseHistory(){
+    const user=await getCurrentUser();
+    if(!user) return [];
+    const {data,error}=await supabaseClient.from('purchase_history').select('*').eq('user_id',user.id).order('created_at',{ascending:false});
+    if(error) throw error;
+    return data||[];
+}
+
+async function getOwnerPurchaseHistory(){
+    const role=await checkRole();
+    if(role!=='owner') throw new Error('Akses hanya untuk owner.');
+    const {data,error}=await supabaseClient.from('purchase_history').select('*').order('created_at',{ascending:false}).limit(100);
+    if(error) throw error;
+    return data||[];
+}
+
+window.getFavorites=getFavorites;
+window.isFavorite=isFavorite;
+window.toggleFavorite=toggleFavorite;
+window.savePurchaseHistory=savePurchaseHistory;
+window.getPurchaseHistory=getPurchaseHistory;
+window.getOwnerPurchaseHistory=getOwnerPurchaseHistory;
