@@ -299,6 +299,20 @@ background:#ffffff0d;
 .member-menu a:hover{background:#ffffff18}
 body.light .member-menu{background:#fff;color:#111}
 body.light .member-menu a{color:#111}
+
+/* Popular apps on homepage */
+.popular-apps{margin-top:15px;padding:18px;border-radius:22px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);box-shadow:0 14px 42px rgba(0,0,0,.25),0 0 24px rgba(56,217,255,.08);backdrop-filter:blur(14px)}
+.popular-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:14px}.popular-head h2{margin:0;font-size:20px}.popular-head p{margin:4px 0 0;color:#aaa;font-size:11px}.popular-more{font-size:11px;color:#7eeeff;text-decoration:none;font-weight:800}
+.popular-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.popular-card{position:relative;display:flex;align-items:center;gap:10px;padding:12px;border-radius:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);color:#fff;text-decoration:none;transition:.22s;overflow:hidden}.popular-card::after{content:"";position:absolute;left:8%;right:8%;bottom:-8px;height:16px;background:linear-gradient(90deg,transparent,#67e8ff99,#7dffb299,transparent);filter:blur(9px);opacity:.45}.popular-card:hover{transform:translateY(-2px);filter:brightness(1.13);box-shadow:0 0 0 1px #7eeeff66,0 0 24px #38d9ff44}.popular-icon{width:40px;height:40px;flex:0 0 40px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.1);font-size:18px}.popular-name{font-weight:800;font-size:12px;line-height:1.2}.popular-cat{display:block;margin-top:3px;color:#aaa;font-size:10px;font-weight:500}.popular-rank{margin-left:auto;color:#7eeeff;font-size:10px;font-weight:900}
+body.light .popular-apps{background:rgba(255,255,255,.84);border-color:rgba(0,0,0,.08);box-shadow:0 14px 40px rgba(0,0,0,.10)} body.light .popular-card{background:rgba(255,255,255,.9);color:#111;border-color:rgba(0,0,0,.08)} body.light .popular-cat{color:#666}.popular-tabs{display:flex;gap:7px;overflow:auto;margin-bottom:12px;padding-bottom:2px}.popular-tab{border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#ddd;border-radius:999px;padding:7px 10px;font-size:10px;font-weight:800;white-space:nowrap}.popular-tab.active{background:#25f4ee;color:#061011;border-color:#25f4ee}.popular-tab{cursor:pointer}
+@media(max-width:650px){.popular-grid{grid-template-columns:1fr 1fr}.popular-head h2{font-size:18px}}
+
+/* Anime Lovers / streaming cards */
+.anime-section{margin-top:15px;padding:18px;border-radius:22px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);box-shadow:0 14px 42px rgba(0,0,0,.25),0 0 26px rgba(168,85,247,.10);backdrop-filter:blur(14px)}
+.anime-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}.anime-head h2{margin:0;font-size:18px}.anime-head p{margin:5px 0 0;color:#aaa;font-size:11px;line-height:1.5}.anime-more{color:#c4b5fd;text-decoration:none;font-size:11px;font-weight:800;white-space:nowrap}.anime-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.anime-book{position:relative;min-height:205px;padding:14px;border-radius:10px 17px 17px 10px;overflow:hidden;text-decoration:none;color:#fff;background:linear-gradient(135deg,rgba(91,33,182,.86),rgba(17,24,39,.94));border:1px solid rgba(255,255,255,.14);box-shadow:inset 8px 0 0 rgba(255,255,255,.06),0 12px 30px rgba(0,0,0,.28);transition:.22s}.anime-book:nth-child(2n){background:linear-gradient(135deg,rgba(30,64,175,.86),rgba(17,24,39,.94))}.anime-book:nth-child(3n){background:linear-gradient(135deg,rgba(157,23,77,.84),rgba(17,24,39,.94))}.anime-book::before{content:"";position:absolute;left:8px;top:0;bottom:0;width:2px;background:linear-gradient(transparent,#fff8,transparent);opacity:.5}.anime-book::after{content:"";position:absolute;left:15%;right:15%;bottom:-8px;height:20px;background:linear-gradient(90deg,transparent,#c4b5fd99,#67e8f999,transparent);filter:blur(10px);opacity:.45}.anime-book:hover{transform:translateY(-3px) rotate(-.4deg);box-shadow:0 0 0 1px #c4b5fd66,0 0 30px #a855f744,0 16px 35px rgba(0,0,0,.35)}.anime-badge{display:inline-flex;padding:5px 8px;border-radius:999px;background:rgba(255,255,255,.12);font-size:9px;font-weight:800}.anime-title{display:block;margin-top:13px;font-size:15px;font-weight:900;line-height:1.2}.anime-meta{display:block;margin-top:7px;font-size:10px;color:#d8d4e5;line-height:1.45}.anime-watch{position:absolute;left:14px;right:14px;bottom:13px;display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 10px;border-radius:11px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.15);font-size:10px;font-weight:900}.anime-watch i{font-size:11px}.anime-note{margin-top:11px;padding:10px 12px;border-radius:13px;background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.13);color:#aaa;font-size:10px;line-height:1.5}.anime-note strong{color:#ddd}
+body.light .anime-section{background:rgba(255,255,255,.88);border-color:rgba(0,0,0,.08);box-shadow:0 14px 40px rgba(0,0,0,.10)}body.light .anime-head p,body.light .anime-note{color:#666}body.light .anime-book{color:#fff}
+@media(max-width:650px){.anime-grid{grid-template-columns:1fr 1fr}.anime-book{min-height:195px}.anime-title{font-size:14px}}
+
 </style>
 </head>
 
@@ -332,6 +346,46 @@ body.light .member-menu a{color:#111}
 <a class="button" href="products.html">🛍 List produk</a>
 <a class="button" href="products.html">🔎 Jelajahi</a>
 </div>
+
+
+<section class="popular-apps" id="popularApps">
+  <div class="popular-head">
+    <div><h2>🔥 Aplikasi Populer Saat Ini</h2><p>Game, sosial, edit, AI, keuangan, streaming, dan aplikasi yang sedang ramai.</p></div>
+    <a class="popular-more" href="tools.html">Lihat semua →</a>
+  </div>
+  <div class="popular-tabs" id="popularTabs">
+    <button class="popular-tab active" data-popcat="all">Semua</button><button class="popular-tab" data-popcat="game">🎮 Game</button><button class="popular-tab" data-popcat="social">💬 Sosial</button><button class="popular-tab" data-popcat="edit">🎨 Edit</button><button class="popular-tab" data-popcat="ai">🤖 AI</button><button class="popular-tab" data-popcat="finance">💳 Keuangan</button><button class="popular-tab" data-popcat="streaming">🎬 Streaming</button>
+  </div>
+  <div class="popular-grid" id="popularGrid"></div>
+</section>
+
+<section class="anime-section" id="animeLovers">
+  <div class="anime-head">
+    <div><h2>🍿 Anime Lovers • Terbaru</h2><p>Update anime terbaru dan pilihan tontonan resmi. Ketuk buku untuk langsung menuju tempat menonton.</p></div>
+    <a class="anime-more" href="https://www.crunchyroll.com/id/videos/new/" target="_blank" rel="noopener">Lebih banyak anime →</a>
+  </div>
+  <div class="anime-grid">
+    <a class="anime-book" href="https://www.youtube.com/watch?v=T8_7uS-XIw8" target="_blank" rel="noopener">
+      <span class="anime-badge">🇲🇾 BOBOIBOY • OFFICIAL</span><span class="anime-title">BoBoiBoy</span><span class="anime-meta">Episode 1 Extended Version dari kanal resmi Monsta.</span><span class="anime-watch"><i class="fa-brands fa-youtube"></i> Tonton di YouTube</span>
+    </a>
+    <a class="anime-book" href="https://www.crunchyroll.com/series/GT00384004/overgeared" target="_blank" rel="noopener">
+      <span class="anime-badge">🔥 FALL 2026</span><span class="anime-title">Overgeared</span><span class="anime-meta">Anime fantasy baru, mulai Oktober 2026 dan tersedia di Crunchyroll.</span><span class="anime-watch"><i class="fa-solid fa-play"></i> Tonton di Crunchyroll</span>
+    </a>
+    <a class="anime-book" href="https://www.crunchyroll.com/search?q=Black%20Clover%20Season%202" target="_blank" rel="noopener">
+      <span class="anime-badge">⚔️ NEW SEASON</span><span class="anime-title">Black Clover Season 2</span><span class="anime-meta">Kembalinya Asta dan Magic Knights pada lineup Fall 2026.</span><span class="anime-watch"><i class="fa-solid fa-play"></i> Cari & Tonton</span>
+    </a>
+    <a class="anime-book" href="https://www.crunchyroll.com/search?q=The%20Apothecary%20Diaries%20Season%203" target="_blank" rel="noopener">
+      <span class="anime-badge">🌿 NEW SEASON</span><span class="anime-title">The Apothecary Diaries S3</span><span class="anime-meta">Maomao kembali memecahkan misteri baru pada Fall 2026.</span><span class="anime-watch"><i class="fa-solid fa-play"></i> Cari & Tonton</span>
+    </a>
+    <a class="anime-book" href="https://www.crunchyroll.com/search?q=From%20Far%20Away" target="_blank" rel="noopener">
+      <span class="anime-badge">✨ NEW 2026</span><span class="anime-title">From Far Away</span><span class="anime-meta">Fantasy shoujo baru yang mulai streaming Oktober 2026.</span><span class="anime-watch"><i class="fa-solid fa-play"></i> Cari & Tonton</span>
+    </a>
+    <a class="anime-book" href="https://www.crunchyroll.com/search?q=A%20Tale%20of%20the%20Secret%20Saint" target="_blank" rel="noopener">
+      <span class="anime-badge">🪄 NEW 2026</span><span class="anime-title">A Tale of the Secret Saint</span><span class="anime-meta">Fantasy baru yang tayang mulai Oktober 2026 di Crunchyroll.</span><span class="anime-watch"><i class="fa-solid fa-play"></i> Cari & Tonton</span>
+    </a>
+  </div>
+  <div class="anime-note"><strong>Tempat nonton resmi:</strong> tombol diarahkan ke kanal atau layanan resmi seperti YouTube/Crunchyroll. Katalog anime dan ketersediaan dapat berbeda menurut wilayah dan langganan.</div>
+</section>
 
 <div class="card-grid">
 <div class="card verified">
@@ -497,5 +551,36 @@ loadStats();
 </script>
 
 
+
+<script>
+const POPULAR_HOME=[
+ {name:'WhatsApp',key:'whatsapp',cat:'Sosial',icon:'fa-brands fa-whatsapp'},
+ {name:'TikTok',key:'tiktok',cat:'Sosial / Video',icon:'fa-brands fa-tiktok'},
+ {name:'DANA',key:'dana',cat:'Keuangan',icon:'fa-solid fa-wallet'},
+ {name:'Shopee',key:'shopee',cat:'Belanja',icon:'fa-solid fa-bag-shopping'},
+ {name:'CapCut',key:'capcut',cat:'Edit Video',icon:'fa-solid fa-scissors'},
+ {name:'GoPay',key:'gopay',cat:'Keuangan',icon:'fa-solid fa-wallet'},
+ {name:'Instagram',key:'instagram',cat:'Sosial',icon:'fa-brands fa-instagram'},
+ {name:'ChatGPT',key:'chatgpt',cat:'AI',icon:'fa-solid fa-robot'},
+ {name:'Spotify',key:'spotify',cat:'Musik',icon:'fa-brands fa-spotify'},
+ {name:'Mobile Legends',key:'mobilelegends',cat:'Game',icon:'fa-solid fa-gamepad'},
+ {name:'Roblox',key:'roblox',cat:'Game',icon:'fa-solid fa-gamepad'},
+ {name:'Free Fire',key:'freefire',cat:'Game',icon:'fa-solid fa-crosshairs'},
+ {name:'PUBG Mobile',key:'pubg',cat:'Game',icon:'fa-solid fa-crosshairs'},
+ {name:'eFootball',key:'efootball',cat:'Game',icon:'fa-solid fa-futbol'},
+ {name:'Gauth',key:'gauth',cat:'AI / Edukasi',icon:'fa-solid fa-graduation-cap'},
+ {name:'Claude',key:'claude',cat:'AI',icon:'fa-solid fa-robot'},
+ {name:'Vidio',key:'vidio',cat:'Streaming',icon:'fa-solid fa-tv'},
+ {name:'Netflix',key:'netflix',cat:'Streaming',icon:'fa-solid fa-film'},
+ {name:'Canva',key:'canva',cat:'Edit & Kreatif',icon:'fa-solid fa-palette'},
+ {name:'Alight Motion',key:'alightmotion',cat:'Edit Video',icon:'fa-solid fa-wand-magic-sparkles'},
+ {name:'Telegram',key:'telegram',cat:'Chat',icon:'fa-brands fa-telegram'},
+ {name:'YouTube',key:'youtube',cat:'Video',icon:'fa-brands fa-youtube'},
+ {name:'Genshin Impact',key:'genshin',cat:'Game',icon:'fa-solid fa-gamepad'},
+ {name:'Higgs Games Island',key:'higgs',cat:'Game',icon:'fa-solid fa-dice'}
+];
+function renderPopular(cat='all'){const grid=document.getElementById('popularGrid');if(!grid)return;const list=POPULAR_HOME.filter(a=>cat==='all'||a.cat.toLowerCase().includes(cat));grid.innerHTML=list.map((a,i)=>`<a class="popular-card" href="tools.html?search=${encodeURIComponent(a.name)}"><span class="popular-icon"><i class="${a.icon}"></i></span><span><span class="popular-name">${a.name}</span><span class="popular-cat">${a.cat}</span></span><span class="popular-rank">#${i+1}</span></a>`).join('')}
+document.querySelectorAll('.popular-tab').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.popular-tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active');renderPopular(btn.dataset.popcat)}));renderPopular();
+</script>
 </body>
 </html>
