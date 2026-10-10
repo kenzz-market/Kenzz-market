@@ -37,6 +37,7 @@ begin
 end;
 $$;
 
+revoke execute on function public.owner_list_admins() from public, anon;
 grant execute on function public.owner_list_admins() to authenticated;
 
 
@@ -83,6 +84,7 @@ begin
 end;
 $$;
 
+revoke execute on function public.owner_add_admin_by_email(text) from public, anon;
 grant execute on function public.owner_add_admin_by_email(text) to authenticated;
 
 
@@ -115,6 +117,7 @@ begin
 end;
 $$;
 
+revoke execute on function public.owner_delete_admin(uuid) from public, anon;
 grant execute on function public.owner_delete_admin(uuid) to authenticated;
 
 
@@ -153,6 +156,7 @@ begin
 end;
 $$;
 
+revoke execute on function public.owner_delete_member(uuid) from public, anon;
 grant execute on function public.owner_delete_member(uuid) to authenticated;
 
 -- Paksa Supabase/PostgREST memuat ulang schema cache.

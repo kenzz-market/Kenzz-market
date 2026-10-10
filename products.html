@@ -408,23 +408,15 @@ function remainingPromo(expires){
   return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 }
 function renderPromos(promos){
-  const box=document.getElementById('promoProducts');
-  if(!promos.length){box.innerHTML='<div class="empty">Belum ada produk promo aktif</div>';return;}
-  box.innerHTML=promos.map(p=>{
-    const stock=Number(p.stock||0);
-    return `<div class="promo-card"><img src="${p.image||'https://via.placeholder.com/300'}"><span class="promo-badge">🔥 PROMO</span><h3>${p.name}</h3><div class="promo-price">Rp ${Number(p.price||0).toLocaleString('id-ID')}</div><div class="promo-countdown" data-promo-expires="${p.expires_at}">⏱ ${remainingPromo(p.expires_at)}</div><div class="availability ${stock>0?'available':'check'}">● ${stock>0?'Tersedia':'Cek Ketersediaan'}</div><p class="info">Kategori: ${p.category||'-'}<br>Stok: ${stock>0?stock:'Cek admin'}</p><button class="buy" onclick='buyPromo(${JSON.stringify(p)})'>💬 Beli Sekarang</button></div>`;
-  }).join('');
+ const box=document.getElementById('promoProducts');if(!promos.length){box.innerHTML='<div class="empty">Belum ada produk promo aktif</div>';return;}
+ box.innerHTML=promos.map(p=>{const stock=Math.max(0,Number(p.stock||0));const img=safeHttpUrl(p.image,'https://via.placeholder.com/300');const payload=encodeURIComponent(JSON.stringify({id:String(p.id),name:p.name||'',price:Number(p.price||0),stock,type:'promo'})).replace(/'/g,'%27');return `<div class="promo-card"><img src="${escHtml(img)}" alt="${escHtml(p.name||'Promo')}"><span class="promo-badge">🔥 PROMO</span><h3>${escHtml(p.name||'Promo')}</h3><div class="promo-price">Rp ${Number(p.price||0).toLocaleString('id-ID')}</div><div class="promo-countdown" data-promo-expires="${escHtml(p.expires_at||'')}">⏱ ${remainingPromo(p.expires_at)}</div><div class="availability ${stock>0?'available':'check'}">● ${stock>0?'Tersedia':'Cek Ketersediaan'}</div><p class="info">Kategori: ${escHtml(p.category||'-')}<br>Stok: ${stock>0?stock:'Cek admin'}</p><button class="buy" onclick="buyPromoEncoded('${payload}')">💬 Beli Sekarang</button></div>`;}).join('');
 }
+function buyPromoEncoded(encoded){try{const p=JSON.parse(decodeURIComponent(encoded));buyPromo(p);}catch(e){alert('Data promo tidak valid.');}}
 async function buyPromo(p){
-  const stock=Number(p.stock||0); if(stock<1){alert('Promo ini sudah habis.');return;}
-  const ok=await requireMemberForPurchase({type:'promo',id:p.id,name:p.name,price:Number(p.price||0),qty:1});
-  if(!ok)return;
-  try{
-    const updated=await decrementPromoStock(p.id,1);
-    if(!updated){alert('Promo sudah habis.');loadPromos();return;}
-    await savePurchaseHistory([{id:p.id,name:p.name,price:Number(p.price||0),qty:1,image:p.image||''}],Number(p.price||0));
-    openWhatsAppPurchase({id:p.id,name:p.name,price:Number(p.price||0),qty:1});
-  }catch(e){console.error(e);alert('Stok promo belum dapat dikurangi. Silakan coba lagi.');}
+  if(Number(p.stock||0)<1){alert('Promo ini sudah habis.');return;}
+  const pending={type:'promo',id:String(p.id),qty:1};if(!await requireMemberForPurchase(pending))return;
+  try{const order=await createPurchaseOrder([{id:String(p.id),type:'promo',qty:1}],null);clearPendingPurchase();location.href=buildWhatsAppOrderUrl(order);}
+  catch(e){console.error(e);alert('Checkout promo gagal: '+e.message);loadPromos();}
 }
 setInterval(()=>document.querySelectorAll('[data-promo-expires]').forEach(e=>{e.textContent='⏱ '+remainingPromo(e.dataset.promoExpires);}),1000);
 
@@ -509,154 +501,16 @@ document.getElementById("sortProducts").addEventListener("change",render);
 
 
 function render(){
-
-
-let keyword =
-
-document
-.getElementById("search")
-.value
-.toLowerCase();
-
-
-
-let data =
-allProducts.filter(p=>{
-
-
-let matchText =
-
-(
-p.name+
-p.category
-)
-
-.toLowerCase()
-
-.includes(keyword);
-
-
-
-let matchCategory =
-
-activeCategory==="Semua"
-
-||
-
-p.category===activeCategory;
-
-
-
-return matchText && matchCategory;
-
-
-});
-
-
-
-
-const sort=document.getElementById('sortProducts').value;
-if(sort==='low') data.sort((a,b)=>Number(a.price||0)-Number(b.price||0));
-if(sort==='high') data.sort((a,b)=>Number(b.price||0)-Number(a.price||0));
-if(sort==='stock') data.sort((a,b)=>Number(b.stock||0)-Number(a.stock||0));
-
-let box = document.getElementById("products");
-
-
-
-if(!data.length){
-
-
-box.innerHTML=
-
-`
-<div class="empty">
-Produk belum tersedia
-</div>
-`;
-
-return;
-
-
+ let keyword=document.getElementById("search").value.toLowerCase();
+ let data=allProducts.filter(p=>(String(p.name||'')+' '+String(p.category||'')).toLowerCase().includes(keyword)&&(activeCategory==="Semua"||p.category===activeCategory));
+ const sort=document.getElementById('sortProducts').value;if(sort==='low')data.sort((a,b)=>Number(a.price||0)-Number(b.price||0));if(sort==='high')data.sort((a,b)=>Number(b.price||0)-Number(a.price||0));if(sort==='stock')data.sort((a,b)=>Number(b.stock||0)-Number(a.stock||0));
+ const box=document.getElementById("products");if(!data.length){box.innerHTML='<div class="empty">Produk belum tersedia</div>';return;}
+ box.innerHTML=data.map(p=>{const stock=Math.max(0,Number(p.stock||0));const availability=stock>0?'<span class="availability available">● Tersedia</span>':'<span class="availability check">● Cek Ketersediaan</span>';const img=safeHttpUrl(p.image,'https://via.placeholder.com/300');const id=encodeURIComponent(String(p.id)).replace(/'/g,'%27');return `<div class="card"><button class="favorite-btn ${favoriteIds.has(String(p.id))?'active':''}" onclick="toggleProductFavoriteById('${id}',this)">❤</button><img src="${escHtml(img)}" alt="${escHtml(p.name||'Produk')}"><h3>${escHtml(p.name||'Produk')}</h3><div class="price">Rp ${Number(p.price||0).toLocaleString("id-ID")}</div>${availability}<p class="info">Kategori: ${escHtml(p.category||'-')}<br>Stok: ${stock>0?stock:"Cek admin"}</p><button class="cart" onclick="addProductCartById('${id}')">🛒 Tambah Keranjang</button><button class="buy" style="background:#7c5cff" onclick="location.href='product-detail.html?id=${id}'">↗ Detail Produk</button><button class="buy" onclick="buyProductById('${id}')">💬 Beli Sekarang</button></div>`;}).join('');
 }
-
-
-
-
-
-box.innerHTML =
-
-data.map(p=>{
-
-
-const stock = Number(p.stock ?? 0);
-let availability = stock > 0
-  ? '<span class="availability available">● Tersedia</span>'
-  : '<span class="availability check">● Cek Ketersediaan</span>';
-
-
-return `
-
-
-<div class="card">
-<button class="favorite-btn ${favoriteIds.has(String(p.id))?'active':''}" onclick='toggleProductFavorite(${JSON.stringify(p)},this)'>❤</button>
-<img src="${p.image || 'https://via.placeholder.com/300'}">
-
-
-<h3>
-${p.name}
-</h3>
-
-
-<div class="price">
-
-Rp ${Number(p.price)
-.toLocaleString("id-ID")}
-
-</div>
-
-${availability}
-
-<p class="info">
-
-Kategori:
-${p.category}
-
-<br>
-
-Stok: ${stock > 0 ? stock : "Cek admin"}
-
-</p>
-
-
-
-<button class="cart" onclick='addProductCart(${JSON.stringify(p)})'>🛒 Tambah Keranjang</button>
-<button class="buy" style="background:#7c5cff" onclick="location.href='product-detail.html?id=${encodeURIComponent(p.id)}'">↗ Detail Produk</button>
-
-
-
-<button class="buy" onclick='buyProduct(${JSON.stringify(p)})'>
-💬 Beli Sekarang
-</button>
-
-
-
-</div>
-
-
-`;
-
-
-
-}).join("");
-
-
-
-}
-
-
-
-
+function productById(encoded){const id=decodeURIComponent(encoded);return allProducts.find(p=>String(p.id)===id)||null;}
+function toggleProductFavoriteById(encoded,btn){const p=productById(encoded);if(p)toggleProductFavorite(p,btn);}
+function addProductCartById(encoded){const p=productById(encoded);if(p)addProductCart(p);}
+function buyProductById(encoded){const p=productById(encoded);if(p)buyProduct(p);}
 
 async function toggleProductFavorite(product,btn){
   try{
@@ -681,36 +535,10 @@ alert(
 
 
 async function buyProduct(product){
-    const ok = await requireMemberForPurchase({
-        type: "product",
-        name: product.name,
-        price: Number(product.price || 0),
-        qty: 1
-    });
-    if(ok){
-        try{
-            const updated = await decrementProductStock(product.id, 1);
-            if(!updated){
-                alert('Stok produk sudah habis atau tidak mencukupi. Silakan cek produk lain.');
-                await loadProducts();
-                return;
-            }
-            await savePurchaseHistory([{id:product.id,name:product.name,price:Number(product.price||0),qty:1,image:product.image||''}],Number(product.price||0));
-            openWhatsAppPurchase({
-                id: product.id,
-                name: product.name,
-                price: Number(product.price || 0),
-                qty: 1
-            });
-        }catch(e){
-            console.error(e);
-            alert('Stok belum dapat dikurangi. Silakan coba lagi.');
-        }
-    }
+ const pending={type:'product',id:String(product.id),name:product.name,qty:1};if(!await requireMemberForPurchase(pending))return;
+ try{const order=await createPurchaseOrder([{id:String(product.id),type:'product',qty:1}],null);clearPendingPurchase();location.href=buildWhatsAppOrderUrl(order);}
+ catch(e){console.error(e);alert('Checkout gagal: '+e.message);await loadProducts();}
 }
-
-
-
 
 loadPromos();
 loadProducts();

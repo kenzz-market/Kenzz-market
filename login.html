@@ -187,7 +187,7 @@ document.getElementById("msg");
 try{
 
 
-msg.innerHTML="Memeriksa akun...";
+msg.textContent="Memeriksa akun...";
 
 
 
@@ -232,7 +232,7 @@ role
 
 
 
-msg.innerHTML=
+msg.textContent=
 "Login berhasil";
 
 
@@ -249,7 +249,7 @@ location.href="owner.html";
 
 
 
-msg.innerHTML=
+msg.textContent=
 "Akun ini bukan Owner. Gunakan Login Admin untuk akun admin.";
 
 
@@ -274,7 +274,7 @@ catch(error){
 console.log(error);
 
 
-msg.innerHTML=
+msg.textContent=
 error.message;
 
 

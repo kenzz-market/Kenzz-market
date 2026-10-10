@@ -27,8 +27,7 @@ async function login(){
  try{
   msg.textContent='Memeriksa akun...';
   await loginMember(document.getElementById('email').value.trim(),document.getElementById('password').value);
-  const pending=getPendingPurchase();
-  if(pending){ openWhatsAppPurchase(pending); return; }
+  if(await resumePendingPurchase()) return;
   location.href='profile.html';
  }catch(e){msg.textContent=e.message;}
 }

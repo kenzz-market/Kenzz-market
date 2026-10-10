@@ -38,9 +38,7 @@ on public.purchase_history for select to authenticated
 using (auth.uid() = user_id);
 
 drop policy if exists "Members insert own purchase history" on public.purchase_history;
-create policy "Members insert own purchase history"
-on public.purchase_history for insert to authenticated
-with check (auth.uid() = user_id);
+revoke insert on public.purchase_history from public, anon, authenticated;
 
 drop policy if exists "Owner view purchase history" on public.purchase_history;
 create policy "Owner view purchase history"

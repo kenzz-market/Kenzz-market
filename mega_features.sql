@@ -73,12 +73,13 @@ create table if not exists public.member_referrals (
   created_at timestamptz default now()
 );
 alter table public.member_referrals enable row level security;
+revoke insert, update, delete on public.member_referrals from public, anon, authenticated;
 drop policy if exists "Public view referral codes" on public.member_referrals;
-create policy "Public view referral codes" on public.member_referrals for select to anon,authenticated using (true);
+drop policy if exists "Members view own referral" on public.member_referrals;
+create policy "Members view own referral" on public.member_referrals for select to authenticated using (auth.uid()=user_id);
 drop policy if exists "Members manage own referral" on public.member_referrals;
-create policy "Members manage own referral" on public.member_referrals for insert to authenticated with check (auth.uid()=user_id);
+drop policy if exists "Members insert own referral" on public.member_referrals;
 drop policy if exists "Members update own referral" on public.member_referrals;
-create policy "Members update own referral" on public.member_referrals for update to authenticated using (auth.uid()=user_id) with check (auth.uid()=user_id);
 drop policy if exists "Owner manage referrals" on public.member_referrals;
 create policy "Owner manage referrals" on public.member_referrals for all to authenticated using (exists(select 1 from public.admins a where a.user_id=auth.uid() and a.role='owner')) with check (exists(select 1 from public.admins a where a.user_id=auth.uid() and a.role='owner'));
 
@@ -94,19 +95,25 @@ begin
   select code into v_code from public.member_referrals where user_id=v_user;
   return v_code;
 end; $$;
+revoke execute on function public.ensure_member_referral_code() from public, anon;
 grant execute on function public.ensure_member_referral_code() to authenticated;
 
 create or replace function public.apply_referral(p_code text)
 returns boolean language plpgsql security definer set search_path=public as $$
-declare v_ref public.member_referrals%rowtype; v_user uuid:=auth.uid();
+declare v_ref public.member_referrals%rowtype; v_user uuid:=auth.uid(); v_existing uuid;
 begin
  if v_user is null then return false; end if;
+ perform pg_advisory_xact_lock(hashtextextended(v_user::text, 9172026));
+ select referred_by into v_existing from public.member_referrals where user_id=v_user;
+ if v_existing is not null then return false; end if;
  select * into v_ref from public.member_referrals where upper(code)=upper(trim(p_code)) limit 1;
  if v_ref.id is null or v_ref.user_id=v_user then return false; end if;
- insert into public.member_referrals(user_id,code,referred_by) values(v_user,'KZ'||upper(substr(replace(v_user::text,'-',''),1,8)),v_ref.user_id) on conflict(user_id) do update set referred_by=excluded.referred_by;
+ insert into public.member_referrals(user_id,code,referred_by) values(v_user,'KZ'||upper(substr(replace(v_user::text,'-',''),1,8)),v_ref.user_id)
+ on conflict(user_id) do update set referred_by=excluded.referred_by where public.member_referrals.referred_by is null;
  update public.member_referrals set referral_count=coalesce(referral_count,0)+1 where user_id=v_ref.user_id;
  return true;
 end; $$;
+revoke execute on function public.apply_referral(text) from public, anon;
 grant execute on function public.apply_referral(text) to authenticated;
 
 create or replace function public.get_store_analytics()
@@ -128,6 +135,7 @@ begin
  ) into v;
  return v;
 end; $$;
+revoke execute on function public.get_store_analytics() from public, anon;
 grant execute on function public.get_store_analytics() to authenticated;
 
 create index if not exists product_reviews_product_idx on public.product_reviews(product_id,created_at desc);
@@ -145,26 +153,15 @@ do $$ begin
   alter publication supabase_realtime add table public.store_announcements;
 exception when duplicate_object then null; end $$;
 
-grant select on public.product_categories, public.flash_sales, public.store_announcements, public.product_reviews, public.member_referrals to anon,authenticated;
+grant select on public.product_categories, public.flash_sales, public.store_announcements, public.product_reviews to anon,authenticated;
+revoke select on public.member_referrals from anon;
 notify pgrst,'reload schema';
 
 create or replace function public.create_flash_order(p_flash_id uuid,p_qty integer default 1)
 returns jsonb language plpgsql security definer set search_path=public as $$
-declare s public.flash_sales%rowtype; p public.products%rowtype; u uuid:=auth.uid(); v_total numeric; v_items jsonb;
 begin
- if u is null then raise exception 'Login member diperlukan.'; end if;
- if not exists(select 1 from public.members where user_id=u) then raise exception 'Akun belum terdaftar sebagai member.'; end if;
- if p_qty<1 then raise exception 'Jumlah tidak valid.'; end if;
- select * into s from public.flash_sales where id=p_flash_id and is_active=true and starts_at<=now() and expires_at>now() for update;
- if s.id is null then raise exception 'Flash Sale sudah berakhir.'; end if;
- if s.stock<p_qty then raise exception 'Stok Flash Sale tidak mencukupi.'; end if;
- select * into p from public.products where id::text=s.product_id for update;
- if p.id is null then raise exception 'Produk tidak ditemukan.'; end if;
- update public.flash_sales set stock=stock-p_qty where id=s.id;
- v_total=coalesce(s.sale_price,0)*p_qty;
- v_items=jsonb_build_array(jsonb_build_object('id',p.id::text,'name',p.name,'price',s.sale_price,'qty',p_qty,'image',p.image));
- insert into public.purchase_history(user_id,items,total,status,source) values(u,v_items,v_total,'Menunggu konfirmasi','flash_sale');
- return jsonb_build_object('items',v_items,'total',v_total,'flash_id',s.id);
+  return public.create_purchase_order(jsonb_build_array(jsonb_build_object('id',p_flash_id::text,'type','flash','qty',p_qty)),null);
 end; $$;
+revoke execute on function public.create_flash_order(uuid,integer) from public, anon;
 grant execute on function public.create_flash_order(uuid,integer) to authenticated;
 notify pgrst,'reload schema';

@@ -164,7 +164,7 @@ begin
 end;
 $$;
 
-grant execute on function public.decrement_product_stock(text, integer) to anon, authenticated;
+revoke execute on function public.decrement_product_stock(text, integer) from public, anon, authenticated;
 
 create or replace function public.decrement_product_stocks(p_items jsonb)
 returns boolean
@@ -207,7 +207,7 @@ exception when others then
 end;
 $$;
 
-grant execute on function public.decrement_product_stocks(jsonb) to anon, authenticated;
+revoke execute on function public.decrement_product_stocks(jsonb) from public, anon, authenticated;
 
 
 -- =====================================================
@@ -239,13 +239,13 @@ using (is_active = true and expires_at > now());
 drop policy if exists "Owner can insert promos" on public.promo_products;
 create policy "Owner can insert promos"
 on public.promo_products for insert to authenticated
-with check (exists (select 1 from public.admins where admins.user_id=auth.uid() and admins.role='owner'));
+with check (exists (select 1 from public.admins where admins.user_id=auth.uid() and admins.role in ('owner','admin')));
 
 drop policy if exists "Owner can update promos" on public.promo_products;
 create policy "Owner can update promos"
 on public.promo_products for update to authenticated
-using (exists (select 1 from public.admins where admins.user_id=auth.uid() and admins.role='owner'))
-with check (exists (select 1 from public.admins where admins.user_id=auth.uid() and admins.role='owner'));
+using (exists (select 1 from public.admins where admins.user_id=auth.uid() and admins.role in ('owner','admin')))
+with check (exists (select 1 from public.admins where admins.user_id=auth.uid() and admins.role in ('owner','admin')));
 
 drop policy if exists "Owner can delete promos" on public.promo_products;
 create policy "Owner can delete promos"
@@ -272,7 +272,7 @@ begin
 end;
 $$;
 
-grant execute on function public.decrement_promo_stock(text,integer) to anon, authenticated;
+revoke execute on function public.decrement_promo_stock(text,integer) from public, anon, authenticated;
 
 -- =====================================================
 -- OWNER CENTER: KELOLA ADMIN & MEMBER
@@ -306,6 +306,7 @@ begin
 end;
 $$;
 
+revoke execute on function public.owner_list_admins() from public, anon;
 grant execute on function public.owner_list_admins() to authenticated;
 
 
@@ -348,6 +349,7 @@ begin
 end;
 $$;
 
+revoke execute on function public.owner_add_admin_by_email(text) from public, anon;
 grant execute on function public.owner_add_admin_by_email(text) to authenticated;
 
 
@@ -378,6 +380,7 @@ begin
 end;
 $$;
 
+revoke execute on function public.owner_delete_admin(uuid) from public, anon;
 grant execute on function public.owner_delete_admin(uuid) to authenticated;
 
 
@@ -414,4 +417,5 @@ begin
 end;
 $$;
 
+revoke execute on function public.owner_delete_member(uuid) from public, anon;
 grant execute on function public.owner_delete_member(uuid) to authenticated;

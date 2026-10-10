@@ -19,6 +19,10 @@ supabase.createClient(
     SUPABASE_KEY
 );
 
+function escHtml(value){return String(value ?? '').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+function safeHttpUrl(value,fallback=''){try{const u=new URL(String(value||''),window.location.href);if(u.protocol==='http:'||u.protocol==='https:')return u.href;}catch(e){}return fallback;}
+window.escHtml=escHtml; window.safeHttpUrl=safeHttpUrl;
+
 
 
 // =====================================
@@ -406,15 +410,6 @@ async function deletePromoProduct(id){
     return data;
 }
 
-async function decrementPromoStock(id,qty=1){
-    const {data,error}=await supabaseClient.rpc('decrement_promo_stock',{
-        p_promo_id:String(id),
-        p_qty:Math.max(1,Number(qty||1))
-    });
-    if(error) throw error;
-    return data === true;
-}
-
 window.getPromoProducts=getPromoProducts;
 window.addPromoProduct=addPromoProduct;
 window.updatePromoProduct=updatePromoProduct;
@@ -681,91 +676,22 @@ window.deleteAdmin=deleteAdmin;
 window.deleteMember=deleteMember;
 
 // =====================================
-// MEMBER PURCHASE GATE
+// MEMBER PURCHASE / ATOMIC CHECKOUT
 // =====================================
-
-async function requireMemberForPurchase(purchaseData){
-    const user = await getCurrentUser();
-    if(user){
-        return true;
-    }
-
-    localStorage.setItem('kenzz_pending_purchase', JSON.stringify({
-        ...purchaseData,
-        created_at: Date.now()
-    }));
-
-    location.href = 'register.html?return=purchase';
-    return false;
-}
-
-function getPendingPurchase(){
-    try{
-        const raw = localStorage.getItem('kenzz_pending_purchase');
-        return raw ? JSON.parse(raw) : null;
-    }catch(e){
-        return null;
-    }
-}
-
-function clearPendingPurchase(){
-    localStorage.removeItem('kenzz_pending_purchase');
-}
-
-async function decrementProductStock(productId, qty=1){
-    const { data, error } = await supabaseClient.rpc('decrement_product_stock', {
-        p_product_id: String(productId),
-        p_qty: Math.max(1, Number(qty || 1))
-    });
-    if(error) throw error;
-    return data === true;
-}
-
-async function decrementProductStocks(items=[]){
-    const clean = (items || []).map(p => ({
-        id: String(p.id),
-        qty: Math.max(1, Number(p.qty || 1))
-    })).filter(p => p.id && p.qty > 0);
-    if(!clean.length) return true;
-    const { data, error } = await supabaseClient.rpc('decrement_product_stocks', {
-        p_items: clean
-    });
-    if(error) throw error;
-    return data === true;
-}
-
-window.decrementProductStock = decrementProductStock;
-window.decrementProductStocks = decrementProductStocks;
-
-function buildWhatsAppPurchaseUrl(purchaseData){
-    const lines = [
-        `Halo ${STORE_SETTINGS.storeName},`,
-        '',
-        'Saya ingin membeli produk berikut:',
-        '',
-        `Produk: ${purchaseData.name || '-'}`,
-        `Harga: Rp ${Number(purchaseData.price || 0).toLocaleString('id-ID')}`,
-        purchaseData.qty ? `Jumlah: ${purchaseData.qty}` : '',
-        '',
-        'Mohon bantu cek ketersediaan dan pilihkan produk yang tersedia.',
-        '',
-        'Terima kasih.'
-    ].filter(Boolean).join('\n');
-
-    return 'https://wa.me/' + STORE_SETTINGS.whatsappOwner + '?text=' + encodeURIComponent(lines);
-}
-
-function openWhatsAppPurchase(purchaseData){
-    clearPendingPurchase();
-    window.location.href = buildWhatsAppPurchaseUrl(purchaseData);
-}
-
-window.requireMemberForPurchase = requireMemberForPurchase;
-window.getPendingPurchase = getPendingPurchase;
-window.clearPendingPurchase = clearPendingPurchase;
-window.buildWhatsAppPurchaseUrl = buildWhatsAppPurchaseUrl;
-window.openWhatsAppPurchase = openWhatsAppPurchase;
-
+async function requireMemberForPurchase(purchaseData){const user=await getCurrentUser();if(user)return true;localStorage.setItem('kenzz_pending_purchase',JSON.stringify({...purchaseData,created_at:Date.now()}));location.href='register.html?return=purchase';return false;}
+function getPendingPurchase(){try{const raw=localStorage.getItem('kenzz_pending_purchase');if(!raw)return null;const data=JSON.parse(raw);if(!data||!data.created_at||Date.now()-Number(data.created_at)>24*60*60*1000){localStorage.removeItem('kenzz_pending_purchase');return null;}return data;}catch(e){localStorage.removeItem('kenzz_pending_purchase');return null;}}
+function clearPendingPurchase(){localStorage.removeItem('kenzz_pending_purchase');}
+function cleanPurchaseItems(items=[]){return (Array.isArray(items)?items:[]).map(p=>({id:String(p?.id??'').trim(),type:['product','promo','flash'].includes(String(p?.type||'').toLowerCase())?String(p.type).toLowerCase():'product',qty:Math.floor(Number(p?.qty??1))})).filter(p=>p.id&&Number.isFinite(p.qty)&&p.qty>=1&&p.qty<=1000);}
+async function createPurchaseOrder(items=[],voucherCode=null){const clean=cleanPurchaseItems(items);if(!clean.length)throw new Error('Produk pembelian tidak valid.');if(clean.length>50)throw new Error('Maksimal 50 baris produk per pesanan.');const {data,error}=await supabaseClient.rpc('create_purchase_order',{p_items:clean,p_voucher_code:voucherCode?String(voucherCode).trim():null});if(error)throw error;if(!data?.success)throw new Error('Checkout gagal.');return data;}
+async function createFlashOrder(flashId,qty=1){return createPurchaseOrder([{id:String(flashId),type:'flash',qty:Math.floor(Number(qty||1))}],null);}
+function buildWhatsAppOrderUrl(order){const items=Array.isArray(order?.items)?order.items:[];let lines=[`Halo ${STORE_SETTINGS.storeName},`,'','Saya ingin membeli produk berikut:',''];items.forEach(p=>{const qty=Math.max(1,Number(p.qty||1));lines.push(`${p.name||'Produk'}\nJumlah: ${qty}\nHarga: Rp ${(Number(p.price||0)*qty).toLocaleString('id-ID')}\n`);});lines.push(`Subtotal: Rp ${Number(order?.subtotal??order?.total??0).toLocaleString('id-ID')}`);if(Number(order?.discount||0)>0)lines.push(`Diskon: Rp ${Number(order.discount).toLocaleString('id-ID')}${order.voucher_code?' ('+order.voucher_code+')':''}`);lines.push(`Total: Rp ${Number(order?.total||0).toLocaleString('id-ID')}`,'','Mohon bantu cek ketersediaan.','','Terima kasih.');return 'https://wa.me/'+String(STORE_SETTINGS.whatsappOwner||'').replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(lines.join('\n'));}
+function buildWhatsAppPurchaseUrl(purchaseData){const qty=Math.max(1,Number(purchaseData?.qty||1));return buildWhatsAppOrderUrl({items:[{name:purchaseData?.name||'Produk',price:Number(purchaseData?.price||0),qty}],subtotal:Number(purchaseData?.price||0)*qty,total:Number(purchaseData?.price||0)*qty,discount:0});}
+function openWhatsAppPurchase(purchaseData){clearPendingPurchase();window.location.href=buildWhatsAppPurchaseUrl(purchaseData);}
+async function resumePendingPurchase(){const pending=getPendingPurchase();if(!pending)return false;if(!(await getCurrentUser()))return false;let items=pending.items;if(!items&&pending.id)items=[{id:String(pending.id),type:pending.type==='promo'?'promo':pending.type==='flash'?'flash':'product',qty:pending.qty||1}];try{const order=await createPurchaseOrder(items,pending.voucherCode||null);clearPendingPurchase();window.location.href=buildWhatsAppOrderUrl(order);return true;}catch(e){console.error('RESUME PURCHASE:',e);clearPendingPurchase();alert('Checkout setelah login gagal: '+e.message);return false;}}
+async function decrementProductStock(){throw new Error('Fungsi stok lama sudah dinonaktifkan. Gunakan checkout atomik.');}
+async function decrementProductStocks(){throw new Error('Fungsi stok lama sudah dinonaktifkan. Gunakan checkout atomik.');}
+async function decrementPromoStock(){throw new Error('Fungsi stok promo lama sudah dinonaktifkan. Gunakan checkout atomik.');}
+window.requireMemberForPurchase=requireMemberForPurchase;window.getPendingPurchase=getPendingPurchase;window.clearPendingPurchase=clearPendingPurchase;window.cleanPurchaseItems=cleanPurchaseItems;window.createPurchaseOrder=createPurchaseOrder;window.createFlashOrder=createFlashOrder;window.resumePendingPurchase=resumePendingPurchase;window.buildWhatsAppOrderUrl=buildWhatsAppOrderUrl;window.buildWhatsAppPurchaseUrl=buildWhatsAppPurchaseUrl;window.openWhatsAppPurchase=openWhatsAppPurchase;window.decrementProductStock=decrementProductStock;window.decrementProductStocks=decrementProductStocks;window.decrementPromoStock=decrementPromoStock;
 
 // =====================================
 // FAVORIT MEMBER + RIWAYAT PEMBELIAN
@@ -805,14 +731,7 @@ async function toggleFavorite(product){
     return true;
 }
 
-async function savePurchaseHistory(items,total,status='Menunggu konfirmasi',voucherCode=null,discount=0){
-    const user=await getCurrentUser();
-    if(!user) return null;
-    const clean=(items||[]).map(p=>({id:String(p.id||''),name:p.name||'',price:Number(p.price||0),qty:Math.max(1,Number(p.qty||1)),image:p.image||''}));
-    const {data,error}=await supabaseClient.from('purchase_history').insert({user_id:user.id,items:clean,total:Number(total||0),status,source:'whatsapp',voucher_code:voucherCode,discount:Number(discount||0)}).select().single();
-    if(error) throw error;
-    return data;
-}
+async function savePurchaseHistory(items,total,status='Menunggu konfirmasi',voucherCode=null,discount=0){return createPurchaseOrder(items,voucherCode);}
 
 async function getPurchaseHistory(){
     const user=await getCurrentUser();
@@ -849,12 +768,12 @@ async function validateVoucher(code,total){
   const {data,error}=await supabaseClient.rpc('redeem_voucher',{p_code:String(code||''),p_total:Number(total||0)});
   if(error) throw error; return data;
 }
-async function incrementVoucherUsage(code){const {data,error}=await supabaseClient.rpc('increment_voucher_usage',{p_code:String(code||'')});if(error) throw error;return data===true;}
+async function incrementVoucherUsage(){throw new Error('Voucher usage sekarang diproses atomik saat checkout.');}
 async function getOwnerVouchers(){const role=await checkRole();if(role!=='owner')throw new Error('Akses hanya untuk owner.');const {data,error}=await supabaseClient.from('vouchers').select('*').order('created_at',{ascending:false});if(error)throw error;return data||[];}
 async function addVoucher(v){const role=await checkRole();if(role!=='owner')throw new Error('Akses hanya untuk owner.');const {data,error}=await supabaseClient.from('vouchers').insert([v]).select().single();if(error)throw error;return data;}
 async function updateVoucher(id,v){const role=await checkRole();if(role!=='owner')throw new Error('Akses hanya untuk owner.');const {data,error}=await supabaseClient.from('vouchers').update(v).eq('id',id).select().single();if(error)throw error;return data;}
 async function deleteVoucher(id){const role=await checkRole();if(role!=='owner')throw new Error('Akses hanya untuk owner.');const {error}=await supabaseClient.from('vouchers').delete().eq('id',id);if(error)throw error;return true;}
-async function updatePurchaseStatus(id,status){const role=await checkRole();if(role!=='owner')throw new Error('Akses hanya untuk owner.');const {data,error}=await supabaseClient.from('purchase_history').update({status}).eq('id',id).select().single();if(error)throw error;return data;}
+async function updatePurchaseStatus(id,status){const role=await checkRole();if(role!=='owner')throw new Error('Akses hanya untuk owner.');const {data,error}=await supabaseClient.rpc('update_purchase_status',{p_order_id:id,p_status:String(status)});if(error)throw error;return data;}
 async function getMemberNotifications(){const user=await getCurrentUser();if(!user)return [];const {data,error}=await supabaseClient.from('notifications').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(50);if(error)throw error;return data||[];}
 async function markMemberNotificationsRead(){const user=await getCurrentUser();if(!user)return;const {error}=await supabaseClient.from('notifications').update({is_read:true}).eq('user_id',user.id).eq('is_read',false);if(error)throw error;}
 window.getActiveVouchers=getActiveVouchers;window.validateVoucher=validateVoucher;window.incrementVoucherUsage=incrementVoucherUsage;window.getOwnerVouchers=getOwnerVouchers;window.addVoucher=addVoucher;window.updateVoucher=updateVoucher;window.deleteVoucher=deleteVoucher;window.updatePurchaseStatus=updatePurchaseStatus;window.getMemberNotifications=getMemberNotifications;window.markMemberNotificationsRead=markMemberNotificationsRead;

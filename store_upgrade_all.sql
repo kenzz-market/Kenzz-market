@@ -7,22 +7,45 @@ alter table public.purchase_history
 
 alter table public.purchase_history enable row level security;
 
+-- Status pesanan diubah hanya melalui RPC server-side.
+-- Owner tidak mendapat UPDATE langsung agar total/items/user_id tidak dapat diubah dari browser.
 drop policy if exists "Owner update purchase status" on public.purchase_history;
-create policy "Owner update purchase status"
-on public.purchase_history
-for update
-to authenticated
-using (exists (select 1 from public.admins where admins.user_id=auth.uid() and admins.role='owner'))
-with check (exists (select 1 from public.admins where admins.user_id=auth.uid() and admins.role='owner'));
+revoke update on public.purchase_history from public, anon, authenticated;
+
+create or replace function public.update_purchase_status(p_order_id uuid, p_status text)
+returns jsonb
+language plpgsql
+security definer
+set search_path=public
+as $$
+declare v_row public.purchase_history%rowtype;
+begin
+  if not exists (select 1 from public.admins where user_id=auth.uid() and role='owner') then
+    raise exception 'Akses hanya untuk owner.';
+  end if;
+  if p_order_id is null then raise exception 'ID pesanan tidak valid.'; end if;
+  if p_status not in ('Menunggu konfirmasi','Diproses','Siap dikirim','Selesai','Dibatalkan') then
+    raise exception 'Status pesanan tidak valid.';
+  end if;
+  update public.purchase_history
+  set status=p_status
+  where id=p_order_id
+  returning * into v_row;
+  if not found then raise exception 'Pesanan tidak ditemukan.'; end if;
+  return jsonb_build_object('id',v_row.id,'status',v_row.status);
+end;
+$$;
+revoke execute on function public.update_purchase_status(uuid,text) from public, anon;
+grant execute on function public.update_purchase_status(uuid,text) to authenticated;
 
 create table if not exists public.vouchers (
   id uuid primary key default gen_random_uuid(),
   code text not null unique,
   discount_type text not null default 'percent' check (discount_type in ('percent','fixed')),
-  discount_value numeric not null default 0,
-  min_purchase numeric not null default 0,
-  max_discount numeric,
-  usage_limit integer,
+  discount_value numeric not null default 0 check (discount_value >= 0),
+  min_purchase numeric not null default 0 check (min_purchase >= 0),
+  max_discount numeric check (max_discount is null or max_discount >= 0),
+  usage_limit integer check (usage_limit is null or usage_limit >= 1),
   used_count integer not null default 0,
   starts_at timestamptz default now(),
   expires_at timestamptz,
@@ -77,7 +100,8 @@ set search_path=public
 as $$
 declare v vouchers%rowtype; v_discount numeric:=0;
 begin
-  select * into v from public.vouchers where upper(code)=upper(trim(p_code)) and is_active=true for update;
+  if p_total is null or p_total < 0 then return jsonb_build_object('valid',false,'message','Total pembelian tidak valid.'); end if;
+  select * into v from public.vouchers where upper(code)=upper(trim(p_code)) and is_active=true;
   if not found then return jsonb_build_object('valid',false,'message','Kode voucher tidak ditemukan atau tidak aktif.'); end if;
   if v.starts_at is not null and v.starts_at>now() then return jsonb_build_object('valid',false,'message','Voucher belum mulai berlaku.'); end if;
   if v.expires_at is not null and v.expires_at<=now() then return jsonb_build_object('valid',false,'message','Voucher sudah kedaluwarsa.'); end if;
@@ -88,16 +112,15 @@ begin
   v_discount:=least(greatest(v_discount,0),greatest(p_total,0));
   return jsonb_build_object('valid',true,'code',upper(v.code),'discount',v_discount,'total',greatest(p_total-v_discount,0),'message','Voucher berhasil diterapkan.');
 end; $$;
+revoke execute on function public.redeem_voucher(text,numeric) from public, anon;
 grant execute on function public.redeem_voucher(text,numeric) to authenticated;
 
 create or replace function public.increment_voucher_usage(p_code text)
 returns boolean language plpgsql security definer set search_path=public as $$
-declare ok boolean;
 begin
- update public.vouchers set used_count=used_count+1 where upper(code)=upper(trim(p_code)) and is_active=true and (usage_limit is null or used_count<usage_limit);
- return found;
+  raise exception 'Fungsi voucher lama dinonaktifkan. Gunakan checkout atomik.';
 end; $$;
-grant execute on function public.increment_voucher_usage(text) to authenticated;
+revoke execute on function public.increment_voucher_usage(text) from public, anon, authenticated;
 
 create or replace function public.notify_new_purchase()
 returns trigger language plpgsql security definer set search_path=public as $$

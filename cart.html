@@ -66,18 +66,18 @@ getCart();
 
 function renderCart(){
   const box=document.getElementById("cart");
-  const itemCount=cart.reduce((n,p)=>n+Number(p.qty||1),0);
   const selected=cart.filter(p=>p.selected!==false);
+  const itemCount=selected.reduce((n,p)=>n+Math.max(1,Math.floor(Number(p.qty||1))),0);
   document.getElementById("itemCount").textContent=itemCount+" item"+(itemCount===1?"":"s");
-  document.getElementById("miniCount").textContent=selected.reduce((n,p)=>n+Number(p.qty||1),0)+" dipilih";
+  document.getElementById("miniCount").textContent=selected.reduce((n,p)=>n+Math.max(1,Math.floor(Number(p.qty||1))),0)+" dipilih";
   if(!cart.length){box.innerHTML=`<div class="empty"><div class="icon"><i class="fa-solid fa-bag-shopping"></i></div><h3>Keranjang masih kosong</h3><p>Belum ada produk yang kamu pilih.</p><a class="continue" href="products.html">Mulai belanja →</a></div>`;document.getElementById("total").textContent="0";document.getElementById("discount").textContent="Rp 0";return;}
-  box.innerHTML=cart.map((p,index)=>{const price=Number(p.price||0),qty=Number(p.qty||1),sub=price*qty,checked=p.selected!==false?'checked':'';return `<div class="card"><div class="check-wrap"><input class="pick" type="checkbox" ${checked} onchange="toggleSelect(${index},this.checked)"></div><img src="${p.image||'https://via.placeholder.com/100'}" alt="${p.name||'Produk'}"><div class="info"><h3>${p.name||'Produk'}</h3><div class="price">Rp ${price.toLocaleString('id-ID')}</div><div class="subtotal">Subtotal: Rp ${sub.toLocaleString('id-ID')}</div><div class="qty"><button onclick="minus(${index})">−</button><b>${qty}</b><button onclick="plus(${index})">+</button><button class="remove" onclick="removeItem(${index})">Hapus</button></div></div></div>`}).join('');
+  box.innerHTML=cart.map((p,index)=>{const price=Math.max(0,Number(p.price||0)),qty=Math.max(1,Math.floor(Number(p.qty||1))),sub=price*qty,checked=p.selected!==false?'checked':'';const img=safeHttpUrl(p.image,'https://via.placeholder.com/100');return `<div class="card"><div class="check-wrap"><input class="pick" type="checkbox" ${checked} onchange="toggleSelect(${index},this.checked)"></div><img src="${escHtml(img)}" alt="${escHtml(p.name||'Produk')}"><div class="info"><h3>${escHtml(p.name||'Produk')}</h3><div class="price">Rp ${price.toLocaleString('id-ID')}</div><div class="subtotal">Subtotal: Rp ${sub.toLocaleString('id-ID')}</div><div class="qty"><button onclick="minus(${index})">−</button><b>${qty}</b><button onclick="plus(${index})">+</button><button class="remove" onclick="removeItem(${index})">Hapus</button></div></div></div>`}).join('');
   recalc();
 }
 function selectedItems(){return cart.filter(p=>p.selected!==false)}
 function recalc(){const base=selectedItems().reduce((sum,p)=>sum+Number(p.price||0)*Number(p.qty||1),0);const discount=Math.min(base,Number(localStorage.getItem('kenzz_voucher_discount')||0));document.getElementById('discount').textContent='Rp '+discount.toLocaleString('id-ID');document.getElementById('total').textContent=(base-discount).toLocaleString('id-ID')}
-function toggleSelect(i,v){cart[i].selected=v;saveCart(cart);recalc()}
-function selectAll(){const all=cart.every(p=>p.selected!==false);cart.forEach(p=>p.selected=!all);saveCart(cart);renderCart()}
+function toggleSelect(i,v){cart[i].selected=v;localStorage.removeItem('kenzz_voucher_code');localStorage.removeItem('kenzz_voucher_discount');document.getElementById('voucherMsg').textContent='';document.getElementById('voucherMsg').className='voucher-msg';saveCart(cart);recalc()}
+function selectAll(){const all=cart.every(p=>p.selected!==false);cart.forEach(p=>p.selected=!all);localStorage.removeItem('kenzz_voucher_code');localStorage.removeItem('kenzz_voucher_discount');document.getElementById('voucherMsg').textContent='';document.getElementById('voucherMsg').className='voucher-msg';saveCart(cart);renderCart()}
 async function applyVoucher(){const code=document.getElementById('voucherCode').value.trim();const msg=document.getElementById('voucherMsg');if(!code){msg.textContent='Masukkan kode voucher.';msg.className='voucher-msg bad';return}const base=selectedItems().reduce((sum,p)=>sum+Number(p.price||0)*Number(p.qty||1),0);if(!base){msg.textContent='Pilih produk terlebih dahulu.';msg.className='voucher-msg bad';return}try{const r=await validateVoucher(code,base);if(!r?.valid){msg.textContent=r?.message||'Voucher tidak valid.';msg.className='voucher-msg bad';return}localStorage.setItem('kenzz_voucher_code',r.code);localStorage.setItem('kenzz_voucher_discount',String(r.discount||0));msg.textContent='✓ '+r.message+' Diskon Rp '+Number(r.discount||0).toLocaleString('id-ID');msg.className='voucher-msg ok';recalc()}catch(e){msg.textContent=e.message;msg.className='voucher-msg bad'}}
 
 function save(){
@@ -140,18 +140,19 @@ save();
 
 
 async function checkout(){
-  const chosen=selectedItems(); if(!chosen.length){alert('Pilih minimal satu produk.');return;}
-  const ok=await requireMemberForPurchase({type:'cart',items:chosen.map(p=>({id:p.id,name:p.name,price:Number(p.price||0),qty:Number(p.qty||1)}))}); if(!ok)return;
+  const chosen=selectedItems();if(!chosen.length){alert('Pilih minimal satu produk.');return;}
+  const voucherCode=localStorage.getItem('kenzz_voucher_code')||null;
+  const pending={type:'cart',items:chosen.map(p=>({id:String(p.id),type:p.type||'product',qty:Math.max(1,Math.floor(Number(p.qty||1)))})),voucherCode};
+  if(!await requireMemberForPurchase(pending))return;
   try{
-    const updated=await decrementProductStocks(chosen.map(p=>({id:p.id,qty:Number(p.qty||1)}))); if(!updated){alert('Salah satu produk sudah habis atau stoknya tidak mencukupi.');return;}
-    const base=chosen.reduce((sum,p)=>sum+Number(p.price||0)*Number(p.qty||1),0), discount=Math.min(base,Number(localStorage.getItem('kenzz_voucher_discount')||0)), totalValue=base-discount, code=localStorage.getItem('kenzz_voucher_code')||null;
-    if(code){await incrementVoucherUsage(code).catch(()=>false)}
-    await savePurchaseHistory(chosen,totalValue,'Menunggu konfirmasi',code,discount);
-    let text=`Halo ${STORE_SETTINGS.storeName},\n\nSaya ingin membeli:\n\n`;chosen.forEach(p=>{text+=`${p.name}\nJumlah: ${p.qty}\nHarga: Rp ${(Number(p.price)*p.qty).toLocaleString('id-ID')}\n\n`});text+=`Subtotal: Rp ${base.toLocaleString('id-ID')}\nDiskon: Rp ${discount.toLocaleString('id-ID')}${code?' ('+code+')':''}\nTotal: Rp ${totalValue.toLocaleString('id-ID')}\n\nMohon bantu cek ketersediaan.\n\nTerima kasih.`;
-    cart=cart.filter(p=>!chosen.includes(p));saveCart(cart);localStorage.removeItem('kenzz_voucher_code');localStorage.removeItem('kenzz_voucher_discount');window.location.href='https://wa.me/'+STORE_SETTINGS.whatsappOwner+'?text='+encodeURIComponent(text);
-  }catch(e){console.error(e);alert('Checkout gagal: '+e.message)}
+    const order=await createPurchaseOrder(pending.items,voucherCode);
+    let text=`Halo ${STORE_SETTINGS.storeName},\n\nSaya ingin membeli:\n\n`;
+    (order.items||[]).forEach(p=>{text+=`${p.name}\nJumlah: ${p.qty}\nHarga: Rp ${(Number(p.price)*Number(p.qty)).toLocaleString('id-ID')}\n\n`;});
+    text+=`Subtotal: Rp ${Number(order.subtotal||order.total||0).toLocaleString('id-ID')}\nDiskon: Rp ${Number(order.discount||0).toLocaleString('id-ID')}${order.voucher_code?' ('+order.voucher_code+')':''}\nTotal: Rp ${Number(order.total||0).toLocaleString('id-ID')}\n\nMohon bantu cek ketersediaan.\n\nTerima kasih.`;
+    cart=cart.filter(p=>!chosen.includes(p));saveCart(cart);localStorage.removeItem('kenzz_voucher_code');localStorage.removeItem('kenzz_voucher_discount');
+    location.href='https://wa.me/'+String(STORE_SETTINGS.whatsappOwner||'').replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(text);
+  }catch(e){console.error(e);alert('Checkout gagal: '+e.message);}
 }
-
 
 
 renderCart();
