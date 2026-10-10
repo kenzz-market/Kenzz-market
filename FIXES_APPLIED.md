@@ -45,3 +45,8 @@ Frontend menggunakan Supabase `anon` key. Itu normal untuk aplikasi browser sela
 
 ## Struktur paket
 Paket final berisi 33 file di dalam 1 folder root `Kenzz-market-main/` (34 entri ZIP jika folder root ikut dihitung).
+
+
+## Fitur jadwal anime
+- Ditambahkan `anime-schedule.html` dengan tautan jadwal dan berita LiveChart.me serta tampilan embed dengan tautan cadangan.
+- Data jadwal tetap dikelola oleh LiveChart.me; penyematan dapat tidak tampil jika sumber membatasi iframe.

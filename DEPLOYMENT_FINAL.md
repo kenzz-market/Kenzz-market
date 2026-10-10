@@ -36,3 +36,8 @@ stability_patch.sql
 
 ## 4. Hasil yang diharapkan
 Tidak ada lagi jalur frontend yang langsung memanggil RPC pengurangan stok lama atau INSERT langsung ke `purchase_history`.
+
+
+## Fitur jadwal anime
+- Ditambahkan `anime-schedule.html` dengan tautan jadwal dan berita LiveChart.me serta tampilan embed dengan tautan cadangan.
+- Data jadwal tetap dikelola oleh LiveChart.me; penyematan dapat tidak tampil jika sumber membatasi iframe.
