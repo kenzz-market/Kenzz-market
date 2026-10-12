@@ -1,30 +1,21 @@
-KENZZ STORE — Anime Center + Community Chat
-==========================================
+KENZZ STORE — Perbaikan navigasi Anime Center & Chat
 
-Perubahan utama
-- Memperbarui anime-schedule.html menjadi Anime Center dengan tab jadwal LiveChart.me, countdown pribadi, pantauan season/S2, favorit, dan notifikasi browser.
-- Menambahkan chat.html untuk chat komunitas menggunakan Supabase Realtime.
-- Menambahkan tautan Anime Center dan Chat Komunitas ke menu beranda serta shortcut bawah.
-- File lama dipertahankan di ZIP ini.
+Perubahan
+- Menghapus seluruh bagian “Aplikasi Populer Saat Ini” dari index.html.
+- Menambahkan tombol Chat Komunitas di area hero beranda.
+- Mempertahankan menu Anime Center dan Chat Komunitas.
+- Memperjelas pesan error chat jika tabel Supabase belum tersedia.
+- Mempertahankan seluruh file dan halaman lama lainnya.
 
-Cara pakai Anime Center
-1. Buka anime-schedule.html dari hosting website.
-2. Jadwal resmi dibuka/di-embed dari LiveChart.me. Jika embed ditolak situs sumber, klik Buka tab baru.
-3. Countdown memerlukan input tanggal dan waktu yang diverifikasi sendiri; fitur ini tidak mengambil data rilis otomatis dari LiveChart.
-4. Favorit, pantauan season, countdown, dan status notifikasi disimpan di localStorage browser/perangkat saat ini.
-5. Notifikasi lokal perlu izin browser dan halaman terbuka agar pengecekan berjalan.
+PENTING: agar chat benar-benar bekerja bersama, tabel database harus dibuat satu kali.
+1. Buka Supabase Dashboard untuk proyek yang dipakai Kenzz Store.
+2. Pilih SQL Editor → New query.
+3. Buka file chat_setup.sql dari ZIP ini, salin seluruh isinya, lalu Run.
+4. Di Supabase → Database → Publications/Realtime, pastikan public.kenzz_chat_messages masuk ke supabase_realtime jika SQL tidak menambahkannya otomatis.
+5. Deploy/unggah SEMUA isi folder Kenzz-market-main ke hosting, dengan index.html di root situs bersama chat.html dan anime-schedule.html.
+6. Buka situs, refresh keras / bersihkan cache, lalu uji tombol Anime Center dan Chat Komunitas.
 
-Aktifkan Chat Komunitas
-1. Buka Supabase Dashboard proyek yang sudah dipakai Kenzz Store.
-2. Masuk ke SQL Editor dan jalankan seluruh isi chat_setup.sql.
-3. Pastikan Realtime diaktifkan untuk tabel public.kenzz_chat_messages jika publikasi tidak otomatis tersedia.
-4. Deploy semua file dari ZIP dengan struktur folder yang sama.
+Tentang LiveChart.me
+LiveChart.me menolak embed di sebagian browser/host (X-Frame-Options/CSP). Itu pembatasan situs sumber, bukan kesalahan CSS Kenzz Store. Gunakan tombol “Buka tab baru” untuk melihat jadwal resminya. Countdown/favorit lokal tetap tersedia.
 
-Catatan keamanan chat
-Chat ini publik: nickname tidak diverifikasi, pesan bisa dibaca dan dikirim siapa saja yang dapat mengakses halaman. Kebijakan SQL membatasi panjang input tetapi bukan sistem anti-spam penuh. Sebelum digunakan secara luas, disarankan menambah CAPTCHA/rate-limit dan moderasi/admin tools. Jangan menyimpan rahasia di frontend. Supabase anon key adalah kunci publik yang sudah digunakan aplikasi frontend, bukan service-role key.
-
-Kompatibilitas yang diperiksa
-- Tautan beranda ke anime-schedule.html dan chat.html.
-- Semua halaman lama tetap ada di arsip dasar.
-- Input dan keluaran pengguna pada dua halaman baru di-escape saat dirender; URL eksternal hanya menerima http/https.
-- Tidak ada klaim API LiveChart.me; jadwal sumber memakai halaman resmi dan countdown pribadi.
+Catatan: ZIP tidak dapat mengubah situs yang sudah online secara otomatis. Perubahan baru terlihat setelah seluruh file di-deploy ke hosting yang benar.
