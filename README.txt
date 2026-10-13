@@ -31,3 +31,5 @@ Kompatibilitas yang diperiksa
 - Semua halaman lama tetap ada di arsip dasar.
 - Input dan keluaran pengguna pada dua halaman baru di-escape saat dirender; URL eksternal hanya menerima http/https.
 - Tidak ada klaim API LiveChart.me; jadwal sumber memakai halaman resmi dan countdown pribadi.
+
+Anime Center: klik kartu anime di anime-schedule.html untuk membuka halaman detail anime (anime-detail.html).
